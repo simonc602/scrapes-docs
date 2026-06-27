@@ -1,0 +1,92 @@
+# First run
+
+Use this checklist after installing Agentic OS.
+
+## Start Command Centre
+
+From the Agentic OS workspace:
+
+```bash
+centre
+```
+
+If the shortcut is not installed yet, use:
+
+```bash
+bash scripts/centre.sh
+```
+
+On Windows PowerShell:
+
+```powershell
+powershell -File scripts\centre.ps1
+```
+
+Command Centre should open in your browser.
+
+## Confirm the workspace
+
+Check that these files and folders exist:
+
+| Path | Expected result |
+| --- | --- |
+| `AGENTS.md` | Shared Agentic OS instructions are present. |
+| `CLAUDE.md` | Claude Code wrapper is present. |
+| `command-centre/` | Local UI app exists. |
+| `context/` | Memory and learning source files can live here. |
+| `brand_context/` | Brand files can live here. |
+| `projects/` | Agent output can be saved here. |
+| `scripts/` | Local management scripts are available. |
+
+Read [Workspace structure](../agentic-os/workspace-structure.md) for details.
+
+## Open Claude Code
+
+Open Claude Code from the root workspace:
+
+```bash
+claude
+```
+
+Claude Code should read `CLAUDE.md`, which imports the shared instructions from
+`AGENTS.md`.
+
+On a new workspace, Agentic OS may guide you through brand setup. This creates
+or updates files in `brand_context/`.
+
+## Check memory
+
+Run a memory check when you want to confirm the local memory store is ready.
+
+```bash
+bash scripts/setup-memory.sh --check
+```
+
+On Windows PowerShell:
+
+```powershell
+powershell -File scripts\setup-memory.ps1 -Check
+```
+
+If memory is not ready, run the normal setup command from
+[Local install](local-install.md#set-up-memory).
+
+## First successful run checklist
+
+Your setup is healthy when:
+
+* Command Centre opens in the browser;
+* Claude Code starts from the Agentic OS workspace;
+* `AGENTS.md` and `CLAUDE.md` are both present;
+* the workspace has `context/`, `brand_context/`, `projects/`, and `scripts/`;
+* memory setup either passes or tells you the next action;
+* no real API keys or tokens were committed.
+
+## Windows notes
+
+Use PowerShell when running Windows commands from these docs.
+
+If the `centre` shortcut was just installed, open a new terminal before using
+it. PowerShell may not see the new shortcut until the next terminal session.
+
+Next: [What is Agentic OS?](../agentic-os/what-is-agentic-os.md)

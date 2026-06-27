@@ -1,0 +1,15 @@
+node_modules
+.DS_Store
+.tmp
+tmp
+dist
+site
+npm-debug.log*
+yarn.lock
+.env
+.vscode
+.idea
+
+## Ignore ephemeral doc-tool output
+output.csv
+_doctools/*.csv

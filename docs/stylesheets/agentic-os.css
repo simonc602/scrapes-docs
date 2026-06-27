@@ -1,0 +1,34 @@
+:root {
+  --md-primary-fg-color: #93452A;
+  --md-primary-fg-color--light: #B25D3F;
+  --md-primary-fg-color--dark: #390C00;
+  --md-accent-fg-color: #B25D3F;
+  --md-default-bg-color: #FCF9F7;
+  --md-default-fg-color: #1B1C1B;
+  --md-default-fg-color--light: #5E5E65;
+  --md-code-bg-color: #2D2A28;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  font-family: Epilogue, Inter, system-ui, sans-serif;
+  letter-spacing: 0;
+}
+
+.md-header,
+.md-tabs {
+  background: #93452A;
+}
+
+.md-typeset a {
+  color: #93452A;
+}
+
+.md-typeset code {
+  border-radius: 6px;
+}

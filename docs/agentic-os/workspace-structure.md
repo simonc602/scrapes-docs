@@ -1,0 +1,47 @@
+# Workspace structure
+
+An Agentic OS workspace is a normal folder with a clear layout.
+
+## Root files
+
+| Path | Purpose |
+| --- | --- |
+| `AGENTS.md` | Shared instructions for AI tools that read Agentic OS rules. |
+| `CLAUDE.md` | Claude Code wrapper that imports `AGENTS.md`. |
+| `.env` | Local secrets and API keys. Do not commit this file. |
+| `.mcp.json` | Local MCP tool configuration when used. Do not commit private values. |
+| `VERSION` | Installed Agentic OS version. |
+
+## Main folders
+
+| Path | Purpose |
+| --- | --- |
+| `brand_context/` | Brand voice, positioning, ideal customer profile, and related files. |
+| `context/` | Shared memory source files, user profile, learnings, and session context. |
+| `clients/` | Client workspaces. Each client can have its own context and outputs. |
+| `projects/` | Generated project work and deliverables. |
+| `cron/` | Scheduled job definitions, logs, and status files. |
+| `scripts/` | Install, update, memory, skill, client, and runtime scripts. |
+| `command-centre/` | Local UI and runtime app. |
+| `.command-centre/` | Local runtime state, caches, memory store, and app data. |
+
+## Shared instructions
+
+`AGENTS.md` is the canonical shared instruction file.
+
+Claude Code still needs `CLAUDE.md`, so Agentic OS keeps `CLAUDE.md` as a thin
+wrapper. The wrapper imports `AGENTS.md`.
+
+This keeps shared methodology in one place while keeping Claude Code compatible.
+
+## Data safety
+
+Agentic OS updates are designed to preserve user data.
+
+The root workspace keeps your local `.env`, brand context, memory source files,
+projects, scheduled jobs, and local settings.
+
+Client workspaces keep their own context, brand data, memory, projects, cron
+jobs, local settings, client-only skills, and `SKILL.local.md` overrides.
+
+Next: [Multi-client workspaces](multi-client-workspaces.md)

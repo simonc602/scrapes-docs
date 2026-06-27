@@ -1,0 +1,90 @@
+# Roles and permissions
+
+Team OS uses roles and grants together.
+
+Roles decide what a user can manage for the team. Grants decide which clients
+and skills a user can access.
+
+## Roles
+
+| Role | What it means |
+| --- | --- |
+| Owner | Highest team role. Can manage team-level access and recover ownership. |
+| Admin | Can manage normal team administration tasks. |
+| Member | Can use only the clients and skills granted to them. |
+
+Only active memberships count. Invited or suspended memberships do not give
+authority.
+
+The role order is:
+
+```text
+owner > admin > member
+```
+
+## Client grants
+
+A client grant gives one user access to one client.
+
+| Grant | What it allows |
+| --- | --- |
+| `read` | Read granted client files and search granted client memory. |
+| `write` | Read and write granted client files, and write granted client memory where allowed. |
+
+Write access includes read access.
+
+Team admins do not automatically get every client. The server checks the active
+client grant before allowing client file or client memory access.
+
+## Skill grants
+
+Skill permissions are ordered from narrow to broad.
+
+| Permission | What it allows |
+| --- | --- |
+| `skill.use` | Use the skill. |
+| `skill.read` | Read the skill. |
+| `skill.edit` | Edit the permitted local override for the skill. |
+| `skill.admin` | Manage higher-level skill access. |
+
+Higher permissions include lower ones.
+
+For example, a user with `skill.edit` can also use and read that skill.
+
+## Common actions
+
+| Action | Required authority |
+| --- | --- |
+| Invite a member | Owner or admin. |
+| Create a client | Owner or admin. |
+| Grant client access | Owner or admin. |
+| Revoke client access | Owner or admin. |
+| Use a client workspace | Active client grant. |
+| Push client files | Active `write` client grant. |
+| Use a skill | Active matching skill grant. |
+| Publish shared team memory | Owner or admin. |
+
+Exact checks are enforced by the server.
+
+## Why grants matter
+
+Roles are broad. Grants are specific.
+
+A member can belong to a team but still see no clients until an owner or admin
+grants access.
+
+A user can have access to one client without seeing another client.
+
+A user can use one skill without being allowed to edit or administer it.
+
+## Trust boundary
+
+The local client is not the authority.
+
+It can send a request, but the hosted server checks the saved session, active
+membership, role, client grant, and skill grant before it allows the action.
+
+This protects Team OS from local requests that claim a different team, client,
+or user.
+
+Next: [Team OS](README.md)

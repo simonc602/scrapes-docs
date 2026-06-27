@@ -1,0 +1,31 @@
+verbose = "warn"
+no_progress = true
+output = "_lychee/output.md"
+format = "markdown"
+cache = true
+max_cache_age = "2d"
+threads = 2
+max_redirects = 5
+max_retries = 2
+max_concurrency = 5
+user_agent = "lychee/0.18.1"
+timeout = 20
+retry_wait_time = 10
+accept = ["200", "429", "403"]
+insecure = false
+scheme = ["https", "http"]
+require_https = true
+method = "get"
+headers = []
+skip_missing = false
+include_verbatim = false
+glob_ignore_case = false
+
+exclude = [
+  '^https://platform\.openai\.com/.*',
+  '^https://www\.gitbook\.com/.*'
+]
+
+exclude_path = ["LICENSE.md", "NOTICE.md"]
+exclude_all_private = true
+include_mail = false

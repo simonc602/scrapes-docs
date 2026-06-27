@@ -1,0 +1,9 @@
+# Command Centre
+
+Command Centre is the local Agentic OS interface.
+
+This section will document how to launch Command Centre, sign in to Team OS,
+inspect memory state, work with clients, and manage common local tasks.
+
+The docs should use simple product-led screenshots once the first pages are
+ready for visual review.

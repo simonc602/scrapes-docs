@@ -1,0 +1,13 @@
+extends: substitution
+message: "Use '%s' instead of '%s' when possible."
+level: warning
+ignorecase: true
+swap:
+  utilize: use
+  executes: runs
+  execute: run
+  functionality: feature
+  configuration: setup
+  assistance: help
+  subsequently: then
+  prior to: before

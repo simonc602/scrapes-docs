@@ -1,0 +1,25 @@
+name: Docs quality
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run local PowerShell checks
+        shell: pwsh
+        run: ./scripts/check-docs.ps1
+
+      - name: Run Vale
+        uses: errata-ai/vale-action@reviewdog
+        with:
+          files: '["docs"]'
+
+      - name: Run Lychee
+        uses: lycheeverse/lychee-action@f796c8b7d468feb9b8c0a46da3fac0af6874d374
+        with:
+          args: --config lychee.toml ./docs

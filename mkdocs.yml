@@ -1,0 +1,58 @@
+site_name: Agentic OS Docs
+site_description: Agentic OS documentation local preview
+docs_dir: docs
+theme:
+  name: material
+  logo: assets/agentic-os-logo.png
+  favicon: assets/agentic-os-logo.png
+  font:
+    text: Inter
+    code: Space Grotesk
+  palette:
+    - scheme: default
+      primary: brown
+      accent: deep orange
+extra_css:
+  - stylesheets/agentic-os.css
+nav:
+  - Home: README.md
+  - Get started:
+      - get-started/README.md
+      - Local install: get-started/local-install.md
+      - First run: get-started/first-run.md
+  - Agentic OS:
+      - agentic-os/README.md
+      - What is Agentic OS?: agentic-os/what-is-agentic-os.md
+      - Core concepts: agentic-os/core-concepts.md
+      - Workspace structure: agentic-os/workspace-structure.md
+      - Multi-client workspaces: agentic-os/multi-client-workspaces.md
+  - Command Centre:
+      - command-centre/README.md
+  - Memory:
+      - memory/README.md
+      - Memory schema and scope: memory/schema.md
+      - Hosted memory API: memory/hosted-api.md
+      - Backup and restore: memory/backup-restore.md
+  - Team OS:
+      - team-os/README.md
+      - Team OS concepts: team-os/concepts.md
+      - Roles and permissions: team-os/roles-and-permissions.md
+      - Connect a Team OS client: team-os/client-connection.md
+      - Memory and file sync: team-os/memory-and-sync.md
+  - Deploy:
+      - deploy/README.md
+      - Team OS hosted server setup: deploy/team-os-hosted-server.md
+  - Admin:
+      - admin/README.md
+      - Team OS admin operations: admin/team-os-admin.md
+      - Team OS manual verification: admin/team-os-verification.md
+  - Troubleshooting:
+      - troubleshooting/README.md
+      - Team OS troubleshooting: troubleshooting/team-os.md
+  - Contribute:
+      - contribute/README.md
+      - Style guide: contribute/style-guide.md
+      - Visual style: contribute/visual-style.md
+      - Source docs reuse matrix: contribute/source-docs-reuse-matrix.md
+      - Quality checks: contribute/quality-checks.md
+      - Authoring kit: contribute/authoring-kit.md

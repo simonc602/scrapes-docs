@@ -1,0 +1,140 @@
+# Team OS troubleshooting
+
+Use this page when Team OS setup or usage does not match the expected result.
+
+Start by checking the hosted API:
+
+```powershell
+Invoke-RestMethod -Uri "https://team.example.com/v1/health" -Method Get
+```
+
+Expected response:
+
+```json
+{
+  "ok": true,
+  "backend": "postgres"
+}
+```
+
+## Login problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| `--api-url must start with http:// or https://` | URL is missing the scheme. | Use the full server URL, such as `https://team.example.com`. |
+| `login failed (401)` | Wrong email, password, team, or server URL. | Check credentials and ask an admin to confirm membership. |
+| `You are not logged in` | No saved local Team OS context. | Run `npm run team -- login ...` again. |
+| `saved Team OS login has expired` | Session token expired. | Sign in again with email and password. |
+| Command Centre is signed out but terminal is signed in | Different config directories. | Start both with the same `AGENTIC_OS_TEAM_CONFIG_DIR`. |
+
+The saved login lives in `team-context.json` under the config directory. It
+should not be committed.
+
+## Missing clients or grants
+
+If `npm run team -- clients` does not show the expected client:
+
+1. Confirm the user is an active team member.
+2. Confirm the client exists.
+3. Confirm the user has an active client grant.
+4. Confirm the user signed in to the correct server and team.
+5. Ask the user to sign in again after the grant changes.
+
+Useful commands:
+
+```powershell
+npm run team -- whoami
+npm run team -- clients
+npm run team:members -- --team demo
+npm run team:client -- grants --team demo
+```
+
+Grant revoke takes effect on the next backend request. Old local pulled files
+are not automatically deleted from disk.
+
+## Memory import problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Import is denied | User is not an owner or admin. | Use an owner/admin account or change the user's role. |
+| Client import is denied | User lacks write access to the client. | Grant `write` client access. |
+| Import stays failed | Indexing failed for that source. | Run `memory imports --status failed`, inspect the error, then retry. |
+| Search does not find new content | Import was not indexed, or embedder changed. | Check memory status and keep one embedder per database. |
+
+Useful commands:
+
+```powershell
+npm run team -- memory imports --status failed
+npm run team -- memory retry --id <import-id>
+```
+
+For hosted deployments, confirm `/v1/health` shows the expected embedder.
+
+## Search access problems
+
+Search uses server-resolved identity. The local client can send a narrow scope,
+but it cannot grant itself access by sending another `teamId`, `clientId`, or
+`userId`.
+
+If a result is missing:
+
+* check whether the memory is `team`, `client`, or `private`;
+* check the user's client grant;
+* check whether the source is indexed;
+* check whether the request asks for the correct visibility layer;
+* check whether the API is connected to the expected database.
+
+## File sync problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Manifest is empty | No active client grant. | Check `npm run team -- clients` and client grants. |
+| Pull returns no files | Client has no syncable text files. | Check excluded paths and file size. |
+| Push is denied | User has `read`, not `write`. | Grant `write` access for that client. |
+| Push says no base version | Existing file was not pulled first. | Run `sync pull`, merge changes, then push. |
+| Push gets a conflict | Remote file changed after pull. | Pull fresh, merge manually, then push. |
+
+Sync skips secrets, generated folders, transcripts, and files larger than 1 MB.
+It is not a secret distribution system.
+
+## Stale Command Centre state
+
+If Command Centre shows old Team OS data:
+
+1. Refresh the Team tab.
+2. Confirm the terminal and UI use the same `AGENTIC_OS_TEAM_CONFIG_DIR`.
+3. Run `npm run team -- whoami`.
+4. Sign out with `npm run team -- logout`.
+5. Start Command Centre again and sign in.
+
+If the backend is unavailable, hosted mode should not silently show every local
+client folder as if it came from Team OS.
+
+## API and database health
+
+If `/v1/health` fails:
+
+* check API deploy logs;
+* check `MEMORY_DATABASE_URL`;
+* check `PGSSLMODE`;
+* check Postgres network access;
+* check whether Postgres is private and reachable from the API container;
+* check whether migrations completed.
+
+If health returns `backend: pglite` in a hosted deploy, the API is not using the
+hosted database. Fix the database environment variables and redeploy.
+
+## Local PGLite lock
+
+Local PGLite is useful for tests, but one process owns the store at a time.
+
+If a direct admin command fails while `npm run memory:api` is running locally,
+stop the API, run the admin command, then start the API again. Hosted Postgres
+does not have this local lock issue.
+
+## Related pages
+
+* [Team OS hosted server setup](../deploy/team-os-hosted-server.md)
+* [Connect a Team OS client](../team-os/client-connection.md)
+* [Team OS memory and file sync](../team-os/memory-and-sync.md)
+* [Team OS admin operations](../admin/team-os-admin.md)

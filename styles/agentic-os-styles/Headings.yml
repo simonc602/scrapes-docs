@@ -1,0 +1,6 @@
+extends: existence
+message: "Headings should not end with punctuation."
+level: warning
+scope: heading
+tokens:
+  - '[.:;!?]$'
