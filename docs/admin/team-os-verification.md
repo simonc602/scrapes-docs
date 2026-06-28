@@ -237,4 +237,4 @@ match the local run.
 
 ## Next
 
-Continue with [Team OS troubleshooting](../troubleshooting/team-os.md).
+Continue with [Team OS troubleshooting](team-os-troubleshooting.md).

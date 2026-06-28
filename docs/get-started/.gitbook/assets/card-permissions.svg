@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">Team OS permissions card</title>
+  <desc id="desc">Users, teams, clients, and skills connected through grants.</desc>
+  <defs>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#3A3633"/>
+    </pattern>
+  </defs>
+  <rect width="960" height="480" rx="18" fill="#1B1C1B"/>
+  <rect width="960" height="480" fill="url(#dots)"/>
+  <circle cx="240" cy="160" r="44" fill="#FCF9F7"/>
+  <circle cx="240" cy="142" r="14" fill="#93452A"/>
+  <path d="M214 180c12-24 40-24 52 0" stroke="#93452A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <rect x="388" y="126" width="184" height="68" rx="16" fill="#93452A"/>
+  <text x="420" y="170" fill="#FFDBCF" font-family="Inter, sans-serif" font-size="28">team</text>
+  <rect x="690" y="126" width="150" height="68" rx="16" fill="#252321" stroke="#EB652A" stroke-width="4"/>
+  <text x="728" y="170" fill="#F6F3F1" font-family="Inter, sans-serif" font-size="26">client</text>
+  <rect x="390" y="294" width="180" height="68" rx="16" fill="#252321" stroke="#5A514B" stroke-width="3"/>
+  <text x="430" y="338" fill="#F6F3F1" font-family="Inter, sans-serif" font-size="26">skills</text>
+  <path d="M288 160h86M572 160h104M480 196v82" stroke="#EB652A" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="382" cy="160" r="9" fill="#EB652A"/>
+  <circle cx="578" cy="160" r="9" fill="#EB652A"/>
+  <circle cx="480" cy="286" r="9" fill="#EB652A"/>
+  <rect x="330" y="400" width="300" height="42" rx="21" fill="#FCF9F7"/>
+  <text x="377" y="429" fill="#390C00" font-family="Space Grotesk, sans-serif" font-size="22">server verifies identity</text>
+</svg>

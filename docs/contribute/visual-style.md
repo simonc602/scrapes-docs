@@ -33,6 +33,18 @@ docs/.gitbook/assets/card-memory-sync.svg
 docs/.gitbook/assets/card-admin.svg
 ```
 
+The `Get started` GitBook space also keeps local copies for the homepage card
+covers:
+
+```text
+docs/get-started/.gitbook/assets/card-setup.svg
+docs/get-started/.gitbook/assets/card-deploy.svg
+docs/get-started/.gitbook/assets/card-client.svg
+docs/get-started/.gitbook/assets/card-permissions.svg
+docs/get-started/.gitbook/assets/card-memory-sync.svg
+docs/get-started/.gitbook/assets/card-admin.svg
+```
+
 The local MkDocs preview uses this copy:
 
 ```text
@@ -116,6 +128,25 @@ The GitBook API is the source of truth for these external settings.
 Do not redesign the layout. Keep GitBook navigation, tables, hints, tabs, code
 blocks, and copy button behavior.
 
+## GitBook site structure
+
+The published GitBook site uses `docs.yaml` at the repository root to define
+real top navigation tabs. Each tab is a GitBook space backed by one directory:
+
+```text
+Get started -> docs/get-started
+Deploy -> docs/deploy
+Agentic OS -> docs/agentic-os
+Command Centre -> docs/command-centre
+Memory -> docs/memory
+Team OS -> docs/team-os
+Admin -> docs/admin
+Contribute -> docs/contribute
+```
+
+Do not add `Troubleshooting` as a top tab. Keep Team OS troubleshooting under
+`Admin`.
+
 ## Landing pages
 
 Use GitBook cards for entry pages and topic overviews:
@@ -139,8 +170,8 @@ Use GitBook cards for entry pages and topic overviews:
 </table>
 ```
 
-For the docs homepage, add a fourth hidden card-cover column that links to a
-file in `.gitbook/assets/`.
+For the `Get started` homepage, add a fourth hidden card-cover column that links
+to a file in that space's `.gitbook/assets/` folder.
 
 ## Local preview styling
 

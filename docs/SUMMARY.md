@@ -23,7 +23,7 @@
 * [Admin](admin/README.md)
   * [Team OS admin operations](admin/team-os-admin.md)
   * [Team OS manual verification](admin/team-os-verification.md)
-  * [Team OS troubleshooting](troubleshooting/team-os.md)
+  * [Team OS troubleshooting](admin/team-os-troubleshooting.md)
 * [Contribute](contribute/README.md)
   * [Style guide](contribute/style-guide.md)
   * [Visual style](contribute/visual-style.md)

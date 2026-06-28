@@ -27,7 +27,7 @@ recovery, health checks, or manual verification.
     <tr>
       <td><strong>Team OS troubleshooting</strong></td>
       <td>Fix common login, grant, sync, memory, and health problems.</td>
-      <td><a href="../troubleshooting/team-os.md">../troubleshooting/team-os.md</a></td>
+      <td><a href="team-os-troubleshooting.md">team-os-troubleshooting.md</a></td>
     </tr>
   </tbody>
 </table>
@@ -39,6 +39,6 @@ recovery, health checks, or manual verification.
 | Invite or remove members | [Team OS admin operations](team-os-admin.md) |
 | Grant clients or skills | [Team OS admin operations](team-os-admin.md) |
 | Verify setup after deploy | [Team OS manual verification](team-os-verification.md) |
-| Diagnose a failure | [Team OS troubleshooting](../troubleshooting/team-os.md) |
+| Diagnose a failure | [Team OS troubleshooting](team-os-troubleshooting.md) |
 
 Next: [Team OS admin operations](team-os-admin.md)
