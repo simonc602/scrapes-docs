@@ -65,11 +65,41 @@ h3 {
 .prose,
 .prose p,
 .prose li,
-.prose td,
 [data-card='true'],
 [data-card='true'] * {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+.docs-table-scroll {
+  width: 100%;
+  max-width: 100%;
+  margin-block: 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.docs-table-scroll:focus-visible {
+  outline: 2px solid var(--color-fd-ring);
+  outline-offset: 3px;
+}
+
+.docs-table-scroll .docs-table {
+  width: max-content;
+  min-width: 100%;
+  margin-block: 0;
+}
+
+.docs-table-scroll th,
+.docs-table-scroll td {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.docs-table-scroll th code,
+.docs-table-scroll td code {
+  white-space: nowrap;
 }
 
 .prose a:not([data-card='true']):not([role='button']) {
