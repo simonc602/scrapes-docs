@@ -1,0 +1,9 @@
+{
+  "title": "Get started",
+  "pages": [
+    "index",
+    "local-install",
+    "first-run"
+  ],
+  "root": true
+}

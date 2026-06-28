@@ -1,0 +1,10 @@
+{
+  "title": "Memory",
+  "pages": [
+    "index",
+    "schema",
+    "hosted-api",
+    "backup-restore"
+  ],
+  "root": true
+}

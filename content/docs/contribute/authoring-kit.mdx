@@ -1,0 +1,81 @@
+---
+title: "Authoring Kit"
+description: "Use the templates in document-templates/ when creating new pages."
+---
+
+Use the templates in `document-templates/` when creating new pages.
+
+| Template | Use for |
+| --- | --- |
+| `concept.md` | Explaining an idea before a task. |
+| `how-to.md` | Helping users complete one task. |
+| `tutorial.md` | Guiding a first-time end-to-end path. |
+| `reference.md` | Listing commands, settings, APIs, or fields. |
+| `troubleshooting.md` | Explaining symptoms, causes, and fixes. |
+| `release-notes.md` | Recording product changes. |
+
+When you add a page:
+
+1. Put it in the right section folder.
+2. Add it to the section `meta.json`.
+3. Add a link from a related page if the reader will need it.
+4. Run the quality checks.
+5. Check [Visual style](visual-style.mdx) before adding images or theme notes.
+
+## Fumadocs examples
+
+Use a callout for important setup details:
+
+```mdx
+<Callout type="warn">
+Do not commit real secrets. Use placeholders in examples.
+</Callout>
+```
+
+Use tabs when the same task has more than one path:
+
+```mdx
+<Tabs items={["Terminal", "Command Centre"]}>
+<Tab>
+Run `agentic team whoami`.
+</Tab>
+
+<Tab>
+Open Team OS and check the signed-in user.
+</Tab>
+</Tabs>
+```
+
+Use a collapsible block for optional detail:
+
+```mdx
+<details>
+<summary>Why this matters</summary>
+
+The server is the source of truth for identity and permissions.
+
+</details>
+```
+
+Use titled code blocks for commands:
+
+````markdown
+```powershell
+pwsh ./scripts/check-docs.ps1
+```
+````
+
+Use images with alt text:
+
+```markdown
+![Command Centre Team OS login](/assets/team-os-login.png)
+```
+
+Use tables for permissions and settings:
+
+```markdown
+| Role | Can manage clients | Can grant skills |
+| --- | --- | --- |
+| Owner | Yes | Yes |
+| Member | No | No |
+```

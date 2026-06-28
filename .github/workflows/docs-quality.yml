@@ -10,6 +10,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build Fumadocs site
+        run: pnpm build
+
       - name: Run local PowerShell checks
         shell: pwsh
         run: ./scripts/check-docs.ps1
@@ -17,9 +35,9 @@ jobs:
       - name: Run Vale
         uses: errata-ai/vale-action@reviewdog
         with:
-          files: '["docs"]'
+          files: '["content/docs"]'
 
       - name: Run Lychee
         uses: lycheeverse/lychee-action@f796c8b7d468feb9b8c0a46da3fac0af6874d374
         with:
-          args: --config lychee.toml ./docs
+          args: --config lychee.toml ./content/docs

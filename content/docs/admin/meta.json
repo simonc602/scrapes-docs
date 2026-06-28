@@ -1,0 +1,10 @@
+{
+  "title": "Admin",
+  "pages": [
+    "index",
+    "team-os-admin",
+    "team-os-verification",
+    "team-os-troubleshooting"
+  ],
+  "root": true
+}

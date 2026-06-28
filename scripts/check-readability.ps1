@@ -1,9 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 $repoRoot = (git rev-parse --show-toplevel).Trim()
-$markdownFiles = git ls-files --cached --others --exclude-standard -- "docs/*.md" | Where-Object {
-  $_ -notlike "docs/SUMMARY.md"
-}
+$markdownFiles = git ls-files --cached --others --exclude-standard -- "content/docs/*.mdx"
 
 $problems = @()
 
@@ -14,9 +12,22 @@ foreach ($file in $markdownFiles) {
   }
 
   $insideCodeBlock = $false
+  $insideFrontmatter = $false
   $lineNumber = 0
   foreach ($line in Get-Content -LiteralPath $path -ErrorAction Stop) {
     $lineNumber += 1
+
+    if ($lineNumber -eq 1 -and $line.Trim() -eq "---") {
+      $insideFrontmatter = $true
+      continue
+    }
+
+    if ($insideFrontmatter) {
+      if ($line.Trim() -eq "---") {
+        $insideFrontmatter = $false
+      }
+      continue
+    }
 
     if ($line.TrimStart().StartsWith('```')) {
       $insideCodeBlock = -not $insideCodeBlock
@@ -32,7 +43,6 @@ foreach ($file in $markdownFiles) {
     $skipLine = $skipLine -or ($trimmed.StartsWith('#'))
     $skipLine = $skipLine -or ($trimmed.StartsWith('*'))
     $skipLine = $skipLine -or ($trimmed.StartsWith('|'))
-    $skipLine = $skipLine -or ($trimmed.StartsWith('{%'))
     $skipLine = $skipLine -or ($trimmed.StartsWith('<'))
     $skipLine = $skipLine -or ($trimmed -match '^\d+\.')
 

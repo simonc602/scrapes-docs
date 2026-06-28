@@ -1,0 +1,215 @@
+---
+title: "Connect a Team OS client"
+description: "Use this guide to connect a local Agentic OS workspace to a hosted Team OS"
+---
+
+Use this guide to connect a local Agentic OS workspace to a hosted Team OS
+server.
+
+You need:
+
+* a Team OS server URL;
+* your email and password;
+* an active team membership;
+* any client or skill grants needed for your work.
+
+If the server is not deployed yet, start with
+[Team OS hosted server setup](/docs/deploy/team-os-hosted-server).
+
+## Terminal login
+
+Run terminal commands from `command-centre` in the Agentic OS repository.
+
+```bash
+cd command-centre
+npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>"
+```
+
+If your email belongs to more than one team, pass the team slug or team ID:
+
+```bash
+npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>" --team acme
+```
+
+Expected output:
+
+```text
+Signed in as user@example.com
+Team: Acme
+```
+
+The CLI stores a user-scoped Team OS session token outside the repository. It
+does not save your password.
+
+## Saved config directory
+
+By default, the saved login file is:
+
+```text
+~/.agentic-os/team-context.json
+```
+
+Use `AGENTIC_OS_TEAM_CONFIG_DIR` when you need a separate login for testing or
+for a specific workspace.
+
+PowerShell:
+
+```powershell
+$env:AGENTIC_OS_TEAM_CONFIG_DIR="$env:TEMP\aios-team-client"
+npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>"
+```
+
+Bash:
+
+```bash
+export AGENTIC_OS_TEAM_CONFIG_DIR="/tmp/aios-team-client"
+npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>"
+```
+
+Command Centre and the terminal share the same login state when they use the
+same `AGENTIC_OS_TEAM_CONFIG_DIR`.
+
+## Check your session
+
+Show the server-resolved user, team, and role:
+
+```bash
+npm run team -- whoami
+```
+
+Expected output:
+
+```text
+Signed in as: user@example.com
+Team: Acme
+Role: member
+```
+
+Show the clients granted to your account:
+
+```bash
+npm run team -- clients
+```
+
+Example output:
+
+```text
+acme	read	Acme
+globex	write	Globex
+```
+
+If you have no client grants, the command prints:
+
+```text
+No clients are available for this account.
+```
+
+That does not always mean your login failed. It can mean an owner or admin has
+not granted you access to a client yet.
+
+## Sign out
+
+Sign out from the terminal:
+
+```bash
+npm run team -- logout
+```
+
+This calls the server logout endpoint when possible and removes the saved local
+Team OS login file.
+
+Expected output:
+
+```text
+Signed out.
+```
+
+## Expired sessions
+
+If the saved session expires, commands fail with a message like:
+
+```text
+Your saved Team OS login has expired. Run: npm run team -- login --api-url <url> --email <email>
+```
+
+Run login again with the same server URL, email, and password.
+
+## Command Centre login
+
+Command Centre can sign in with the same server URL, email, password, and
+optional team slug.
+
+1. Start Command Centre from the same environment you want to use.
+2. Open the Team control in the top-right area.
+3. Choose sign in.
+4. Enter the Team OS server URL, email, password, and optional team.
+5. Confirm the Team control shows a connected state.
+
+The Team control should show the signed-in user, team, role, session expiry, and
+sign-out action.
+
+If you logged in from the terminal first, Command Centre can reuse that login
+when `AGENTIC_OS_TEAM_CONFIG_DIR` is the same.
+
+## Invite and join flow
+
+Owners and admins create invites. A normal user receives an invite token for one
+email address.
+
+The user joins with:
+
+* the team slug;
+* the invited email;
+* the invite token;
+* a new password.
+
+After joining, the user signs in with the normal login command:
+
+```bash
+npm run team -- login --api-url https://team.example.com --email member@example.com --password "<password>" --team acme
+```
+
+Invite tokens are single-use. If a token is already used or expired, ask an
+owner or admin for a new invite.
+
+## Dev-only token login
+
+Some deployments set `MEMORY_API_TOKEN` for internal smoke tests. This is a
+shared dev fallback token, not the normal login method for users.
+
+Use it only when an operator asks you to test the deployment:
+
+```bash
+npm run team -- login-dev --api-url https://team.example.com --token "<dev-token>"
+```
+
+Expected output:
+
+```text
+Dev-only shared token saved. Use email/password login for normal Team OS users.
+Signed in as owner@example.com
+Team: Acme
+```
+
+Do not share this token with normal users. Rotate it if it is exposed.
+
+## Common failures
+
+| Symptom | What to check |
+| --- | --- |
+| `--api-url must start with http:// or https://` | Use the full server URL, including `https://`. |
+| `login failed (401)` or `unauthorized` | Check email, password, invite status, and server URL. |
+| `No clients are available for this account.` | Ask an owner or admin to grant client access. |
+| Saved login expired | Run `npm run team -- login` again. |
+| Command Centre shows signed out after terminal login | Start both with the same `AGENTIC_OS_TEAM_CONFIG_DIR`. |
+| Health check fails | Ask the server operator to check `/v1/health` and API deploy logs. |
+
+## What the server decides
+
+After login, the local client can ask for clients, memory, and files. The server
+still decides what is allowed.
+
+The local client cannot grant itself a team, role, client, skill, or user
+identity by sending different IDs in a request.
+
+Next: [Memory](/docs/memory)

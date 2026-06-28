@@ -22,8 +22,7 @@ include_verbatim = false
 glob_ignore_case = false
 
 exclude = [
-  '^https://platform\.openai\.com/.*',
-  '^https://www\.gitbook\.com/.*'
+  '^https://platform\.openai\.com/.*'
 ]
 
 exclude_path = ["LICENSE.md", "NOTICE.md"]

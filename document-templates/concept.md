@@ -16,4 +16,4 @@ Show a small practical example.
 
 ## Related pages
 
-* [Related page](../docs/README.md)
+* [Related page](../content/docs/index.mdx)

@@ -1,0 +1,151 @@
+---
+title: "Visual style"
+description: "Use this page when adding docs visuals, screenshots, or Fumadocs theme settings."
+---
+
+Use this page when adding docs visuals, screenshots, or Fumadocs theme settings.
+
+The docs should follow the Command Centre visual direction without becoming a
+new design project. Keep the page quiet, readable, and product-led.
+
+## Source of truth
+
+Use these files in the Agentic OS source repo as the visual source:
+
+* `command-centre/src/design-system/theme.css`
+* `command-centre/src/design-system/tokens.ts`
+* `command-centre/public/logo.png`
+
+The self-hosted docs app stores public assets at:
+
+```text
+public/assets/agentic-os-logo.png
+```
+
+Card covers also live in this folder. Use simple product-led diagrams, dark
+dotted backgrounds, and terracotta or orange accents.
+
+Current card assets:
+
+```text
+public/assets/card-setup.svg
+public/assets/card-deploy.svg
+public/assets/card-client.svg
+public/assets/card-permissions.svg
+public/assets/card-memory-sync.svg
+public/assets/card-admin.svg
+```
+
+## Logo
+
+Use the Agentic OS / Command Centre logo for docs identity.
+
+```markdown
+![Agentic OS logo](/assets/agentic-os-logo.png)
+```
+
+Use a clear alt text. Do not use decorative logos without alt text.
+
+## Light theme colors
+
+| Role | Token | Value |
+| --- | --- | --- |
+| Canvas | `--cc-canvas` | `#FCF9F7` |
+| Surface | `--cc-surface` | `#FFFFFF` |
+| Muted surface | `--cc-surface-muted` | `#F6F3F1` |
+| Primary text | `--cc-text-primary` | `#1B1C1B` |
+| Secondary text | `--cc-text-secondary` | `#5E5E65` |
+| Brand primary | `--cc-brand-primary` | `#93452A` |
+| Brand hover | `--cc-brand-hover` | `#B25D3F` |
+| Brand soft | `--cc-brand-soft` | `#FFDBCF` |
+| Warning | `--cc-status-warning` | `#D2783C` |
+| Danger | `--cc-status-danger` | `#C04030` |
+| Success | `--cc-status-success` | `#6B8E6B` |
+
+## Dark theme colors
+
+| Role | Token | Value |
+| --- | --- | --- |
+| Canvas | `--cc-canvas` | `#141518` |
+| Surface | `--cc-surface` | `#1E2026` |
+| Muted surface | `--cc-surface-muted` | `#1A1C21` |
+| Primary text | `--cc-text-primary` | `#EDEFF7` |
+| Secondary text | `--cc-text-secondary` | `#D3D6E0` |
+| Brand primary | `--cc-brand-primary` | `#EB652A` |
+| Brand hover | `--cc-brand-hover` | `#FF7A3D` |
+| Brand soft | `--cc-brand-soft` | `#3B241E` |
+
+## Fonts
+
+Use these families where the docs platform allows custom fonts:
+
+| Use | Font |
+| --- | --- |
+| Body | Inter |
+| Headings | Epilogue |
+| Labels and small UI text | Space Grotesk |
+| Code | Space Grotesk or the platform monospace fallback |
+
+If a host cannot load a custom font, use the closest platform default and keep
+the brand colors and logo.
+
+## Fumadocs theme settings
+
+The self-hosted docs app sets theme values in `app/global.css` and layout
+options in `lib/layout.shared.tsx`.
+
+| Setting | Value |
+| --- | --- |
+| Site title | Scrapes Docs |
+| Logo | `public/assets/agentic-os-logo.png` |
+| Layout | Fumadocs Notebook |
+| Search | Fumadocs local search |
+| Primary color, light | `#93452A` |
+| Primary color, dark | `#EB652A` |
+| Typography | Inter-compatible system font stack |
+| Theme switcher | Enabled, default system |
+
+Do not redesign the layout. Keep Fumadocs navigation, tables, callouts, tabs,
+code blocks, search, and copy button behavior.
+
+## Fumadocs site structure
+
+The self-hosted Fumadocs site uses `content/docs/meta.json` and section
+`meta.json` files to define top navigation tabs. Each tab is a root folder:
+
+```text
+Get started -> content/docs/get-started
+Deploy -> content/docs/deploy
+Agentic OS -> content/docs/agentic-os
+Command Centre -> content/docs/command-centre
+Memory -> content/docs/memory
+Team OS -> content/docs/team-os
+Admin -> content/docs/admin
+Contribute -> content/docs/contribute
+```
+
+Do not add `Troubleshooting` as a top tab. Keep Team OS troubleshooting under
+`Admin`.
+
+## Landing pages
+
+Use Fumadocs cards for entry pages and topic overviews:
+
+```mdx
+<Cards>
+  <Card title="Page title" description="Short reader-focused description." href="/docs/section/target-page" />
+</Cards>
+```
+
+For the `Get started` homepage, use the card cover SVGs from `public/assets/`
+as card icons when helpful.
+
+## Local styling
+
+The app styling lives at:
+
+```text
+app/global.css
+```
+
+It mirrors the Command Centre colors and keeps the docs quiet and readable.

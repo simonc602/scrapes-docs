@@ -1,0 +1,101 @@
+---
+title: "Multi-client workspaces"
+description: "Use clients when one Agentic OS install must support separate brands, customers,"
+---
+
+Use clients when one Agentic OS install must support separate brands, customers,
+teams, or project areas.
+
+## The main rule
+
+Agentic OS has two layers:
+
+| Layer | Stored at | Purpose |
+| --- | --- | --- |
+| Shared methodology | Root workspace | Shared instructions, base skills, scripts, hooks, and templates. |
+| Client data | `clients/{client-slug}/` | Client context, memory, brand data, projects, jobs, local settings, and overrides. |
+
+Work from the root workspace when the task is for your own system.
+
+Work from a client workspace when the task belongs to a specific client.
+
+## Add a client
+
+From the root workspace:
+
+```bash
+bash scripts/add-client.sh "Client Name"
+```
+
+Then start work inside the new client folder:
+
+```bash
+cd clients/client-name
+claude
+```
+
+Agentic OS creates the client folder, copies shared system files, and gives the
+client its own context and output folders.
+
+## What each client gets
+
+Each client can have:
+
+* its own `AGENTS.md` and `CLAUDE.md`;
+* its own `brand_context/`;
+* its own `context/` and memory source files;
+* its own `projects/`;
+* its own `cron/jobs/`;
+* its own `.env` if client-specific keys are needed;
+* its own client-only skills;
+* its own `SKILL.local.md` overrides.
+
+## How instructions load
+
+Claude Code reads `CLAUDE.md` files from parent folders.
+
+When you run Claude Code inside a client folder, it gets the root shared rules
+and the client-specific rules.
+
+Codex reads `AGENTS.md` directly. It also sees the root rules first, then the
+client rules.
+
+## Skills and overrides
+
+Edit shared skills at the root workspace when the change should apply to every
+client.
+
+Use `SKILL.local.md` inside a client skill folder when only one client needs a
+different rule.
+
+During updates, Agentic OS syncs shared skill files and scripts into clients.
+It preserves client-only skills and `SKILL.local.md` files.
+
+## Updates
+
+Run updates from the root workspace:
+
+```bash
+bash scripts/update.sh
+```
+
+The updater refreshes shared system files. It preserves root and client data,
+including `.env`, brand context, memory, projects, cron jobs, and local settings.
+
+## Cron jobs
+
+One managed cron runtime can cover the root workspace and all client workspaces.
+
+Start it from the root workspace when you want scheduled jobs to run:
+
+```bash
+bash scripts/start-crons.sh
+```
+
+On Windows PowerShell:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\start-crons.ps1
+```
+
+Use Command Centre when you want to manage jobs from the browser.

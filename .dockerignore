@@ -1,0 +1,15 @@
+.git
+.github
+.next
+.source
+.tmp
+.worktrees
+dist
+node_modules
+npm-debug.log*
+output.csv
+site
+tmp
+.env
+.vscode
+.idea

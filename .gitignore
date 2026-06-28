@@ -1,10 +1,14 @@
 node_modules
+.next
+.source
+tsconfig.tsbuildinfo
 .DS_Store
 .tmp
 tmp
 dist
 site
 npm-debug.log*
+next-localhost-*.log
 yarn.lock
 .env
 .vscode

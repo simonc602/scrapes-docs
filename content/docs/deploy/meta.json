@@ -1,0 +1,8 @@
+{
+  "title": "Deploy",
+  "pages": [
+    "index",
+    "team-os-hosted-server"
+  ],
+  "root": true
+}

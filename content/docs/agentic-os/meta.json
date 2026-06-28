@@ -1,0 +1,11 @@
+{
+  "title": "Agentic OS",
+  "pages": [
+    "index",
+    "what-is-agentic-os",
+    "core-concepts",
+    "workspace-structure",
+    "multi-client-workspaces"
+  ],
+  "root": true
+}

@@ -1,6 +1,6 @@
 # Agentic OS Docs Writing Style
 
 Style guidance lives in
-[`docs/contribute/style-guide.md`](docs/contribute/style-guide.md).
+[`content/docs/contribute/style-guide.mdx`](content/docs/contribute/style-guide.mdx).
 
 Use that guide when writing or reviewing public documentation.

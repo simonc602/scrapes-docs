@@ -1,0 +1,12 @@
+{
+  "title": "Contribute",
+  "pages": [
+    "index",
+    "style-guide",
+    "visual-style",
+    "source-docs-reuse-matrix",
+    "quality-checks",
+    "authoring-kit"
+  ],
+  "root": true
+}

@@ -1,0 +1,82 @@
+---
+title: "Hosted memory API"
+description: "The hosted memory API is the HTTP service behind Team OS."
+---
+
+The hosted memory API is the HTTP service behind Team OS.
+
+In the Agentic OS repository, the service is started with:
+
+```bash
+npm run memory:api
+```
+
+The service is also called `memory-api`. In hosted Team OS, it does more than
+memory search. It handles login, permissions, team admin data, manual imports,
+workspace file sync, memory status, and health checks.
+
+## Health check
+
+The health endpoint does not require auth:
+
+```bash
+curl https://team.example.com/v1/health
+```
+
+Expected response:
+
+```json
+{
+  "ok": true,
+  "backend": "postgres",
+  "embedder": {
+    "model": "bge-m3",
+    "dim": 1024
+  }
+}
+```
+
+Use `/v1/health` as the deployment health check in Railway, Coolify, Docker, or
+a VPS reverse proxy.
+
+## Authentication
+
+Normal users sign in with email and password:
+
+```bash
+npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>"
+```
+
+The server returns a Team OS session token. The terminal and Command Centre use
+that token for later requests.
+
+Some deployments also configure `MEMORY_API_TOKEN`. This is a dev fallback token
+for smoke tests. It is not the normal user login path.
+
+## Main endpoint groups
+
+| Endpoint group | Purpose |
+| --- | --- |
+| `/v1/auth/*` | Login, join, and logout. |
+| `/v1/team/*` | Who am I, granted clients, team admin data, members, invites, and grants. |
+| `/v1/memory/*` | Search, ingest, manual imports, retries, and memory status. |
+| `/v1/workspace/*` | Permission-scoped file manifest, pull, and push. |
+| `/v1/health` | Deployment health check. |
+
+All protected routes use the server-resolved Team OS identity. The local client
+cannot grant itself access by sending a different team, client, or user ID.
+
+## Startup behavior
+
+At startup, the API:
+
+* resolves the memory backend;
+* runs memory migrations;
+* runs Better Auth migrations;
+* resolves or bootstraps the configured Team OS server principal;
+* starts listening on `MEMORY_API_PORT`, `PORT`, or `8787`.
+
+If hosted mode is expected, the health response should show `backend:
+postgres`.
+
+Next: [Backup and restore](backup-restore.mdx)

@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "index",
+    "get-started",
+    "deploy",
+    "agentic-os",
+    "command-centre",
+    "memory",
+    "team-os",
+    "admin",
+    "contribute"
+  ],
+  "title": "Scrapes Docs"
+}

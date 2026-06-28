@@ -14,4 +14,4 @@ Explain what the reference covers.
 
 ## Related pages
 
-* [Related page](../docs/README.md)
+* [Related page](../content/docs/index.mdx)

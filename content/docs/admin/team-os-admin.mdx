@@ -1,0 +1,251 @@
+---
+title: "Team OS admin operations"
+description: "Use this page for owner and admin tasks."
+---
+
+Use this page for owner and admin tasks.
+
+Most direct admin commands run from `command-centre/`. They write to the local
+PGLite store by default, or to hosted Postgres when `MEMORY_DATABASE_URL` is set.
+
+In local PGLite, stop the API before running direct admin commands. PGLite
+allows only one process to hold the local store. Hosted Postgres does not have
+that limit.
+
+## Admin surfaces
+
+| Surface | Use it for |
+| --- | --- |
+| Terminal admin commands | Bootstrap teams, invites, members, clients, grants, skills, and owner reset. |
+| `npm run team -- ...` | User login, identity, clients, memory imports, and file sync. |
+| Command Centre Team tab | Members, invites, grants, memory status, sync state, skills, and secrets. |
+| Hosted API | Health, admin data, memory status, workspace manifest, and auth. |
+
+Command Centre uses the same saved Team OS login as the terminal when
+`AGENTIC_OS_TEAM_CONFIG_DIR` points to the same folder.
+
+## Create the first team and owner
+
+Run this once for a local test store or a hosted database:
+
+```powershell
+cd command-centre
+npm run team:create -- --slug demo --name "Demo Team" --owner-email owner@example.test --owner-name "Owner" --owner-password "owner-pass-123"
+```
+
+Expected output includes the team id, slug, and owner email.
+
+## Invite and join members
+
+Invite a member:
+
+```powershell
+npm run team:invite -- --team demo --email member@example.test --by owner@example.test
+```
+
+The command prints a one-time join token. Send the token to the invited user
+through a private channel.
+
+Accept the invite:
+
+```powershell
+npm run team:join -- --team demo --email member@example.test --token <invite-token> --password "member-pass-123"
+```
+
+List members:
+
+```powershell
+npm run team:members -- --team demo
+```
+
+Expected member states:
+
+| Status | Meaning |
+| --- | --- |
+| `invited` | Invite exists, but the user has not joined yet. |
+| `active` | User can sign in and use granted resources. |
+| `suspended` | User should not receive access. |
+
+Invite tokens are single-use. If a token is used, expired, or sent to the wrong
+email, create a new invite.
+
+## Manage clients
+
+Create a client:
+
+```powershell
+npm run team:client -- create --team demo --slug acme --name "Acme" --by owner@example.test
+```
+
+List clients:
+
+```powershell
+npm run team:client -- list --team demo
+```
+
+Grant read access:
+
+```powershell
+npm run team:client -- grant --team demo --client acme --user member@example.test --access read --by owner@example.test
+```
+
+Grant write access:
+
+```powershell
+npm run team:client -- grant --team demo --client acme --user member@example.test --access write --by owner@example.test
+```
+
+List client grants:
+
+```powershell
+npm run team:client -- grants --team demo
+```
+
+Revoke access:
+
+```powershell
+npm run team:client -- revoke --team demo --client acme --user member@example.test --by owner@example.test
+```
+
+Client grants affect `npm run team -- clients`, memory search, memory ingest,
+and file sync.
+
+## Manage skill grants
+
+Grant a skill permission:
+
+```powershell
+npm run team:skill -- grant --team demo --skill mkt-copywriting --user member@example.test --permission skill.use --by owner@example.test
+```
+
+List skill grants:
+
+```powershell
+npm run team:skill -- grants --team demo
+```
+
+Revoke a skill permission:
+
+```powershell
+npm run team:skill -- revoke --team demo --skill mkt-copywriting --user member@example.test --permission skill.use --by owner@example.test
+```
+
+Allowed permissions:
+
+| Permission | Meaning |
+| --- | --- |
+| `skill.use` | User can use the skill. |
+| `skill.read` | User can read the skill. |
+| `skill.edit` | User can edit local skill overrides, not shared base skill files. |
+| `skill.admin` | User can manage grants for that skill. |
+
+Target users must be active team members before they can receive skill grants.
+
+## Reset an owner password
+
+Use owner reset when a hosted owner needs a password reset link.
+
+Inside Docker:
+
+```powershell
+docker compose exec memory-api npm run team:owner-reset -- --base-url https://team.example.com
+```
+
+Directly from `command-centre/`:
+
+```powershell
+npm run team:owner-reset -- --team demo --email owner@example.test --base-url https://team.example.com
+```
+
+The command prints a reset URL. Treat it like a secret because it can change the
+owner password until it expires.
+
+## Health checks
+
+Check the hosted API:
+
+```powershell
+Invoke-RestMethod -Uri "https://team.example.com/v1/health" -Method Get
+```
+
+Expected response:
+
+```json
+{
+  "ok": true,
+  "backend": "postgres",
+  "embedder": {
+    "model": "bge-m3",
+    "dim": 1024
+  }
+}
+```
+
+If hosted mode is expected, `backend` should be `postgres`. If it says `pglite`,
+the API is not connected to hosted Postgres.
+
+## Memory status
+
+The hosted API exposes memory status at `GET /v1/memory/status`. Command Centre
+uses this in the Team view.
+
+Use memory status to check:
+
+* failed sources;
+* failed index jobs;
+* sources grouped by status;
+* whether imports are indexed.
+
+Failed manual imports can be retried:
+
+```powershell
+npm run team -- memory imports --status failed
+npm run team -- memory retry --id <import-id>
+```
+
+## Sync status
+
+Use the manifest and grants to confirm sync access.
+
+```powershell
+npm run team -- clients
+npm run team -- sync manifest --client acme
+```
+
+If the manifest is empty, check:
+
+* the user has an active team membership;
+* the user has an active client grant;
+* the client slug is correct;
+* the API can read the workspace file data;
+* the files are not excluded by sync rules.
+
+For sync behavior, see [Team OS memory and file sync](/docs/team-os/memory-and-sync).
+
+## Command Centre checks
+
+Open the Team tab after signing in.
+
+Owners and admins should see members, clients, client grants, skill grants,
+secrets, memory status, and sync state. Non-admin members should not see admin
+management controls.
+
+The clients list should come from the Team OS backend in hosted mode. It should
+not fall back to all local client folders when Team OS is connected.
+
+## Useful automated checks
+
+Run these from the Team OS source repo:
+
+```powershell
+cd "C:\Users\gmsal\Code Projects\AgenticOS-team-os-solomon\command-centre"
+npm run test:identity
+npm run test:memory
+npm run build
+```
+
+These checks cover identity, permissions, memory, and the Command Centre build.
+
+## Next
+
+Continue with [manual verification](team-os-verification.mdx).
