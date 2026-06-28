@@ -134,7 +134,7 @@ does not have this local lock issue.
 
 ## Related pages
 
-* [Team OS hosted server setup](/deploy/team-os-hosted-server)
-* [Connect a Team OS client](/team-os/client-connection)
-* [Team OS memory and file sync](/team-os/memory-and-sync)
-* [Team OS admin operations](/admin/team-os-admin)
+* [Team OS hosted server setup](https://sites.gitbook.com/preview/site_Nb7fG/deploy/team-os-hosted-server)
+* [Connect a Team OS client](https://sites.gitbook.com/preview/site_Nb7fG/team-os/client-connection)
+* [Team OS memory and file sync](https://sites.gitbook.com/preview/site_Nb7fG/team-os/memory-and-sync)
+* [Team OS admin operations](https://sites.gitbook.com/preview/site_Nb7fG/admin/team-os-admin)

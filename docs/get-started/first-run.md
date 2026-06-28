@@ -38,7 +38,7 @@ Check that these files and folders exist:
 | `projects/` | Agent output can be saved here. |
 | `scripts/` | Local management scripts are available. |
 
-Read [Workspace structure](/agentic-os/workspace-structure) for details.
+Read [Workspace structure](https://sites.gitbook.com/preview/site_Nb7fG/agentic-os/workspace-structure) for details.
 
 ## Open Claude Code
 
@@ -89,4 +89,4 @@ Use PowerShell when running Windows commands from these docs.
 If the `centre` shortcut was just installed, open a new terminal before using
 it. PowerShell may not see the new shortcut until the next terminal session.
 
-Next: [What is Agentic OS?](/agentic-os/what-is-agentic-os)
+Next: [What is Agentic OS?](https://sites.gitbook.com/preview/site_Nb7fG/agentic-os/what-is-agentic-os)

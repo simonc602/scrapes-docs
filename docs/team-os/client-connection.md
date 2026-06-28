@@ -11,7 +11,7 @@ You need:
 * any client or skill grants needed for your work.
 
 If the server is not deployed yet, start with
-[Team OS hosted server setup](/deploy/team-os-hosted-server).
+[Team OS hosted server setup](https://sites.gitbook.com/preview/site_Nb7fG/deploy/team-os-hosted-server).
 
 ## Terminal login
 
@@ -209,4 +209,4 @@ still decides what is allowed.
 The local client cannot grant itself a team, role, client, skill, or user
 identity by sending different IDs in a request.
 
-Next: [Memory](/memory)
+Next: [Memory](https://sites.gitbook.com/preview/site_Nb7fG/memory)

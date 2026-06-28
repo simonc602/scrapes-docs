@@ -44,13 +44,13 @@ Start here before using the hosted setup and client connection guides.
 
 1. [Team OS concepts](concepts.md)
 2. [Roles and permissions](roles-and-permissions.md)
-3. [Team OS hosted server setup](/deploy/team-os-hosted-server)
+3. [Team OS hosted server setup](https://sites.gitbook.com/preview/site_Nb7fG/deploy/team-os-hosted-server)
 4. [Connect a Team OS client](client-connection.md)
 5. [Memory and file sync](memory-and-sync.md)
 
 For hosted server setup, see
-[Team OS hosted server setup](/deploy/team-os-hosted-server).
+[Team OS hosted server setup](https://sites.gitbook.com/preview/site_Nb7fG/deploy/team-os-hosted-server).
 
-For admin tasks, see [Team OS admin operations](/admin/team-os-admin).
+For admin tasks, see [Team OS admin operations](https://sites.gitbook.com/preview/site_Nb7fG/admin/team-os-admin).
 
 Next: [Memory and file sync](memory-and-sync.md)

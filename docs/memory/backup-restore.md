@@ -58,4 +58,4 @@ npm run memory:backup
 npm run memory:restore -- backups/memory/<backup-file>.tar.gz --yes
 ```
 
-Next: [Team OS hosted server setup](/deploy/team-os-hosted-server)
+Next: [Team OS hosted server setup](https://sites.gitbook.com/preview/site_Nb7fG/deploy/team-os-hosted-server)

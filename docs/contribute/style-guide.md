@@ -83,9 +83,9 @@ Prefer internal links when a concept already has a page.
 
 Examples:
 
-* Link to [Team OS](/team-os) when explaining hosted team setup.
-* Link to [Memory](/memory) when explaining search or imports.
-* Link to [Troubleshooting](/admin/team-os-troubleshooting) when a setup step can fail.
+* Link to [Team OS](https://sites.gitbook.com/preview/site_Nb7fG/team-os) when explaining hosted team setup.
+* Link to [Memory](https://sites.gitbook.com/preview/site_Nb7fG/memory) when explaining search or imports.
+* Link to [Troubleshooting](https://sites.gitbook.com/preview/site_Nb7fG/admin/team-os-troubleshooting) when a setup step can fail.
 
 ## Document Team OS safely
 

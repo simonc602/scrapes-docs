@@ -217,7 +217,7 @@ If the manifest is empty, check:
 * the API can read the workspace file data;
 * the files are not excluded by sync rules.
 
-For sync behavior, see [Team OS memory and file sync](/team-os/memory-and-sync).
+For sync behavior, see [Team OS memory and file sync](https://sites.gitbook.com/preview/site_Nb7fG/team-os/memory-and-sync).
 
 ## Command Centre checks
 

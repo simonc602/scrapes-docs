@@ -16,4 +16,4 @@ connect to Team OS.
 | [Workspace structure](workspace-structure.md) | You want to know what each folder does. |
 | [Multi-client workspaces](multi-client-workspaces.md) | You work with more than one client, brand, or project area. |
 
-Next: [Team OS](/team-os)
+Next: [Team OS](https://sites.gitbook.com/preview/site_Nb7fG/team-os)

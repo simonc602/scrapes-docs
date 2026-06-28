@@ -310,9 +310,9 @@ After deployment:
 
 ## Related
 
-* [Memory schema and scope](/memory/schema)
-* [Hosted memory API](/memory/hosted-api)
-* [Backup and restore](/memory/backup-restore)
-* [Connect a Team OS client](/team-os/client-connection)
+* [Memory schema and scope](https://sites.gitbook.com/preview/site_Nb7fG/memory/schema)
+* [Hosted memory API](https://sites.gitbook.com/preview/site_Nb7fG/memory/hosted-api)
+* [Backup and restore](https://sites.gitbook.com/preview/site_Nb7fG/memory/backup-restore)
+* [Connect a Team OS client](https://sites.gitbook.com/preview/site_Nb7fG/team-os/client-connection)
 
-Next: [Connect a Team OS client](/team-os/client-connection)
+Next: [Connect a Team OS client](https://sites.gitbook.com/preview/site_Nb7fG/team-os/client-connection)
