@@ -111,7 +111,7 @@ Invoke-RestMethod `
 The server resolves the real team and user from the saved login. Body IDs can
 ask for a narrower search, but they cannot widen access.
 
-For endpoint details, see [Hosted memory API](../memory/hosted-api.md).
+For endpoint details, see [Hosted memory API](/memory/hosted-api).
 
 ## File sync model
 
@@ -264,4 +264,4 @@ The folder should contain only files returned by the Team OS manifest.
 
 ## Next
 
-Continue with [Team OS admin operations](../admin/team-os-admin.md).
+Continue with [Team OS admin operations](/admin/team-os-admin).

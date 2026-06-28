@@ -22,7 +22,7 @@ solo workspace.
     <tr>
       <td><strong>Connect after deploy</strong></td>
       <td>Sign in from a local client after the server is healthy.</td>
-      <td><a href="../team-os/client-connection.md">../team-os/client-connection.md</a></td>
+      <td><a href="/team-os/client-connection">/team-os/client-connection</a></td>
     </tr>
   </tbody>
 </table>
@@ -34,4 +34,4 @@ solo workspace.
 | Separate Postgres and API services | You need production backups, scaling, and independent lifecycle management. |
 | Single Compose or Coolify stack | You need a simpler self-hosted install for a small team. |
 
-Next: [Admin](../admin/README.md)
+Next: [Admin](/admin)

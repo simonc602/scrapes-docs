@@ -310,9 +310,9 @@ After deployment:
 
 ## Related
 
-* [Memory schema and scope](../memory/schema.md)
-* [Hosted memory API](../memory/hosted-api.md)
-* [Backup and restore](../memory/backup-restore.md)
-* [Connect a Team OS client](../team-os/client-connection.md)
+* [Memory schema and scope](/memory/schema)
+* [Hosted memory API](/memory/hosted-api)
+* [Backup and restore](/memory/backup-restore)
+* [Connect a Team OS client](/team-os/client-connection)
 
-Next: [Connect a Team OS client](../team-os/client-connection.md)
+Next: [Connect a Team OS client](/team-os/client-connection)

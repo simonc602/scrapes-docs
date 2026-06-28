@@ -10,6 +10,6 @@ Team OS.
 | [Memory schema and scope](schema.md) | Learn how memory rows are scoped. |
 | [Hosted memory API](hosted-api.md) | Learn what the Team OS API exposes. |
 | [Backup and restore](backup-restore.md) | Back up and restore hosted memory. |
-| [Team OS memory and file sync](../team-os/memory-and-sync.md) | Import shared memory and sync granted client files. |
+| [Team OS memory and file sync](/team-os/memory-and-sync) | Import shared memory and sync granted client files. |
 
-Next: [Team OS memory and file sync](../team-os/memory-and-sync.md)
+Next: [Team OS memory and file sync](/team-os/memory-and-sync)

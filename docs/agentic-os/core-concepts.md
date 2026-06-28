@@ -51,11 +51,11 @@ Hosted Team OS memory can run on Postgres with pgvector.
 Memory is scoped. A root workspace, a client workspace, a team, and a private
 user can have different memory layers.
 
-Read [Memory](../memory/README.md) before changing memory settings.
+Read [Memory](/memory) before changing memory settings.
 
 ## Team OS
 
 Team OS adds a hosted server. The server becomes the source of truth for users,
 teams, clients, roles, grants, shared memory, and file access.
 
-Start with [Team OS concepts](../team-os/concepts.md) before setup.
+Start with [Team OS concepts](/team-os/concepts) before setup.
