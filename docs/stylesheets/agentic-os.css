@@ -32,3 +32,64 @@ body {
 .md-typeset code {
   border-radius: 6px;
 }
+
+.md-typeset table[data-view="cards"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.md-typeset table[data-view="cards"] thead {
+  display: none;
+}
+
+.md-typeset table[data-view="cards"] tbody,
+.md-typeset table[data-view="cards"] tr,
+.md-typeset table[data-view="cards"] td {
+  display: block;
+}
+
+.md-typeset table[data-view="cards"] tr {
+  overflow: hidden;
+  min-height: 180px;
+  border: 1px solid #E4DDD8;
+  border-radius: 8px;
+  background: #FFFFFF;
+  box-shadow: 0 12px 30px rgb(27 28 27 / 8%);
+}
+
+.md-typeset table[data-view="cards"] td {
+  border: 0;
+  padding: 0 20px 12px;
+}
+
+.md-typeset table[data-view="cards"] td:first-child {
+  padding-top: 18px;
+  font-family: Epilogue, Inter, system-ui, sans-serif;
+  font-size: 1rem;
+}
+
+.md-typeset table[data-view="cards"] td[data-hidden],
+.md-typeset table[data-view="cards"] td:nth-child(3),
+.md-typeset table[data-view="cards"] td:nth-child(4) {
+  display: none;
+}
+
+.md-typeset table[data-card-size="large"] tr {
+  min-height: 300px;
+}
+
+.md-typeset table[data-card-size="large"] td:nth-child(4) {
+  display: block;
+  padding: 0;
+  order: -1;
+}
+
+.md-typeset table[data-card-size="large"] td:nth-child(4) a {
+  display: block;
+  overflow: hidden;
+  height: 160px;
+  text-indent: -9999px;
+  background: #1B1C1B;
+}

@@ -19,6 +19,20 @@ The local docs repo stores the GitBook logo at:
 docs/.gitbook/assets/agentic-os-logo.png
 ```
 
+GitBook card covers also live in this folder. Use simple product-led diagrams,
+dark dotted backgrounds, and terracotta or orange accents.
+
+Current card assets:
+
+```text
+docs/.gitbook/assets/card-setup.svg
+docs/.gitbook/assets/card-deploy.svg
+docs/.gitbook/assets/card-client.svg
+docs/.gitbook/assets/card-permissions.svg
+docs/.gitbook/assets/card-memory-sync.svg
+docs/.gitbook/assets/card-admin.svg
+```
+
 The local MkDocs preview uses this copy:
 
 ```text
@@ -80,20 +94,53 @@ default and keep the brand colors and logo.
 
 ## GitBook theme settings
 
-Some GitBook theme settings are configured in GitBook itself, not in this local
-repo. Apply these settings after the private remote and publishing setup exist:
+Some GitBook theme settings are configured in GitBook itself, not in this repo.
+The GitBook API is the source of truth for these external settings.
 
 | Setting | Value |
 | --- | --- |
-| Site title | Agentic OS Docs |
+| Site title | Scrapes Docs |
 | Logo | `docs/.gitbook/assets/agentic-os-logo.png` |
-| Primary color | `#93452A` |
-| Accent color | `#B25D3F` |
-| Background | `#FCF9F7` |
-| Typography | Inter body, Epilogue headings if available |
+| Theme | Clean |
+| Search | Prominent |
+| Primary color, light | `#93452A` |
+| Primary color, dark | `#EB652A` |
+| Links | Accent |
+| Corners | Rounded |
+| Depth | Subtle |
+| Typography | Inter body, IBM Plex Mono code |
+| Feedback | Enabled |
+| AI assistant | Enabled |
+| Theme switcher | Enabled, default system |
 
 Do not redesign the layout. Keep GitBook navigation, tables, hints, tabs, code
 blocks, and copy button behavior.
+
+## Landing pages
+
+Use GitBook cards for entry pages and topic overviews:
+
+```html
+<table data-view="cards">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th data-hidden data-card-target data-type="content-ref"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Page title</strong></td>
+      <td>Short reader-focused description.</td>
+      <td><a href="target-page.md">target-page.md</a></td>
+    </tr>
+  </tbody>
+</table>
+```
+
+For the docs homepage, add a fourth hidden card-cover column that links to a
+file in `.gitbook/assets/`.
 
 ## Local preview styling
 

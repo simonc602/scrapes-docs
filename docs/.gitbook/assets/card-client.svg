@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-labelledby="title desc">
+  <title id="title">Team OS client connection card</title>
+  <desc id="desc">A local client signs in to a hosted Team OS server.</desc>
+  <defs>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#3A3633"/>
+    </pattern>
+  </defs>
+  <rect width="960" height="480" rx="18" fill="#1B1C1B"/>
+  <rect width="960" height="480" fill="url(#dots)"/>
+  <rect x="108" y="132" width="300" height="216" rx="20" fill="#252321" stroke="#5A514B"/>
+  <rect x="148" y="176" width="220" height="24" rx="12" fill="#F6F3F1"/>
+  <rect x="148" y="224" width="160" height="20" rx="10" fill="#B9B2AD"/>
+  <rect x="148" y="272" width="120" height="34" rx="17" fill="#EB652A"/>
+  <text x="154" y="395" fill="#F6F3F1" font-family="Inter, sans-serif" font-size="26">local client</text>
+  <circle cx="706" cy="240" r="94" fill="#252321" stroke="#93452A" stroke-width="8"/>
+  <path d="M670 242l24 24 48-56" stroke="#FFDBCF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <text x="632" y="395" fill="#F6F3F1" font-family="Inter, sans-serif" font-size="26">hosted server</text>
+  <path d="M430 240h144" stroke="#EB652A" stroke-width="8" stroke-linecap="round"/>
+  <path d="M574 240l-22-20M574 240l-22 20" stroke="#EB652A" stroke-width="8" stroke-linecap="round"/>
+  <rect x="392" y="82" width="176" height="50" rx="25" fill="#FCF9F7"/>
+  <text x="425" y="115" fill="#390C00" font-family="Space Grotesk, sans-serif" font-size="24">login</text>
+</svg>
