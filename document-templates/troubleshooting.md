@@ -18,4 +18,4 @@ Explain the likely cause in simple words.
 
 ## Related pages
 
-* [Related page](../content/docs/admin/team-os-troubleshooting.mdx)
+* [Related page](/docs/admin/team-os-troubleshooting)

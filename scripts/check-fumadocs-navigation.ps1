@@ -100,6 +100,17 @@ function Test-CardHref($filePath) {
   }
 }
 
+function Test-MarkdownSourceLinks($filePath) {
+  $relativeFile = [System.IO.Path]::GetRelativePath($repoRoot, $filePath)
+  $content = Remove-FencedCodeBlocks (Get-Content -Raw -LiteralPath $filePath)
+  $matches = [regex]::Matches($content, '(?<!\!)\[[^\]]+\]\(\s*<?(?<href>[^)\s>]+\.mdx(?:[?#][^)\s>]*)?)>?')
+
+  foreach ($match in $matches) {
+    $href = $match.Groups["href"].Value
+    $script:problems += "{0}: Markdown link must use public route, not .mdx source path: {1}" -f $relativeFile, $href
+  }
+}
+
 $rootMetaPath = Join-Path $contentRoot "meta.json"
 $rootMeta = Get-MetaJson $rootMetaPath
 if ($rootMeta) {
@@ -153,6 +164,22 @@ foreach ($section in $requiredSections) {
 
 foreach ($mdxFile in Get-ChildItem -Path $contentRoot -Filter "*.mdx" -Recurse) {
   Test-CardHref $mdxFile.FullName
+}
+
+$markdownSourceLinkFiles = @(Get-ChildItem -Path $contentRoot -Filter "*.mdx" -Recurse)
+
+$templateRoot = Join-Path $repoRoot "document-templates"
+if (Test-Path -LiteralPath $templateRoot) {
+  $markdownSourceLinkFiles += Get-ChildItem -Path $templateRoot -Filter "*.md" -Recurse
+}
+
+$rootStyleGuidePath = Join-Path $repoRoot "STYLE_GUIDE.md"
+if (Test-Path -LiteralPath $rootStyleGuidePath) {
+  $markdownSourceLinkFiles += Get-Item -LiteralPath $rootStyleGuidePath
+}
+
+foreach ($markdownLinkFile in $markdownSourceLinkFiles) {
+  Test-MarkdownSourceLinks $markdownLinkFile.FullName
 }
 
 if ($problems.Count -gt 0) {
