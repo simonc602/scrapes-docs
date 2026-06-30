@@ -1,0 +1,83 @@
+---
+title: "Custom edits"
+description: "Customize Agentic OS without losing your changes during updates."
+---
+
+Agentic OS is made from plain files. You can edit skills, instructions, and
+methods when your workflow needs a change.
+
+The main rule is simple: base files belong to Agentic OS, and local files
+belong to you.
+
+## Base and local files
+
+| Layer | Examples | Who owns it |
+| --- | --- | --- |
+| Base | `SKILL.md`, `CLAUDE.md`, `AGENTS.md`, `.claude/settings.json` | Agentic OS updates refresh these files. |
+| Local | `SKILL.local.md`, `CLAUDE.local.md`, `.claude/settings.local.json` | You own these files. Updates leave them alone. |
+
+When instructions load, Agentic OS tells the agent to read the base file and
+then apply the local layer.
+
+This base plus local behavior is an Agentic OS instruction. It is not default
+Claude Code behavior.
+
+## Where to put your changes
+
+For personal changes, use the matching local file.
+
+Examples:
+
+| Goal | Edit this |
+| --- | --- |
+| Add personal Claude Code rules | `CLAUDE.local.md` |
+| Add personal Claude Code settings | `.claude/settings.local.json` |
+| Customize one skill | `SKILL.local.md` next to that skill's `SKILL.md` |
+| Keep project notes for old work | `CLAUDE.local.md` or a project note linked from it |
+
+If you edit a base file directly, the updater is designed to move your changes
+into the matching local file and save a backup first.
+
+## Files that are entirely yours
+
+These files and folders do not use a base and local split:
+
+* `.env`
+* `context/USER.md`
+* `context/SOUL.md`
+* `context/memory/`
+* `context/learnings.md`
+* `brand_context/`
+* `projects/`
+
+Updates do not overwrite them.
+
+## Multi-client edits
+
+Edit shared skills at the root workspace when the change should apply to every
+client.
+
+For one client only, create a uniquely named skill inside that client's
+`.claude/skills/` folder.
+
+Do not edit a shared skill only inside a client copy. Root skills sync into
+clients, so the root version can overwrite the client copy.
+
+Use `SKILL.local.md` when an existing shared skill needs one client-specific
+rule.
+
+## How skills improve
+
+Skills can improve in three ways.
+
+| Mechanism | What it does |
+| --- | --- |
+| Learnings | Feedback from wrap-up is saved so the skill can avoid the same mistake. |
+| Direct fixes | Clear feedback can update the skill instructions for next time. |
+| Rules | Hard constraints are added when a repeated issue needs a firm rule. |
+
+For example, if you say a skill missed the CTA, Agentic OS can log that
+feedback. If the missing CTA is a clear process error, it can also update the
+skill instructions.
+
+Next: [Multi-client workspaces](/docs/agentic-os/multi-client-workspaces)

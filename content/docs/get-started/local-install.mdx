@@ -1,104 +1,82 @@
 ---
 title: "Local install"
-description: "This guide installs Agentic OS locally and opens Command Centre."
+description: "Install Agentic OS locally with the guided installer."
 ---
 
-This guide installs Agentic OS locally and opens Command Centre.
+This guide installs Agentic OS locally with the guided installer.
 
-## Prerequisites
+Before you start, check [Prerequisites](/docs/get-started/prerequisites).
 
-Install these first:
+## Create a blank folder
 
-| Tool | Why it is needed |
-| --- | --- |
-| Git | Clones Agentic OS and receives updates. |
-| Node.js | Runs Command Centre and memory scripts. |
-| Python 3 | Used by some Agentic OS scripts. |
-| Claude Code | Main local runtime for Claude-based work. |
-| PowerShell | Recommended on Windows. |
+Create a new folder anywhere you want.
 
-Some optional skills need their own API keys. Add keys to `.env` only when a
-skill asks for them.
+You can name it anything. For example:
 
-## Clone Agentic OS
+```text
+my-agentic-os
+```
 
-Use the access method provided by the project owner.
+Open VS Code, choose **Open Folder**, and select that folder.
+
+## Run the installer
+
+Open a terminal inside VS Code.
+
+On Windows, use PowerShell. Do not use Git Bash for the installer.
+
+Run:
 
 ```bash
-git clone https://<YOUR_TOKEN>@github.com/simonc602/agentic-os.git
-cd agentic-os
+npx @scrapes/installer
 ```
 
-Do not paste a real token into documentation, screenshots, or committed files.
+The installer opens a guided menu.
 
-## Launch Command Centre
+If GitHub access is already set up, the installer uses it. If it needs a token,
+it asks for one during setup.
 
-On macOS or Linux:
+Do not paste real tokens into docs, screenshots, or committed files.
 
-```bash
-bash scripts/centre.sh
-```
+## Choose Agentic OS
 
-On Windows PowerShell:
+In the installer menu:
 
-```powershell
-powershell -File scripts\centre.ps1
-```
+1. Choose **Install Agentic OS**.
+2. Choose the folder you opened in VS Code.
+3. Follow the guided setup.
 
-The launcher checks the workspace, repairs local bootstrap files when needed,
-starts the Command Centre app, and opens the browser.
+The installer creates an `agentic-os` folder inside your chosen folder.
 
-After the first setup, you can use the optional global shortcut:
+It also checks for required tools, shows available skills, and connects them
+to Claude Code.
 
-```bash
-centre
-```
+The five core skills are always installed. Some optional skills may ask for an
+API key. Most skills still work without keys.
 
-## Manual install command
+Add API keys to `.env` only when you need them. Check `.env.example` for the
+full list of supported keys.
 
-Use the installer directly when you need setup or repair without launching the
-browser UI.
+## Bring existing work
 
-```bash
-bash scripts/install.sh
-bash scripts/install.sh --repair
-```
+If you already have projects, folders, files, or notes, keep their current
+structure.
 
-On Windows PowerShell:
+Install Agentic OS into a dedicated blank folder. Then move your existing work
+inside `projects/`.
 
-```powershell
-powershell -File scripts\install.ps1
-```
+Add a short note in `CLAUDE.local.md` that explains where the old work lives
+and what it contains.
 
-## Update Agentic OS
+Do not edit base `CLAUDE.md` for personal project notes. Base files are updated
+by Agentic OS. Read [Custom edits](/docs/agentic-os/custom-edits) for the safe
+local layer.
 
-Run updates from the root workspace:
+## Expected result
 
-```bash
-bash scripts/update.sh
-```
+Setup is complete when the installer finishes and the new `agentic-os` folder
+exists.
 
-The updater pulls from the official upstream source and preserves local data.
-It does not overwrite your brand context, memory source files, projects, cron
-jobs, client data, `.env`, or local settings.
-
-## Set up memory
-
-Memory setup usually runs during install and update. You can also run it
-manually.
-
-```bash
-bash scripts/setup-memory.sh
-bash scripts/setup-memory.sh --check
-```
-
-On Windows PowerShell:
-
-```powershell
-powershell -File scripts\setup-memory.ps1
-```
-
-Local memory uses `.command-centre/memory`. Hosted Team OS memory uses Postgres
-with pgvector and belongs in the Team OS setup flow.
+Your terminal may still be one level above that folder.
 
 Next: [First run](/docs/get-started/first-run)

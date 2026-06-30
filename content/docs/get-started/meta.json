@@ -2,8 +2,10 @@
   "title": "Get started",
   "pages": [
     "index",
+    "prerequisites",
     "local-install",
-    "first-run"
+    "first-run",
+    "updating"
   ],
   "root": true
 }

@@ -75,13 +75,13 @@ function Test-DocsRoute($href) {
 function Test-CardHref($filePath) {
   $relativeFile = [System.IO.Path]::GetRelativePath($repoRoot, $filePath)
   $content = Remove-FencedCodeBlocks (Get-Content -Raw -LiteralPath $filePath)
-  $matches = [regex]::Matches($content, '(?s)<Card\b[^>]*\bhref\s*=\s*(["''])(?<href>.*?)\1')
+  $matches = [regex]::Matches($content, '(?s)<(?:Card|FeatureCard)\b[^>]*\bhref\s*=\s*(["''])(?<href>.*?)\1')
 
   foreach ($match in $matches) {
     $href = $match.Groups["href"].Value
 
     if ($href -match '\.mdx(?:[?#].*)?$') {
-      $script:problems += "{0}: Card href must not point to .mdx source path: {1}" -f $relativeFile, $href
+      $script:problems += "{0}: card href must not point to .mdx source path: {1}" -f $relativeFile, $href
       continue
     }
 
@@ -90,12 +90,12 @@ function Test-CardHref($filePath) {
     }
 
     if (-not ($href -eq "/docs" -or $href.StartsWith("/docs/"))) {
-      $script:problems += "{0}: Card href must use /docs/... route, http(s), or #: {1}" -f $relativeFile, $href
+      $script:problems += "{0}: card href must use /docs/... route, http(s), or #: {1}" -f $relativeFile, $href
       continue
     }
 
     if (-not (Test-DocsRoute $href)) {
-      $script:problems += "{0}: Card href points to missing docs route: {1}" -f $relativeFile, $href
+      $script:problems += "{0}: card href points to missing docs route: {1}" -f $relativeFile, $href
     }
   }
 }

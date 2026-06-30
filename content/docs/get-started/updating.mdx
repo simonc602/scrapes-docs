@@ -1,0 +1,73 @@
+---
+title: "Updating Agentic OS"
+description: "Update Agentic OS without overwriting your local work."
+---
+
+Agentic OS is designed to update system files while keeping your work safe.
+
+Run the installer again when you want to check for updates:
+
+```bash
+npx @scrapes/installer
+```
+
+Run it from the folder that contains your Agentic OS workspace, unless your
+project owner gives you a different path.
+
+## What the updater protects
+
+Updates never overwrite these local files and folders:
+
+| Path | Why it is protected |
+| --- | --- |
+| `.env` | Your API keys and local secrets. |
+| `context/USER.md` | Your user profile. |
+| `context/SOUL.md` | Your agent personality. |
+| `context/memory/` | Your session history and memory source files. |
+| `context/learnings.md` | Learnings collected over time. |
+| `brand_context/` | Voice, positioning, and ICP files. |
+| `projects/` | Your generated work and project files. |
+| `clients/` | Your client context and client work. |
+| `.claude/settings.local.json` | Your personal Claude Code settings. |
+
+These files belong to you. Updates focus on system files, scripts, and base
+skills.
+
+## Common update results
+
+| Scenario | What happens |
+| --- | --- |
+| Nothing changed | The installer says Agentic OS is already up to date. |
+| Only Agentic OS changed | System files update cleanly and the installer shows a summary. |
+| Only you edited a skill | Your version is kept. The installer tells you the upstream file did not change. |
+| You and Agentic OS edited the same skill | Your custom edits move into `SKILL.local.md`. The base `SKILL.md` updates. |
+| You created a new skill | The installer leaves it alone when the skill name is unique. |
+| New catalog skills are available | New skills install automatically, unless you removed that skill before. |
+
+When a file needs protection before an update, Agentic OS saves a copy in
+`.backup/`.
+
+## Skill update rules
+
+Root skills are shared skills. They sync to clients during updates.
+
+If the same skill name exists in the root and in a client, the root version
+wins during sync.
+
+For one client only, create a skill with a unique name inside that client's
+`.claude/skills/` folder. The updater treats it as client-only and leaves it
+alone.
+
+For custom rules on an existing shared skill, use `SKILL.local.md`. Read
+[Custom edits](/docs/agentic-os/custom-edits) before changing shared skills.
+
+## Personal Claude Code settings
+
+Agentic OS ships shared hooks and statusline settings in
+`.claude/settings.json`.
+
+Do not put personal settings there. Put them in
+`.claude/settings.local.json` instead. Claude Code layers the local settings on
+top, and updates leave the local file alone.
+
+Next: [Custom edits](/docs/agentic-os/custom-edits)

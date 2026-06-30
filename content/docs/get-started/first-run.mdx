@@ -1,95 +1,93 @@
 ---
 title: "First run"
-description: "Use this checklist after installing Agentic OS."
+description: "Start Claude Code and run the Agentic OS first-time setup."
 ---
 
-Use this checklist after installing Agentic OS.
+Use this guide after the installer finishes.
 
-## Start Command Centre
+## Move into Agentic OS
 
-From the Agentic OS workspace:
+The installer creates an `agentic-os` folder inside the folder you chose.
 
-```bash
-centre
-```
-
-If the shortcut is not installed yet, use:
+When setup finishes, your terminal may still be one level above it. Move into
+the new folder first:
 
 ```bash
-bash scripts/centre.sh
+cd agentic-os
 ```
 
-On Windows PowerShell:
+## Start Claude Code
 
-```powershell
-powershell -File scripts\centre.ps1
-```
-
-Command Centre should open in your browser.
-
-## Confirm the workspace
-
-Check that these files and folders exist:
-
-| Path | Expected result |
-| --- | --- |
-| `AGENTS.md` | Shared Agentic OS instructions are present. |
-| `CLAUDE.md` | Claude Code wrapper is present. |
-| `command-centre/` | Local UI app exists. |
-| `context/` | Memory and learning source files can live here. |
-| `brand_context/` | Brand files can live here. |
-| `projects/` | Agent output can be saved here. |
-| `scripts/` | Local management scripts are available. |
-
-Read [Workspace structure](/docs/agentic-os/workspace-structure) for details.
-
-## Open Claude Code
-
-Open Claude Code from the root workspace:
+Start Claude Code from inside the Agentic OS workspace:
 
 ```bash
 claude
 ```
 
-Claude Code should read `CLAUDE.md`, which imports the shared instructions from
+Claude Code should read the Agentic OS instructions from `CLAUDE.md` and
 `AGENTS.md`.
 
-On a new workspace, Agentic OS may guide you through brand setup. This creates
-or updates files in `brand_context/`.
+## Start the first setup
 
-## Check memory
+Type:
 
-Run a memory check when you want to confirm the local memory store is ready.
-
-```bash
-bash scripts/setup-memory.sh --check
+```text
+/start-here
 ```
 
-On Windows PowerShell:
+You can also type:
 
-```powershell
-powershell -File scripts\setup-memory.ps1 -Check
+```text
+start here
 ```
 
-If memory is not ready, run the normal setup command from
-[Local install](/docs/get-started/local-install#set-up-memory).
+On a new workspace, Agentic OS may start this setup automatically.
 
-## First successful run checklist
+If `/start-here` does not appear as a slash command, type `start here` instead.
 
-Your setup is healthy when:
+The setup asks about your business, voice, audience, and positioning. It uses
+your answers to create the first brand foundation.
 
-* Command Centre opens in the browser;
-* Claude Code starts from the Agentic OS workspace;
+This usually takes about 15 minutes.
+
+## Confirm the workspace
+
+After setup, check that these files and folders exist:
+
+| Path | Expected result |
+| --- | --- |
+| `AGENTS.md` | Shared Agentic OS instructions are present. |
+| `CLAUDE.md` | Claude Code wrapper is present. |
+| `brand_context/` | Brand voice, positioning, and ICP files can live here. |
+| `context/` | User profile, memory notes, and learnings can live here. |
+| `projects/` | Your project work can live here. |
+| `scripts/` | Local management scripts are available. |
+
+Read [Workspace structure](/docs/agentic-os/workspace-structure) for details.
+
+## Work normally
+
+After the first setup, talk to Agentic OS like a team member.
+
+Examples:
+
+* Write copy for my landing page.
+* Repurpose this YouTube video into social posts.
+* Research what is trending in AI automation.
+* Write a UGC script for this product.
+* Generate an infographic of my workflow.
+
+Agentic OS chooses the right skill, reads your brand context, and saves useful
+context as you work.
+
+## Success checklist
+
+Your first run is complete when:
+
+* Claude Code starts from inside `agentic-os`;
+* `/start-here` or `start here` begins the guided setup;
+* `brand_context/` has your first brand foundation;
 * `AGENTS.md` and `CLAUDE.md` are both present;
-* the workspace has `context/`, `brand_context/`, `projects/`, and `scripts/`;
-* memory setup either passes or tells you the next action;
 * no real API keys or tokens were committed.
 
-## Windows notes
-
-Use PowerShell when running Windows commands from these docs.
-
-If the `centre` shortcut was just installed, open a new terminal before using
-it. PowerShell may not see the new shortcut until the next terminal session.
-
-Next: [What is Agentic OS?](/docs/agentic-os/what-is-agentic-os)
+Next: [Updating Agentic OS](/docs/get-started/updating)

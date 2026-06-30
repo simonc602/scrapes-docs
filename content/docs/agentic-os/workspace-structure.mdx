@@ -11,8 +11,11 @@ An Agentic OS workspace is a normal folder with a clear layout.
 | --- | --- |
 | `AGENTS.md` | Shared instructions for AI tools that read Agentic OS rules. |
 | `CLAUDE.md` | Claude Code wrapper that imports `AGENTS.md`. |
+| `CLAUDE.local.md` | Optional local Claude Code rules that updates leave alone. |
 | `.env` | Local secrets and API keys. Do not commit this file. |
 | `.mcp.json` | Local MCP tool configuration when used. Do not commit private values. |
+| `.claude/settings.json` | Shared Claude Code settings managed by Agentic OS. |
+| `.claude/settings.local.json` | Personal Claude Code settings that updates leave alone. |
 | `VERSION` | Installed Agentic OS version. |
 
 ## Main folders
@@ -27,6 +30,7 @@ An Agentic OS workspace is a normal folder with a clear layout.
 | `scripts/` | Install, update, memory, skill, client, and runtime scripts. |
 | `command-centre/` | Local UI and runtime app. |
 | `.command-centre/` | Local runtime state, caches, memory store, and app data. |
+| `.backup/` | Backups created before an update changes protected files. |
 
 ## Shared instructions
 
@@ -37,14 +41,30 @@ wrapper. The wrapper imports `AGENTS.md`.
 
 This keeps shared methodology in one place while keeping Claude Code compatible.
 
+## Existing work
+
+Your old projects do not need a new structure.
+
+Move existing project folders into `projects/`. Keep their files and folders as
+they are.
+
+Then add a short note in `CLAUDE.local.md` that tells Claude Code where the
+work lives and what it contains.
+
+Use the local file for this note because base `CLAUDE.md` is refreshed by
+updates.
+
 ## Data safety
 
 Agentic OS updates are designed to preserve user data.
 
 The root workspace keeps your local `.env`, brand context, memory source files,
-projects, scheduled jobs, and local settings.
+projects, clients, scheduled jobs, and local settings.
 
 Client workspaces keep their own context, brand data, memory, projects, cron
 jobs, local settings, client-only skills, and `SKILL.local.md` overrides.
 
-Next: [Multi-client workspaces](/docs/agentic-os/multi-client-workspaces)
+Read [Updating Agentic OS](/docs/get-started/updating) for the full protected
+file list.
+
+Next: [Custom edits](/docs/agentic-os/custom-edits)

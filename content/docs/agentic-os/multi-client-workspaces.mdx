@@ -65,22 +65,33 @@ client rules.
 Edit shared skills at the root workspace when the change should apply to every
 client.
 
-Use `SKILL.local.md` inside a client skill folder when only one client needs a
-different rule.
+Root skills sync into clients. If the same skill name exists in the root and in
+a client, the root copy wins during sync.
 
-During updates, Agentic OS syncs shared skill files and scripts into clients.
-It preserves client-only skills and `SKILL.local.md` files.
+Do not edit an existing shared Agentic OS skill only inside a client folder.
+That client copy can be overwritten.
+
+Use `SKILL.local.md` inside a client skill folder when only one client needs a
+different rule for an existing skill.
+
+For a skill that belongs to one client only, give it a unique name and put it
+inside that client's `.claude/skills/` folder. Agentic OS treats it as a
+client-only skill and preserves it.
 
 ## Updates
 
-Run updates from the root workspace:
+Run the guided installer from the folder that contains your Agentic OS
+workspace:
 
 ```bash
-bash scripts/update.sh
+npx @scrapes/installer
 ```
 
 The updater refreshes shared system files. It preserves root and client data,
-including `.env`, brand context, memory, projects, cron jobs, and local settings.
+including `.env`, brand context, memory, projects, cron jobs, local settings,
+client-only skills, and local overrides.
+
+Read [Updating Agentic OS](/docs/get-started/updating) for update scenarios.
 
 ## Cron jobs
 
