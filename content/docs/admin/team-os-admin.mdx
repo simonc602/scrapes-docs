@@ -5,6 +5,46 @@ description: "Use this page for owner and admin tasks."
 
 Use this page for owner and admin tasks.
 
+Owners and admins can manage Team OS from the Command Centre UI or from the
+interactive terminal menu. Use these first when you want a guided path.
+
+## Start with the guided path
+
+You can run admin actions in either place:
+
+* Command Centre Team tab for the visual UI.
+* Interactive terminal menu for a guided terminal flow.
+
+To open the terminal menu, run this from the Agentic OS workspace:
+
+```powershell
+cd command-centre
+npm run team
+```
+
+![Team OS interactive terminal menu](/assets/team-os-interactive-menu.png)
+
+The menu lets you choose actions for team status, members, clients, secrets,
+skills, context and sync, and memory. You do not need to remember every command
+for normal admin work.
+
+## Admin surfaces
+
+| Surface | Use it for |
+| --- | --- |
+| Command Centre Team tab | Manage members, invites, grants, memory status, sync state, skills, and secrets in the UI. |
+| Interactive terminal menu | Manage admin actions from a guided terminal menu. |
+| Direct command reference | Use exact commands for automation, repeatable setup, recovery, and troubleshooting. |
+| Hosted API | Health, admin data, memory status, workspace manifest, and auth. |
+
+Command Centre uses the same saved Team OS login as the terminal menu when
+`AGENTIC_OS_TEAM_CONFIG_DIR` points to the same folder.
+
+## Command reference
+
+Use the commands below when you need automation, repeatable setup, recovery, or
+troubleshooting.
+
 Most direct admin commands run from `command-centre/`. They write to the local
 PGLite store by default, or to hosted Postgres when `MEMORY_DATABASE_URL` is set.
 
@@ -12,19 +52,7 @@ In local PGLite, stop the API before running direct admin commands. PGLite
 allows only one process to hold the local store. Hosted Postgres does not have
 that limit.
 
-## Admin surfaces
-
-| Surface | Use it for |
-| --- | --- |
-| Terminal admin commands | Bootstrap teams, invites, members, clients, grants, skills, and owner reset. |
-| `npm run team -- ...` | User login, identity, clients, memory imports, and file sync. |
-| Command Centre Team tab | Members, invites, grants, memory status, sync state, skills, and secrets. |
-| Hosted API | Health, admin data, memory status, workspace manifest, and auth. |
-
-Command Centre uses the same saved Team OS login as the terminal when
-`AGENTIC_OS_TEAM_CONFIG_DIR` points to the same folder.
-
-## Create the first team and owner
+### Create the first team and owner
 
 Run this once for a local test store or a hosted database:
 
@@ -35,7 +63,7 @@ npm run team:create -- --slug demo --name "Demo Team" --owner-email owner@exampl
 
 Expected output includes the team id, slug, and owner email.
 
-## Invite and join members
+### Invite and join members
 
 Invite a member:
 
@@ -69,7 +97,7 @@ Expected member states:
 Invite tokens are single-use. If a token is used, expired, or sent to the wrong
 email, create a new invite.
 
-## Manage clients
+### Manage clients
 
 Create a client:
 
@@ -110,7 +138,7 @@ npm run team:client -- revoke --team demo --client acme --user member@example.te
 Client grants affect `npm run team -- clients`, memory search, memory ingest,
 and file sync.
 
-## Manage skill grants
+### Manage skill grants
 
 Grant a skill permission:
 
@@ -141,7 +169,7 @@ Allowed permissions:
 
 Target users must be active team members before they can receive skill grants.
 
-## Reset an owner password
+### Reset an owner password
 
 Use owner reset when a hosted owner needs a password reset link.
 
@@ -160,7 +188,7 @@ npm run team:owner-reset -- --team demo --email owner@example.test --base-url ht
 The command prints a reset URL. Treat it like a secret because it can change the
 owner password until it expires.
 
-## Health checks
+### Health checks
 
 Check the hosted API:
 
@@ -184,7 +212,7 @@ Expected response:
 If hosted mode is expected, `backend` should be `postgres`. If it says `pglite`,
 the API is not connected to hosted Postgres.
 
-## Memory status
+### Memory status
 
 The hosted API exposes memory status at `GET /v1/memory/status`. Command Centre
 uses this in the Team view.
@@ -203,7 +231,7 @@ npm run team -- memory imports --status failed
 npm run team -- memory retry --id <import-id>
 ```
 
-## Sync status
+### Sync status
 
 Use the manifest and grants to confirm sync access.
 
