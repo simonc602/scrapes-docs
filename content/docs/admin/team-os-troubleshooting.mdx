@@ -73,6 +73,19 @@ npm run team -- memory retry --id <import-id>
 
 For hosted deployments, confirm `/v1/health` shows the expected embedder.
 
+## Memory capture and review problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Capture does not appear in search | Team OS capture is staged first. | Run `npm run memory:consolidate`, then check Command Centre Team > Memories. |
+| Consolidation sends many items to review | The model found uncertain, sensitive, or low-confidence memory. | An owner or admin should review and publish only durable items. |
+| `memory:consolidate` cannot claim captures | The user is not signed in, or there are no eligible captures yet. | Sign in to Team OS and wait for recent captures to become eligible. |
+| Client capture is denied | The user lacks `write` access to that client. | Grant `write` access or capture under a client the user can write. |
+| Review controls are missing | The signed-in user is not an owner or admin. | Use an owner/admin account or update the member role. |
+
+Pending review items are not searchable. This is expected. Review exists so an
+owner or admin can block weak or sensitive memory before it enters recall.
+
 ## Search access problems
 
 Search uses server-resolved identity. The local client can send a narrow scope,

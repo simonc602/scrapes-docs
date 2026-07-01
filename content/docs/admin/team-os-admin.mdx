@@ -32,7 +32,7 @@ for normal admin work.
 
 | Surface | Use it for |
 | --- | --- |
-| Command Centre Team tab | Manage members, invites, grants, memory status, sync state, skills, and secrets in the UI. |
+| Command Centre Team tab | Manage members, invites, grants, memory status, memory review, sync state, skills, and secrets in the UI. |
 | Interactive terminal menu | Manage admin actions from a guided terminal menu. |
 | Direct command reference | Use exact commands for automation, repeatable setup, recovery, and troubleshooting. |
 | Hosted API | Health, admin data, memory status, workspace manifest, and auth. |
@@ -222,7 +222,8 @@ Use memory status to check:
 * failed sources;
 * failed index jobs;
 * sources grouped by status;
-* whether imports are indexed.
+* whether imports are indexed;
+* whether capture events are pending, reviewed, or failed.
 
 Failed manual imports can be retried:
 
@@ -230,6 +231,38 @@ Failed manual imports can be retried:
 npm run team -- memory imports --status failed
 npm run team -- memory retry --id <import-id>
 ```
+
+### Memory consolidation and review
+
+Team OS session capture is staged before it becomes shared memory. Staged
+captures are not searchable until consolidation publishes them.
+
+Run consolidation from `command-centre/` after signing in:
+
+```powershell
+npm run memory:consolidate
+```
+
+For client-scoped captures:
+
+```powershell
+npm run memory:consolidate -- --client acme
+```
+
+The command publishes clear durable memory, discards weak captures, and sends
+uncertain or sensitive items to review.
+
+Owners and admins review those items in Command Centre:
+
+1. Open the Team tab.
+2. Open Memories.
+3. Review pending items.
+4. Publish or discard each item.
+
+Published items become searchable team or client memory. Discarded items stay
+out of recall.
+
+For the full flow, see [Session capture and review](/docs/memory/session-capture).
 
 ### Sync status
 
@@ -255,8 +288,8 @@ For sync behavior, see [Team OS memory and file sync](/docs/team-os/memory-and-s
 Open the Team tab after signing in.
 
 Owners and admins should see members, clients, client grants, skill grants,
-secrets, memory status, and sync state. Non-admin members should not see admin
-management controls.
+secrets, memory status, memory review, and sync state. Non-admin members should
+not see admin management controls.
 
 The clients list should come from the Team OS backend in hosted mode. It should
 not fall back to all local client folders when Team OS is connected.

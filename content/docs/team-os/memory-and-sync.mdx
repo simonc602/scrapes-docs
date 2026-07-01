@@ -24,6 +24,9 @@ commands.
 Manual shared imports publish only `team` or `client` memory. Private memory is
 captured through normal private capture paths, not the shared import command.
 
+Team OS session capture is staged first. It becomes searchable only after
+consolidation publishes durable memory. See [Session capture and review](/docs/memory/session-capture).
+
 ## Import shared memory
 
 Owners and admins can publish shared memory through the Team OS API.
@@ -84,10 +87,30 @@ server to skip unchanged content.
 
 ## Search hosted memory
 
-The terminal does not expose a `memory search` subcommand yet. Search uses the
-hosted API endpoint `POST /v1/memory/search`.
+When the local client is signed in to Team OS, memory recall uses the hosted
+API by default.
 
-PowerShell example:
+Run recall from `command-centre/`:
+
+```powershell
+npm run memory:recall -- "onboarding notes"
+```
+
+Search a granted client:
+
+```powershell
+npm run memory:recall -- "onboarding notes" --client acme
+```
+
+`TEAM_OS_MEMORY_MODE` controls this routing:
+
+| Value | Meaning |
+| --- | --- |
+| `auto` | Default. Use the hosted API when signed in, otherwise use local PGLite. |
+| `team` | Require the hosted Team OS API. Fail if the login or server is unavailable. |
+| `local` | Use local PGLite even when signed in. This is useful for offline work. |
+
+Custom clients can call the hosted API endpoint directly:
 
 ```powershell
 $saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json

@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "schema",
+    "session-capture",
     "hosted-api",
     "backup-restore"
   ],

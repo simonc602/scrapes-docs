@@ -16,6 +16,9 @@ schema and scope rules are the same in both modes.
 | `memory_chunks` | Searchable chunks from each source, including vector embeddings. |
 | `index_jobs` | Indexing and import job history. |
 | `search_events` | Audit records for scoped search requests. |
+| `memory_capture_events` | Staged Team OS session captures that are not searchable yet. |
+| `memory_consolidation_batches` | Claim records for capture consolidation work. |
+| `memory_source_provenance` | Links published memory back to the captures that produced it. |
 | `schema_migrations` | Applied memory schema migrations. |
 
 ## Scope columns
@@ -41,6 +44,23 @@ Memory rows carry scope data:
 The store enforces these rules before writing rows. Hosted Team OS also checks
 the signed-in user's role and grants before search, import, or sync actions.
 
+## Capture staging
+
+Automatic Team OS capture does not write straight to searchable memory.
+
+The hosted API first stores the session summary in `memory_capture_events`.
+Those rows are staging data. They are not returned by memory search.
+
+Consolidation then claims eligible captures in `memory_consolidation_batches`.
+The consolidating client publishes durable items, sends uncertain items to
+review, or discards weak items.
+
+Published items become `memory_sources` and `memory_chunks`. The
+`memory_source_provenance` table keeps a link back to the source captures.
+
+Read [Session capture and review](/docs/memory/session-capture) before changing
+capture or consolidation behavior.
+
 ## Hosted search boundary
 
 In hosted mode, the server resolves the real team and user from the saved Team
@@ -58,4 +78,4 @@ database.
 If a database was built with a different embedding dimension, rebuild and
 re-index memory before serving it from Team OS.
 
-Next: [Hosted memory API](/docs/memory/hosted-api)
+Next: [Session capture and review](/docs/memory/session-capture)

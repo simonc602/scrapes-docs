@@ -13,7 +13,8 @@ npm run memory:api
 
 The service is also called `memory-api`. In hosted Team OS, it does more than
 memory search. It handles login, permissions, team admin data, manual imports,
-workspace file sync, memory status, and health checks.
+workspace file sync, memory capture, memory review, memory status, and health
+checks.
 
 ## Health check
 
@@ -59,12 +60,44 @@ for smoke tests. It is not the normal user login path.
 | --- | --- |
 | `/v1/auth/*` | Login, join, and logout. |
 | `/v1/team/*` | Who am I, granted clients, team admin data, members, invites, and grants. |
-| `/v1/memory/*` | Search, ingest, manual imports, retries, and memory status. |
+| `/v1/memory/search` and `/v1/memory/ingest` | Search and direct memory ingest. |
+| `/v1/memory/imports` | Manual shared imports, failed import lists, and retries. |
+| `/v1/memory/captures` | Stage automatic Team OS session captures. |
+| `/v1/memory/consolidation/*` | Claim and complete capture consolidation batches. |
+| `/v1/memory/memories` | Admin memory review and published memory library. |
+| `/v1/memory/status` | Memory health, source, import, job, and capture status. |
 | `/v1/workspace/*` | Permission-scoped file manifest, pull, and push. |
 | `/v1/health` | Deployment health check. |
 
 All protected routes use the server-resolved Team OS identity. The local client
 cannot grant itself access by sending a different team, client, or user ID.
+
+## Capture and consolidation endpoints
+
+Automatic Team OS session capture uses staged memory.
+
+`POST /v1/memory/captures` stores a summarized session block as a capture event.
+It does not make the text searchable.
+
+`POST /v1/memory/consolidation/claim` claims a small batch of staged captures.
+The consolidating client reads those captures and prepares durable memory
+items.
+
+`POST /v1/memory/consolidation/complete` finishes the batch. Each item is
+published, sent to review, or discarded.
+
+Published items become searchable memory. Review and discarded items stay out of
+recall.
+
+## Memory review endpoints
+
+Owners and admins use `/v1/memory/memories` to review memory.
+
+`GET /v1/memory/memories` returns pending review items and published memory for
+the resolved team. `POST /v1/memory/memories` lets an owner or admin publish or
+discard a review item.
+
+Command Centre uses this endpoint in the Team tab's Memories view.
 
 ## Startup behavior
 
@@ -79,4 +112,4 @@ At startup, the API:
 If hosted mode is expected, the health response should show `backend:
 postgres`.
 
-Next: [Backup and restore](/docs/memory/backup-restore)
+Next: [Session capture and review](/docs/memory/session-capture)
