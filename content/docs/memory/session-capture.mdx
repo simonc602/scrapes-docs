@@ -28,9 +28,12 @@ hosted API as a staged capture event.
 The hosted flow has three steps:
 
 1. The local client sends a summarized block to `/v1/memory/captures`.
-2. `npm run memory:consolidate` claims staged captures from
-   `/v1/memory/consolidation/claim`.
+2. Team OS starts consolidation in the background after capture. The
+   consolidation script claims staged captures from `/v1/memory/consolidation/claim`.
 3. The client completes the batch through `/v1/memory/consolidation/complete`.
+
+Most users do not need to run consolidation after each session. The background
+run is quiet and processes captures when they are eligible.
 
 The consolidation step asks an LLM to choose one result for each item:
 
@@ -44,7 +47,11 @@ Only published items become `memory_sources` and `memory_chunks`.
 
 ## Run consolidation
 
-Run this from `command-centre/` after signing in to Team OS:
+Team OS usually runs consolidation automatically after a staged capture. Use
+this command when you want to catch up pending captures, troubleshoot capture
+flow, or run consolidation for a client on purpose.
+
+Run it from `command-centre/` after signing in to Team OS:
 
 ```powershell
 npm run memory:consolidate
@@ -112,7 +119,7 @@ actions.
 
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
-| Capture is not searchable | It is still staged or waiting for review. | Run `npm run memory:consolidate`, then review pending items. |
+| Capture is not searchable | It is still staged, waiting for automatic consolidation, or waiting for review. | Wait for the background run, then review pending items. Run `npm run memory:consolidate` only if you need to catch up manually. |
 | Consolidation publishes nothing | The model found no durable memory or sent items to review. | Open Command Centre Team > Memories. |
 | Client capture is denied | The user does not have write access to that client. | Ask an owner or admin for a `write` client grant. |
 | System capture is denied | Shared system capture needs explicit admin setup. | Use team or client capture for normal Team OS sessions. |
