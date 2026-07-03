@@ -32,7 +32,7 @@ for normal admin work.
 
 | Surface | Use it for |
 | --- | --- |
-| Command Centre Team tab | Manage members, invites, grants, memory status, memory review, sync state, skills, and secrets in the UI. |
+| Command Centre Team tab | Manage members, invites, grants, memory status, memory review, published memories, sync state, skills, and secrets in the UI. |
 | Interactive terminal menu | Manage admin actions from a guided terminal menu. |
 | Direct command reference | Use exact commands for automation, repeatable setup, recovery, and troubleshooting. |
 | Hosted API | Health, admin data, memory status, workspace manifest, and auth. |
@@ -262,6 +262,11 @@ Owners and admins review those items in Command Centre:
 Published items become searchable team or client memory. Discarded items stay
 out of recall.
 
+Owners and admins can also open a published memory from the same Memories view.
+They can edit its title and content, or delete it from recall. Deleting a
+published memory archives the source and removes its search chunks. The audit
+trail still records that the memory was deleted.
+
 For the full flow, see [Session capture and review](/docs/memory/session-capture).
 
 ### Sync status
@@ -288,8 +293,8 @@ For sync behavior, see [Team OS memory and file sync](/docs/team-os/memory-and-s
 Open the Team tab after signing in.
 
 Owners and admins should see members, clients, client grants, skill grants,
-secrets, memory status, memory review, and sync state. Non-admin members should
-not see admin management controls.
+secrets, memory status, memory review, published memory actions, and sync
+state. Non-admin members should not see admin management controls.
 
 The clients list should come from the Team OS backend in hosted mode. It should
 not fall back to all local client folders when Team OS is connected.

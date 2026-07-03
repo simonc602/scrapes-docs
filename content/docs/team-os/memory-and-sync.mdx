@@ -85,6 +85,20 @@ npm run team -- memory retry --id <import-id>
 Retry normally forces re-indexing. Add `--no-force` only when you want the
 server to skip unchanged content.
 
+## Manage published memory
+
+Owners and admins can manage published memory in Command Centre:
+
+1. Open the Team tab.
+2. Open Memories.
+3. Use search or the status, scope, and client filters.
+4. Open a published memory.
+5. Edit it, or delete it from recall.
+
+Editing a published memory updates its indexed content. Deleting a published
+memory archives the source and removes its search chunks. The audit trail still
+records the delete action.
+
 ## Search hosted memory
 
 When the local client is signed in to Team OS, memory recall uses the hosted
@@ -152,6 +166,28 @@ The server decides:
 * whether a push can write a file.
 
 The local client never receives full server filesystem access.
+
+## Use Command Centre sync controls
+
+Command Centre shows sync state in the Team tab.
+
+For clients, the row can show:
+
+| State | Meaning |
+| --- | --- |
+| `Synced` | Local files match the server version. |
+| `local changes` | Local files changed after the last sync. |
+| `server updates` | Server files changed after the last sync. |
+| `both changed` | Local and server files both changed. Review before overwriting. |
+| `not synced` | No clean sync state exists yet. |
+
+Use **Pull** to copy server files to the local workspace. Use **Push** to send
+local changes to the server. A user needs a `write` client grant to push client
+files.
+
+When a pull or push would overwrite changed files, Command Centre opens a review
+modal. It shows the affected files and a text diff when possible. Cancel keeps
+the current files. Confirming applies the overwrite in the selected direction.
 
 ## View the manifest
 
@@ -228,6 +264,9 @@ No base version for clients/acme/context/notes.md. Run sync pull before pushing 
 Team OS sends the last pulled SHA when it pushes an existing file. If the server
 file changed since the pull, the server returns a conflict instead of silently
 overwriting the new remote version.
+
+Command Centre shows these conflicts in a review modal before it overwrites
+local or server files.
 
 To resolve a conflict:
 

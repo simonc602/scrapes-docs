@@ -64,7 +64,7 @@ for smoke tests. It is not the normal user login path.
 | `/v1/memory/imports` | Manual shared imports, failed import lists, and retries. |
 | `/v1/memory/captures` | Stage automatic Team OS session captures. |
 | `/v1/memory/consolidation/*` | Claim and complete capture consolidation batches. |
-| `/v1/memory/memories` | Admin memory review and published memory library. |
+| `/v1/memory/memories` | Admin memory review, published memory library, and published memory edit/delete actions. |
 | `/v1/memory/status` | Memory health, source, import, job, and capture status. |
 | `/v1/workspace/*` | Permission-scoped file manifest, pull, and push. |
 | `/v1/health` | Deployment health check. |
@@ -94,8 +94,15 @@ recall.
 Owners and admins use `/v1/memory/memories` to review memory.
 
 `GET /v1/memory/memories` returns pending review items and published memory for
-the resolved team. `POST /v1/memory/memories` lets an owner or admin publish or
-discard a review item.
+the resolved team. `POST /v1/memory/memories` lets an owner or admin:
+
+* publish a review item;
+* discard a review item;
+* update a published team or client memory;
+* delete a published team or client memory.
+
+Delete archives the memory source and removes its search chunks. It does not
+erase the audit event.
 
 Command Centre uses this endpoint in the Team tab's Memories view.
 

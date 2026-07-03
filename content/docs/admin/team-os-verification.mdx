@@ -204,7 +204,9 @@ Expected result:
 * only granted client files appear;
 * pulled files live under `clients/acme`;
 * excluded files do not appear;
-* `.agentic-os/team-sync-state.json` is created.
+* `.agentic-os/team-sync-state.json` is created;
+* Command Centre can show the client as synced, changed locally, changed on the
+  server, or changed on both sides.
 
 ## 8. Check Command Centre
 
@@ -222,7 +224,9 @@ Check:
 * the top-right Team control shows connected state after login;
 * the Team tab shows server data;
 * the clients list shows only backend-granted clients;
+* client rows show Pull and, for `write` grants, Push controls;
 * the Memories view loads for owners and admins;
+* owners and admins can open a published memory and see edit/delete actions;
 * admin controls are visible only to owners and admins;
 * sign-out clears the shared terminal and UI login state.
 

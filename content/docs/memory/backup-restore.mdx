@@ -18,6 +18,21 @@ Database backups protect:
 They do not replace secret management. Keep database passwords, API tokens, and
 auth secrets in a secure store.
 
+## Workspace GitHub backup
+
+Team OS can also back up files written under `AGENTIC_OS_DIR` to a private
+GitHub repo. Configure it on the API service with `TEAM_OS_GITHUB_BACKUP_REMOTE`
+and `TEAM_OS_GITHUB_BACKUP_TOKEN`.
+
+This protects server-side workspace files, such as shared context and granted
+client text files. It does not protect the Postgres database. It also excludes
+secrets, runtime state, transcripts, build output, and `backups/`.
+
+Use both backups in production:
+
+* Postgres backup for memory, auth, teams, grants, and audit data.
+* GitHub workspace backup for server-side workspace files.
+
 ## Back up hosted Postgres
 
 Run this from `command-centre` with a hosted database URL:

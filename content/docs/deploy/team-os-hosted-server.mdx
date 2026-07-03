@@ -77,15 +77,29 @@ backend id pair.
 | --- | --- | --- | --- |
 | `TEAM_OS_SECRETS_KEYS` | for shared secrets | `v1:<base64url-32-byte-key>` | Encrypts Team OS shared secrets and private config backups. Keep it separate from `BETTER_AUTH_SECRET`. |
 | `TEAM_OS_SECRETS_ACTIVE_KEY_ID` | for shared secrets | `v1` | Required when `TEAM_OS_SECRETS_KEYS` is set, or when more than one key is present. |
-| `TEAM_OS_WORKSPACE_BACKUP_REMOTE` | optional | `git@github.com:org/private-backup.git` | Private Git remote for workspace backup. Use only private repositories. |
-| `TEAM_OS_GIT_BACKUP_REMOTE` | optional | same shape | Older fallback name for the same backup remote. |
-| `TEAM_OS_WORKSPACE_BACKUP_BRANCH` | optional | `main` | Backup branch. Default is `main`. |
-| `TEAM_OS_WORKSPACE_BACKUP_USER_NAME` | optional | `Team OS Backup` | Git author name for backup commits. |
-| `TEAM_OS_WORKSPACE_BACKUP_USER_EMAIL` | optional | `team-os-backup@example.invalid` | Git author email for backup commits. |
+| `TEAM_OS_GITHUB_BACKUP_REMOTE` | optional | `https://github.com/org/private-backup.git` | Private GitHub repo for files written under `AGENTIC_OS_DIR`. Use only private repositories. |
+| `TEAM_OS_GITHUB_BACKUP_TOKEN` | if remote is set | generated GitHub token | Token with read/write access to the backup repo. It is used for push and is not saved in Git config. |
+| `TEAM_OS_GITHUB_BACKUP_BRANCH` | optional | `main` | Backup branch. Default is `main`. |
+| `TEAM_OS_GITHUB_BACKUP_USER_NAME` | optional | `Team OS Backup` | Git author name for backup commits. |
+| `TEAM_OS_GITHUB_BACKUP_USER_EMAIL` | optional | `team-os-backup@example.invalid` | Git author email for backup commits. |
+| `TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS` | optional | `900` | How often the API backs up the workspace. Set `0` to disable the periodic job. |
 
 Use Team OS secrets variables if you want shared `.env` sync or private
 `.mcp.json` backup. Without them, local secrets can still work, but remote
 secret backup and secret sync are unavailable.
+
+Use GitHub workspace backup when the API writes server-side files under
+`AGENTIC_OS_DIR`, such as shared context or granted client files. This backup
+does not replace Postgres backups. It does not include `.env`, `.mcp.json`,
+runtime state, build output, local transcripts, or `backups/`.
+
+The API container must have `git` installed for workspace backup. The supplied
+`command-centre/Dockerfile.memory-api` includes it. If you build a custom image,
+install `git` there too.
+
+Older names such as `TEAM_OS_WORKSPACE_BACKUP_REMOTE`,
+`TEAM_OS_WORKSPACE_BACKUP_TOKEN`, and `TEAM_OS_GIT_BACKUP_REMOTE` still work as
+fallbacks. Prefer the `TEAM_OS_GITHUB_BACKUP_*` names for new deployments.
 
 ### Postgres service variables
 
@@ -180,8 +194,10 @@ services:
       MEMORY_API_BOOTSTRAP_OWNER_NAME: ${MEMORY_API_BOOTSTRAP_OWNER_NAME}
       TEAM_OS_SECRETS_KEYS: ${TEAM_OS_SECRETS_KEYS}
       TEAM_OS_SECRETS_ACTIVE_KEY_ID: ${TEAM_OS_SECRETS_ACTIVE_KEY_ID}
-      TEAM_OS_WORKSPACE_BACKUP_REMOTE: ${TEAM_OS_WORKSPACE_BACKUP_REMOTE}
-      TEAM_OS_WORKSPACE_BACKUP_BRANCH: ${TEAM_OS_WORKSPACE_BACKUP_BRANCH:-main}
+      TEAM_OS_GITHUB_BACKUP_REMOTE: ${TEAM_OS_GITHUB_BACKUP_REMOTE}
+      TEAM_OS_GITHUB_BACKUP_TOKEN: ${TEAM_OS_GITHUB_BACKUP_TOKEN}
+      TEAM_OS_GITHUB_BACKUP_BRANCH: ${TEAM_OS_GITHUB_BACKUP_BRANCH:-main}
+      TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS: ${TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS:-900}
     volumes:
       - aios_team_data:/data/agentic-os
     ports:
@@ -213,8 +229,10 @@ MEMORY_API_BOOTSTRAP_OWNER_NAME=Owner Example
 MEMORY_API_PUBLIC_URL=https://team.example.com
 TEAM_OS_SECRETS_KEYS=v1:<base64url-32-byte-key>
 TEAM_OS_SECRETS_ACTIVE_KEY_ID=v1
-TEAM_OS_WORKSPACE_BACKUP_REMOTE=
-TEAM_OS_WORKSPACE_BACKUP_BRANCH=main
+TEAM_OS_GITHUB_BACKUP_REMOTE=
+TEAM_OS_GITHUB_BACKUP_TOKEN=
+TEAM_OS_GITHUB_BACKUP_BRANCH=main
+TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS=900
 ```
 
 Start the stack:

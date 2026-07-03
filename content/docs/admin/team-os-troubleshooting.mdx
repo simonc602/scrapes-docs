@@ -82,6 +82,8 @@ For hosted deployments, confirm `/v1/health` shows the expected embedder.
 | `memory:consolidate` cannot claim captures | The user is not signed in, or there are no eligible captures yet. | Sign in to Team OS and wait for recent captures to become eligible. |
 | Client capture is denied | The user lacks `write` access to that client. | Grant `write` access or capture under a client the user can write. |
 | Review controls are missing | The signed-in user is not an owner or admin. | Use an owner/admin account or update the member role. |
+| Edit or delete controls are missing | The selected item is not a published memory, or the user is not an owner/admin. | Open a published memory from Team > Memories with an owner/admin account. |
+| Deleted memory still appears in audit history | Delete archives the memory source but keeps the audit event. | This is expected. Search should no longer return the deleted memory. |
 
 Pending review items are not searchable. This is expected. Review exists so an
 owner or admin can block weak or sensitive memory before it enters recall.
@@ -109,6 +111,7 @@ If a result is missing:
 | Push is denied | User has `read`, not `write`. | Grant `write` access for that client. |
 | Push says no base version | Existing file was not pulled first. | Run `sync pull`, merge changes, then push. |
 | Push gets a conflict | Remote file changed after pull. | Pull fresh, merge manually, then push. |
+| Command Centre asks to review files before pull or push | Local and server files both changed, or one side deleted a file. | Review the diff. Cancel to keep files as they are, or confirm if the overwrite is intended. |
 
 Sync skips secrets, generated folders, transcripts, and files larger than 1 MB.
 It is not a secret distribution system.
@@ -139,6 +142,18 @@ If `/v1/health` fails:
 
 If health returns `backend: pglite` in a hosted deploy, the API is not using the
 hosted database. Fix the database environment variables and redeploy.
+
+## Workspace GitHub backup problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Logs say `GitHub workspace backup disabled` | No backup remote is configured. | Set `TEAM_OS_GITHUB_BACKUP_REMOTE` if you want workspace backup. |
+| Logs say the backup token is missing | A remote is set, but no token is available. | Set `TEAM_OS_GITHUB_BACKUP_TOKEN` with access to the private backup repo. |
+| Backup fails with `git` not found | The API image does not include Git. | Use the supplied `command-centre/Dockerfile.memory-api` or install `git` in the custom image. |
+| Backup appears empty after deploy | `AGENTIC_OS_DIR` points to a non-persistent path or no server files changed. | Mount `AGENTIC_OS_DIR` to persistent storage and confirm files are written there. |
+
+Workspace GitHub backup does not replace database backup. Keep backing up
+hosted Postgres.
 
 ## Local PGLite lock
 
