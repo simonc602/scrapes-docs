@@ -1,5 +1,6 @@
 {
   "title": "Memory",
+  "icon": "Database",
   "pages": [
     "index",
     "schema",

@@ -162,10 +162,17 @@ Allowed permissions:
 
 | Permission | Meaning |
 | --- | --- |
-| `skill.use` | User can use the skill. |
-| `skill.read` | User can read the skill. |
-| `skill.edit` | User can edit local skill overrides, not shared base skill files. |
-| `skill.admin` | User can manage grants for that skill. |
+| `skill.use` | User can request the skill in a Team OS task or reply, such as `/mkt-copywriting`. This does not let them open, copy, sync, or edit the skill files. |
+| `skill.read` | User can view or sync the skill files, such as `SKILL.md` and reference files. Includes use. |
+| `skill.edit` | User can save allowed Team OS edits for that skill, such as `SKILL.local.md` overrides. This does not allow edits to the shared base `SKILL.md`. |
+| `skill.admin` | User can change who has use, read, edit, or admin access to that skill. |
+
+`skill.use` only lets the Team OS request pass the server permission check. It
+does not install the skill files on the user's computer. The runner still needs
+the skill files in its workspace.
+
+Grant `skill.read` when a user needs to download, inspect, or sync the skill
+files. Local private files are separate from Team OS grants.
 
 Target users must be active team members before they can receive skill grants.
 

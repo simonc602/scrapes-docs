@@ -29,6 +29,40 @@ function Get-MetaJson($path) {
   }
 }
 
+function Test-LucideIcon($iconName, $metaPath) {
+  $relativeMeta = [System.IO.Path]::GetRelativePath($repoRoot, $metaPath)
+  $nodeCommand = Get-Command node -ErrorAction SilentlyContinue
+
+  if (-not $nodeCommand) {
+    $script:problems += "{0}: cannot validate icon {1} because Node.js is unavailable" -f $relativeMeta, $iconName
+    return
+  }
+
+  $validationScript = "try { const { icons } = require('lucide-react'); process.exit(icons[process.argv[1]] ? 0 : 1); } catch { process.exit(2); }"
+  & node -e $validationScript $iconName | Out-Null
+
+  if ($LASTEXITCODE -eq 1) {
+    $script:problems += "{0}: icon must be a valid lucide-react icon: {1}" -f $relativeMeta, $iconName
+    return
+  }
+
+  if ($LASTEXITCODE -ne 0) {
+    $script:problems += "{0}: could not validate lucide-react icon: {1}" -f $relativeMeta, $iconName
+  }
+}
+
+function Test-RootSectionIcon($meta, $metaPath) {
+  $relativeMeta = [System.IO.Path]::GetRelativePath($repoRoot, $metaPath)
+  $iconName = $meta.icon
+
+  if (-not ($iconName -is [string]) -or [string]::IsNullOrWhiteSpace($iconName)) {
+    $script:problems += "{0}: root top tab must define an icon" -f $relativeMeta
+    return
+  }
+
+  Test-LucideIcon $iconName $metaPath
+}
+
 function Test-PageEntry($dir, $entry, $metaPath) {
   if (-not ($entry -is [string])) {
     $script:problems += "{0}: page entry must be a string" -f [System.IO.Path]::GetRelativePath($repoRoot, $metaPath)
@@ -139,6 +173,10 @@ foreach ($metaFile in Get-ChildItem -Path $contentRoot -Filter "meta.json" -Recu
   $dir = Split-Path -Parent $metaFile.FullName
   foreach ($entry in $meta.pages) {
     Test-PageEntry $dir $entry $metaFile.FullName
+  }
+
+  if ($meta.root -eq $true) {
+    Test-RootSectionIcon $meta $metaFile.FullName
   }
 }
 

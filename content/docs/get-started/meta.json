@@ -1,5 +1,6 @@
 {
   "title": "Get started",
+  "icon": "Rocket",
   "pages": [
     "index",
     "prerequisites",

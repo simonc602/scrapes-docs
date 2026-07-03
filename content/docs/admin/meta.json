@@ -1,5 +1,6 @@
 {
   "title": "Admin",
+  "icon": "ShieldCheck",
   "pages": [
     "index",
     "team-os-admin",

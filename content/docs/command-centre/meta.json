@@ -1,5 +1,6 @@
 {
   "title": "Command Centre",
+  "icon": "AppWindow",
   "pages": [
     "index"
   ],

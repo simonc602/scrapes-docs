@@ -124,6 +124,17 @@ Admin -> content/docs/admin
 Contribute -> content/docs/contribute
 ```
 
+Each root section `meta.json` must include an `icon` value. Use a valid
+Lucide icon name:
+
+```json
+{
+  "title": "Contribute",
+  "icon": "HandHeart",
+  "root": true
+}
+```
+
 Do not add `Troubleshooting` as a top tab. Keep Team OS troubleshooting under
 `Admin`.
 

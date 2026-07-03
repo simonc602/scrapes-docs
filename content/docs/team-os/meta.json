@@ -1,5 +1,6 @@
 {
   "title": "Team OS",
+  "icon": "Users",
   "pages": [
     "index",
     "concepts",
