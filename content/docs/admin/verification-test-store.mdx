@@ -1,0 +1,37 @@
+---
+title: "Prepare a local test store"
+description: "Create local Team OS test data."
+---
+
+Run from the Team OS source repo:
+
+```powershell
+cd "C:\Users\gmsal\Code Projects\AgenticOS-team-os-solomon\command-centre"
+$env:AGENTIC_OS_DIR="$env:TEMP\aios-team-manual"
+$env:MEMORY_STORE_BACKEND="pglite"
+$env:MEMORY_EMBEDDER="hash"
+```
+
+Create a team and owner:
+
+```powershell
+npm run team:create -- --slug demo --name "Demo Team" --owner-email owner@example.test --owner-name "Owner" --owner-password "owner-pass-123"
+```
+
+Invite and join a member:
+
+```powershell
+npm run team:invite -- --team demo --email member@example.test --by owner@example.test
+npm run team:join -- --team demo --email member@example.test --token <invite-token> --password "member-pass-123"
+npm run team:members -- --team demo
+```
+
+Create a client and grants:
+
+```powershell
+npm run team:client -- create --team demo --slug acme --name "Acme" --by owner@example.test
+npm run team:client -- grant --team demo --client acme --user member@example.test --access read --by owner@example.test
+npm run team:skill -- grant --team demo --skill mkt-copywriting --user member@example.test --permission skill.use --by owner@example.test
+```
+
+Next: [Start the API](/docs/admin/verification-start-api)

@@ -1,0 +1,126 @@
+---
+title: "Docker Compose"
+description: "Run Team OS with Postgres and the API in one Compose stack."
+---
+
+Use Docker Compose for a small self-hosted setup.
+
+Put the Compose file in the Agentic OS workspace. The API Dockerfile copies
+files from the workspace root.
+
+## Compose file
+
+```yaml
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-agentic_memory}
+    volumes:
+      - aios_team_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  memory-api:
+    build:
+      context: .
+      dockerfile: command-centre/Dockerfile.memory-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AGENTIC_OS_DIR: /data/agentic-os
+      MEMORY_STORE_BACKEND: postgres
+      MEMORY_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-agentic_memory}
+      PGSSLMODE: disable
+      MEMORY_API_TOKEN: ${MEMORY_API_TOKEN}
+      MEMORY_API_PORT: 8787
+      MEMORY_EMBEDDER: bge-m3
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      MEMORY_API_PUBLIC_URL: ${MEMORY_API_PUBLIC_URL}
+      BETTER_AUTH_URL: ${MEMORY_API_PUBLIC_URL}
+      TEAM_OS_PUBLIC_URL: ${MEMORY_API_PUBLIC_URL}
+      MEMORY_API_BOOTSTRAP_TEAM_SLUG: ${MEMORY_API_BOOTSTRAP_TEAM_SLUG}
+      MEMORY_API_BOOTSTRAP_TEAM_NAME: ${MEMORY_API_BOOTSTRAP_TEAM_NAME}
+      MEMORY_API_BOOTSTRAP_OWNER_EMAIL: ${MEMORY_API_BOOTSTRAP_OWNER_EMAIL}
+      MEMORY_API_BOOTSTRAP_OWNER_NAME: ${MEMORY_API_BOOTSTRAP_OWNER_NAME}
+      TEAM_OS_SECRETS_KEYS: ${TEAM_OS_SECRETS_KEYS}
+      TEAM_OS_SECRETS_ACTIVE_KEY_ID: ${TEAM_OS_SECRETS_ACTIVE_KEY_ID}
+      TEAM_OS_GITHUB_BACKUP_REMOTE: ${TEAM_OS_GITHUB_BACKUP_REMOTE}
+      TEAM_OS_GITHUB_BACKUP_TOKEN: ${TEAM_OS_GITHUB_BACKUP_TOKEN}
+      TEAM_OS_GITHUB_BACKUP_BRANCH: ${TEAM_OS_GITHUB_BACKUP_BRANCH:-main}
+      TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS: ${TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS:-900}
+    volumes:
+      - aios_team_data:/data/agentic-os
+    ports:
+      - "8787:8787"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8787/v1/health >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  aios_team_postgres:
+  aios_team_data:
+```
+
+## Environment file
+
+Use a `.env` file or host variables:
+
+```text
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=<strong-database-password>
+POSTGRES_DB=agentic_memory
+MEMORY_API_TOKEN=<strong-dev-fallback-token>
+BETTER_AUTH_SECRET=<strong-auth-secret>
+MEMORY_API_BOOTSTRAP_TEAM_SLUG=acme
+MEMORY_API_BOOTSTRAP_TEAM_NAME=Acme
+MEMORY_API_BOOTSTRAP_OWNER_EMAIL=owner@example.com
+MEMORY_API_BOOTSTRAP_OWNER_NAME=Owner Example
+MEMORY_API_PUBLIC_URL=https://team.example.com
+TEAM_OS_SECRETS_KEYS=v1:<base64url-32-byte-key>
+TEAM_OS_SECRETS_ACTIVE_KEY_ID=v1
+TEAM_OS_GITHUB_BACKUP_REMOTE=
+TEAM_OS_GITHUB_BACKUP_TOKEN=
+TEAM_OS_GITHUB_BACKUP_BRANCH=main
+TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS=900
+```
+
+## Start and check
+
+Start the stack:
+
+```bash
+docker compose up -d
+```
+
+Check the API:
+
+```bash
+curl https://team.example.com/v1/health
+```
+
+Expected response:
+
+```json
+{
+  "ok": true,
+  "backend": "postgres",
+  "embedder": {
+    "model": "bge-m3",
+    "dim": 1024
+  }
+}
+```
+
+Next: [Startup and first owner](/docs/deploy/startup-and-first-owner)

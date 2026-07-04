@@ -1,0 +1,25 @@
+---
+title: "Memory layers"
+description: "Understand Team OS memory scopes."
+---
+
+Team OS uses memory scopes to decide who can use each memory item.
+
+| Layer | Who can use it | Typical content |
+| --- | --- | --- |
+| System | Local Agentic OS or trusted service paths. | Baseline Agentic OS methods. |
+| Team | Active team members. | Shared operating notes and team context. |
+| Client | Users with a grant for that client. | Client notes, briefs, and context. |
+| Private | One signed-in user. | User-specific memory and session context. |
+
+Manual shared imports publish only `team` or `client` memory.
+
+Private memory is captured through normal private capture paths, not the shared
+import command.
+
+Team OS session capture is staged first. It becomes searchable only after
+consolidation publishes durable memory.
+
+See [Session capture and review](/docs/memory/session-capture).
+
+Next: [Import shared memory](/docs/team-os/import-shared-memory)

@@ -3,7 +3,16 @@
   "icon": "Server",
   "pages": [
     "index",
-    "team-os-hosted-server"
+    "team-os-hosted-server",
+    "environment-variables",
+    "secrets-and-workspace-backup",
+    "docker-compose",
+    "coolify",
+    "railway",
+    "vps",
+    "startup-and-first-owner",
+    "backups-and-restore",
+    "first-verification"
   ],
   "root": true
 }

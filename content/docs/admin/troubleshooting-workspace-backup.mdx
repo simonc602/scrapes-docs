@@ -1,0 +1,16 @@
+---
+title: "Workspace backup"
+description: "Fix Team OS workspace GitHub backup problems."
+---
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Logs say `GitHub workspace backup disabled` | No backup remote is configured. | Set `TEAM_OS_GITHUB_BACKUP_REMOTE` if you want workspace backup. |
+| Logs say the backup token is missing | A remote is set, but no token is available. | Set `TEAM_OS_GITHUB_BACKUP_TOKEN` with access to the private backup repo. |
+| Backup fails with `git` not found | The API image does not include Git. | Use the supplied `command-centre/Dockerfile.memory-api` or install `git`. |
+| Backup appears empty after deploy | `AGENTIC_OS_DIR` points to a non-persistent path or no server files changed. | Mount `AGENTIC_OS_DIR` to persistent storage. |
+
+Workspace GitHub backup does not replace database backup. Keep backing up hosted
+Postgres.
+
+Next: [Local PGLite lock](/docs/admin/troubleshooting-pglite)

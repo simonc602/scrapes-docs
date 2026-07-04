@@ -1,0 +1,62 @@
+---
+title: "Hosted memory search"
+description: "Search hosted Team OS memory."
+---
+
+When the local client is signed in to Team OS, memory recall uses the hosted API
+by default.
+
+Run recall from `command-centre/`:
+
+```powershell
+npm run memory:recall -- "onboarding notes"
+```
+
+Search a granted client:
+
+```powershell
+npm run memory:recall -- "onboarding notes" --client acme
+```
+
+## Memory mode
+
+`TEAM_OS_MEMORY_MODE` controls routing:
+
+| Value | Meaning |
+| --- | --- |
+| `auto` | Default. Use the hosted API when signed in, otherwise use local PGLite. |
+| `team` | Require the hosted Team OS API. Fail if login or server access is unavailable. |
+| `local` | Use local PGLite even when signed in. This is useful for offline work. |
+
+## Direct API call
+
+Custom clients can call the hosted API endpoint directly:
+
+```powershell
+$saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json
+$body = @{
+  query = "onboarding notes"
+  topK = 5
+  scope = @{
+    teamId = "server-resolved"
+    clientId = "acme"
+    userId = $null
+    include = @("team", "client")
+  }
+  storeQueryText = $false
+} | ConvertTo-Json -Depth 6
+
+Invoke-RestMethod `
+  -Uri "$($saved.apiUrl)/v1/memory/search" `
+  -Method Post `
+  -Headers @{ Authorization = "Bearer $($saved.token)" } `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+The server resolves the real team and user from the saved login. Body IDs can
+ask for a narrower search, but they cannot widen access.
+
+For endpoint details, see [Hosted memory API](/docs/memory/hosted-api).
+
+Next: [File sync model](/docs/team-os/file-sync-model)

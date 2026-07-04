@@ -1,0 +1,21 @@
+---
+title: "Sync conflicts"
+description: "Resolve Team OS file sync conflicts."
+---
+
+Team OS sends the last pulled SHA when it pushes an existing file.
+
+If the server file changed since the pull, the server returns a conflict instead
+of silently overwriting the new remote version.
+
+Command Centre shows these conflicts in a review modal before it overwrites
+local or server files.
+
+To resolve a conflict:
+
+1. Run `sync pull` into a clean folder.
+2. Compare the remote file with your local change.
+3. Merge the content manually.
+4. Run `sync push` again.
+
+Next: [Sync exclusions](/docs/team-os/sync-exclusions)

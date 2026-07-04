@@ -1,0 +1,50 @@
+---
+title: "Memory and search"
+description: "Fix Team OS memory import, review, and search problems."
+---
+
+## Memory import problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Import is denied | User is not an owner or admin. | Use an owner/admin account or change the user's role. |
+| Client import is denied | User lacks write access to the client. | Grant `write` client access. |
+| Import stays failed | Indexing failed for that source. | Run `memory imports --status failed`, inspect the error, then retry. |
+| Search does not find new content | Import was not indexed, or embedder changed. | Check memory status and keep one embedder per database. |
+
+Run these from `command-centre/`:
+
+```powershell
+npm run team -- memory imports --status failed
+npm run team -- memory retry --id <import-id>
+```
+
+For hosted deployments, confirm `/v1/health` shows the expected embedder.
+
+## Memory capture and review problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Capture does not appear in search | Team OS capture is staged first. | Run `npm run memory:consolidate`, then check Command Centre Team > Memories. |
+| Consolidation sends many items to review | The model found uncertain or sensitive memory. | An owner or admin should review and publish only durable items. |
+| `memory:consolidate` cannot claim captures | The user is not signed in, or there are no eligible captures yet. | Sign in to Team OS and wait for captures to become eligible. |
+| Client capture is denied | The user lacks `write` access to that client. | Grant `write` access or capture under a client the user can write. |
+| Review controls are missing | The signed-in user is not an owner or admin. | Use an owner/admin account or update the member role. |
+| Edit or delete controls are missing | The selected item is not a published memory, or the user is not an owner/admin. | Open a published memory with an owner/admin account. |
+
+Pending review items are not searchable. This is expected.
+
+## Search access problems
+
+Search uses server-resolved identity. The local client can send a narrow scope,
+but it cannot grant itself access by sending another ID.
+
+If a result is missing:
+
+* check whether the memory is `team`, `client`, or `private`;
+* check the user's client grant;
+* check whether the source is indexed;
+* check whether the request asks for the correct visibility layer;
+* check whether the API is connected to the expected database.
+
+Next: [Sync troubleshooting](/docs/admin/troubleshooting-sync)

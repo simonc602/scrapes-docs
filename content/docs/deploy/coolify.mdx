@@ -1,0 +1,48 @@
+---
+title: "Coolify"
+description: "Deploy Team OS with Coolify."
+---
+
+For Coolify, use the same two-service Compose model.
+
+## Configure the services
+
+Configure Coolify this way:
+
+* deploy from the Agentic OS workspace root;
+* build `memory-api` with `command-centre/Dockerfile.memory-api`;
+* expose only the `memory-api` service through Coolify's reverse proxy;
+* keep Postgres private inside the Compose network;
+* do not publish port `5432`;
+* set the health check path to `/v1/health`;
+* store all secrets in Coolify environment variables.
+
+Prefer `expose: ["8787"]` for the API service. Coolify's reverse proxy should
+route public traffic to the API.
+
+## Database URL
+
+The API should connect to Postgres with the internal service name:
+
+```text
+MEMORY_DATABASE_URL=postgres://postgres:<password>@postgres:5432/agentic_memory
+PGSSLMODE=disable
+```
+
+## Public URLs
+
+Use the public Coolify URL for all public URL variables:
+
+```text
+MEMORY_API_PUBLIC_URL=https://team.example.com
+BETTER_AUTH_URL=https://team.example.com
+TEAM_OS_PUBLIC_URL=https://team.example.com
+```
+
+Set `AGENTIC_OS_DIR` to a persistent mounted path, such as
+`/data/agentic-os`.
+
+If it points inside `/app`, uploaded workspace files and backup state may be
+lost when the container is rebuilt.
+
+Next: [Startup and first owner](/docs/deploy/startup-and-first-owner)

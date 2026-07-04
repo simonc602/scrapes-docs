@@ -1,0 +1,25 @@
+---
+title: "Test revoke behavior"
+description: "Verify that revoked grants stop client access."
+---
+
+Stop the API with `Ctrl+C`. Then revoke the client grant:
+
+```powershell
+$env:AGENTIC_OS_DIR="$env:TEMP\aios-team-manual"
+npm run team:client -- revoke --team demo --client acme --user member@example.test --by owner@example.test
+npm run team:client -- grants --team demo
+```
+
+Restart the API with the same environment from the API startup step.
+
+Then run:
+
+```powershell
+npm run team -- clients
+npm run team -- sync manifest --client acme
+```
+
+Expected result: `acme` is no longer available to the member.
+
+Next: [Test file sync](/docs/admin/verification-file-sync)

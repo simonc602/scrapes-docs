@@ -1,0 +1,20 @@
+---
+title: "Sync exclusions"
+description: "See which files Team OS sync skips."
+---
+
+Sync includes text files only. It skips large files and sensitive or generated
+paths.
+
+Common exclusions:
+
+* `.env`, `.env.local`, `.env.*`, and `.mcp.json`
+* `.git`, `.next`, `.memsearch`, `.command-centre`, and `node_modules`
+* `backups`, `coverage`, and `dist`
+* `clients/<slug>/context/transcripts`
+* files larger than 1 MB
+
+Do not use Team OS file sync for secrets. Shared secrets use the Team OS secrets
+flow in Command Centre.
+
+Next: [Sync revoke behavior](/docs/team-os/sync-revoke)

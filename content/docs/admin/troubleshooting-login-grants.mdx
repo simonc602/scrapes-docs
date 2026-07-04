@@ -1,0 +1,41 @@
+---
+title: "Login and grants"
+description: "Fix Team OS login, client, and grant problems."
+---
+
+## Login problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| `--api-url must start with http:// or https://` | URL is missing the scheme. | Use the full server URL, such as `https://team.example.com`. |
+| `login failed (401)` | Wrong email, password, team, or server URL. | Check credentials and ask an admin to confirm membership. |
+| `You are not logged in` | No saved local Team OS context. | Run `npm run team -- login ...` again. |
+| `saved Team OS login has expired` | Session token expired. | Sign in again with email and password. |
+| Command Centre is signed out but terminal is signed in | Different config directories. | Start both with the same `AGENTIC_OS_TEAM_CONFIG_DIR`. |
+
+The saved login lives in `team-context.json` under the config directory. It
+should not be committed.
+
+## Missing clients or grants
+
+If `npm run team -- clients` does not show the expected client:
+
+1. Confirm the user is an active team member.
+2. Confirm the client exists.
+3. Confirm the user has an active client grant.
+4. Confirm the user signed in to the correct server and team.
+5. Ask the user to sign in again after the grant changes.
+
+Run these from `command-centre/`:
+
+```powershell
+npm run team -- whoami
+npm run team -- clients
+npm run team:members -- --team demo
+npm run team:client -- grants --team demo
+```
+
+Grant revoke takes effect on the next backend request. Old local pulled files
+are not automatically deleted from disk.
+
+Next: [Memory and search](/docs/admin/troubleshooting-memory-search)

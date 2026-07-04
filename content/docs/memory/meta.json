@@ -4,8 +4,14 @@
   "pages": [
     "index",
     "schema",
-    "session-capture",
     "hosted-api",
+    "session-capture",
+    "capture-flow",
+    "capture-consolidation",
+    "review-pending-memory",
+    "published-memories",
+    "capture-variables",
+    "capture-troubleshooting",
     "backup-restore"
   ],
   "root": true

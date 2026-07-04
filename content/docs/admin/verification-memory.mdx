@@ -1,0 +1,48 @@
+---
+title: "Import and search memory"
+description: "Verify Team OS memory import and search."
+---
+
+Import a proof phrase:
+
+```powershell
+$proof="$env:TEMP\team-proof.txt"
+Set-Content $proof "Team OS proof phrase: aubergine-927"
+npm run team -- memory import --file $proof --visibility team --title "Team Proof"
+npm run team -- memory imports --limit 5
+```
+
+Expected result:
+
+* the import status is `indexed`;
+* at least one chunk is inserted.
+
+Search through the API:
+
+```powershell
+$saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json
+$body = @{
+  query = "aubergine-927"
+  topK = 5
+  scope = @{
+    teamId = "fake-client-team"
+    clientId = $null
+    userId = $null
+    include = @("team")
+  }
+  storeQueryText = $false
+} | ConvertTo-Json -Depth 6
+
+Invoke-RestMethod `
+  -Uri "http://127.0.0.1:8787/v1/memory/search" `
+  -Method Post `
+  -Headers @{ Authorization = "Bearer $($saved.token)" } `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+Expected result: the search returns `aubergine-927`.
+
+This also proves the server does not trust the fake `teamId` sent by the client.
+
+Next: [Test member restrictions](/docs/admin/verification-member-restrictions)

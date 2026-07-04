@@ -1,0 +1,26 @@
+---
+title: "Capture variables"
+description: "Reference Team OS memory capture variables."
+---
+
+Most users do not need to set these manually. They are useful for hosted
+services, tests, and explicit capture runs.
+
+| Variable | Purpose |
+| --- | --- |
+| `AGENTIC_OS_HOSTED_MODE` | Marks Command Centre as hosted mode. |
+| `TEAM_OS_HOSTED_MODE` | Alternate hosted mode flag. |
+| `MEMORY_CAPTURE_VIA_API` | Forces capture through the hosted API path. |
+| `MEMORY_CAPTURE_TEAM_ID` | Team ID used for direct hosted capture. |
+| `MEMORY_CAPTURE_USER_ID` | User ID used for direct hosted capture. |
+| `MEMORY_CAPTURE_CLIENT_ID` | Client ID for client-scoped capture. |
+| `MEMORY_CAPTURE_VISIBILITY` | Capture visibility: `private`, `client`, `team`, or `system`. |
+| `MEMORY_CAPTURE_ALLOW_SYSTEM` | Allows explicit system capture for admin or service paths. |
+| `MEMORY_CONSOLIDATE_AFTER_CAPTURE` | Set to `0` to stop automatic consolidation after capture. |
+
+In normal Team OS use, the saved login supplies the team and user.
+
+The server still checks the signed-in user and grants before accepting capture
+or review actions.
+
+Next: [Capture troubleshooting](/docs/memory/capture-troubleshooting)

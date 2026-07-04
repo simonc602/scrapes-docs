@@ -1,0 +1,25 @@
+---
+title: "Restricted runner"
+description: "Test a member with access to only one client."
+---
+
+Use this workflow when testing a member who should see only one client.
+
+1. Sign in as that member.
+2. Run `npm run team -- clients`.
+3. Pull the granted client into a clean folder.
+4. Start the local runner from the pulled folder.
+
+Start from the pulled folder, not from the full source workspace.
+
+```powershell
+$env:AGENTIC_OS_TEAM_CONFIG_DIR="$env:TEMP\aios-member-client"
+npm run team -- login --api-url https://team.example.com --email member@example.com --password "<password>"
+npm run team -- sync pull --client acme --dest "$env:TEMP\team-os-member-runner"
+cd "$env:TEMP\team-os-member-runner"
+Get-ChildItem -Recurse
+```
+
+The folder should contain only files returned by the Team OS manifest.
+
+Next: [Team OS admin operations](/docs/admin/team-os-admin)

@@ -1,0 +1,25 @@
+---
+title: "Invites"
+description: "Join Team OS with an invite token."
+---
+
+Owners and admins create invites. A normal user receives an invite token for one
+email address.
+
+The user joins with:
+
+* the team slug;
+* the invited email;
+* the invite token;
+* a new password.
+
+After joining, the user signs in with the normal login command:
+
+```bash
+npm run team -- login --api-url https://team.example.com --email member@example.com --password "<password>" --team acme
+```
+
+Invite tokens are single-use. If a token is already used or expired, ask an
+owner or admin for a new invite.
+
+Next: [Dev-only token login](/docs/team-os/dev-token-login)

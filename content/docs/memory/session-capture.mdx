@@ -1,6 +1,6 @@
 ---
 title: "Session capture and review"
-description: "Team OS stages session captures before they become shared memory."
+description: "Understand how Team OS turns session captures into shared memory."
 ---
 
 Team OS stages session captures before they become shared memory.
@@ -8,137 +8,15 @@ Team OS stages session captures before they become shared memory.
 This protects the team memory store. A raw session summary is not searchable
 right away. It must first be consolidated, then published or sent to review.
 
-## How capture works
+## Capture path
 
-The Claude Stop hook starts session capture in the background. It does not slow
-down the active chat.
-
-Capture writes two local files:
-
-| File | Purpose |
+| Task | Page |
 | --- | --- |
-| `context/memory/YYYY-MM-DD.aos.md` | Machine-owned summary blocks used for backup and future re-indexing. |
-| `context/transcripts/YYYY-MM-DD/*.jsonl` | Raw transcript archive. This stays local and should not be committed. |
+| Understand local and hosted capture | [Capture flow](/docs/memory/capture-flow) |
+| Run or troubleshoot consolidation | [Capture consolidation](/docs/memory/capture-consolidation) |
+| Review pending items | [Review pending memory](/docs/memory/review-pending-memory) |
+| Edit or delete published memory | [Published memories](/docs/memory/published-memories) |
+| Check capture settings | [Capture variables](/docs/memory/capture-variables) |
+| Fix capture problems | [Capture troubleshooting](/docs/memory/capture-troubleshooting) |
 
-When the local client is signed in to Team OS, the capture is also sent to the
-hosted API as a staged capture event.
-
-## Hosted capture flow
-
-The hosted flow has three steps:
-
-1. The local client sends a summarized block to `/v1/memory/captures`.
-2. Team OS starts consolidation in the background after capture. The
-   consolidation script claims staged captures from `/v1/memory/consolidation/claim`.
-3. The client completes the batch through `/v1/memory/consolidation/complete`.
-
-Most users do not need to run consolidation after each session. The background
-run is quiet and processes captures when they are eligible.
-
-The consolidation step asks an LLM to choose one result for each item:
-
-| Result | Meaning |
-| --- | --- |
-| `publish` | Create final team or client memory. Published memory becomes searchable. |
-| `review` | Keep the item out of recall until an owner or admin decides. |
-| `discard` | Drop captures that have no durable memory value. |
-
-Only published items become `memory_sources` and `memory_chunks`.
-
-## Run consolidation
-
-Team OS usually runs consolidation automatically after a staged capture. Use
-this command when you want to catch up pending captures, troubleshoot capture
-flow, or run consolidation for a client on purpose.
-
-Run it from `command-centre/` after signing in to Team OS:
-
-```powershell
-npm run memory:consolidate
-```
-
-Consolidate client-scoped captures:
-
-```powershell
-npm run memory:consolidate -- --client acme
-```
-
-Expected output:
-
-```text
-memory-consolidate: claimed 3, published 1, review 1, discarded 1
-```
-
-The command uses Claude Haiku by default. If the Claude command is installed in
-a custom location, set:
-
-```text
-MEMORY_CONSOLIDATE_CLAUDE_COMMAND=<path-or-command>
-```
-
-## Review pending memories
-
-Owners and admins review pending memories in Command Centre:
-
-1. Sign in to Team OS.
-2. Open the Team tab.
-3. Open Memories.
-4. Review pending items.
-5. Publish or discard each item.
-
-The review UI uses `/v1/memory/memories`. It shows pending review items and
-published team or client memory. Non-admin members do not get the admin review
-controls.
-
-When an admin publishes a review item, Team OS creates final memory and links it
-back to the original capture. When an admin discards it, the item stays out of
-recall.
-
-## Manage published memories
-
-Owners and admins can also manage published team and client memories:
-
-1. Sign in to Team OS.
-2. Open the Team tab.
-3. Open Memories.
-4. Select a published memory.
-5. Edit the memory, or delete it from recall.
-
-Editing a published memory re-indexes its content so search uses the latest
-text. Deleting a published memory archives the memory source and removes its
-search chunks. The audit trail still keeps the delete event.
-
-Members can search memory that their grants allow. They do not get the edit or
-delete controls for published memories.
-
-## Capture variables
-
-Most users do not need to set these manually. They are useful for hosted
-services, tests, and explicit capture runs.
-
-| Variable | Purpose |
-| --- | --- |
-| `AGENTIC_OS_HOSTED_MODE` | Marks Command Centre as hosted mode. |
-| `TEAM_OS_HOSTED_MODE` | Alternate hosted mode flag. |
-| `MEMORY_CAPTURE_VIA_API` | Forces capture through the hosted API path. |
-| `MEMORY_CAPTURE_TEAM_ID` | Team id used for direct hosted capture. |
-| `MEMORY_CAPTURE_USER_ID` | User id used for direct hosted capture. |
-| `MEMORY_CAPTURE_CLIENT_ID` | Client id for client-scoped capture. |
-| `MEMORY_CAPTURE_VISIBILITY` | Capture visibility: `private`, `client`, `team`, or `system`. |
-| `MEMORY_CAPTURE_ALLOW_SYSTEM` | Allows explicit system capture for admin or service paths. |
-| `MEMORY_CONSOLIDATE_AFTER_CAPTURE` | Set to `0` to stop automatic consolidation after capture. |
-
-In normal Team OS use, the saved login supplies the team and user. The server
-still checks the signed-in user and grants before accepting capture or review
-actions.
-
-## Troubleshooting
-
-| Symptom | Likely cause | Fix |
-| --- | --- | --- |
-| Capture is not searchable | It is still staged, waiting for automatic consolidation, or waiting for review. | Wait for the background run, then review pending items. Run `npm run memory:consolidate` only if you need to catch up manually. |
-| Consolidation publishes nothing | The model found no durable memory or sent items to review. | Open Command Centre Team > Memories. |
-| Client capture is denied | The user does not have write access to that client. | Ask an owner or admin for a `write` client grant. |
-| System capture is denied | Shared system capture needs explicit admin setup. | Use team or client capture for normal Team OS sessions. |
-
-Next: [Hosted memory API](/docs/memory/hosted-api)
+Next: [Capture flow](/docs/memory/capture-flow)

@@ -6,7 +6,26 @@
     "concepts",
     "roles-and-permissions",
     "client-connection",
-    "memory-and-sync"
+    "terminal-login",
+    "saved-config",
+    "command-centre-login",
+    "invites",
+    "dev-token-login",
+    "client-common-failures",
+    "memory-and-sync",
+    "memory-layers",
+    "import-shared-memory",
+    "published-memory",
+    "hosted-memory-search",
+    "file-sync-model",
+    "command-centre-sync",
+    "sync-manifest",
+    "sync-pull",
+    "sync-push",
+    "sync-conflicts",
+    "sync-exclusions",
+    "sync-revoke",
+    "restricted-runner"
   ],
   "root": true
 }

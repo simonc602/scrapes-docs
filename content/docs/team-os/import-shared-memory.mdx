@@ -1,0 +1,62 @@
+---
+title: "Import shared memory"
+description: "Publish team or client memory through Team OS."
+---
+
+Owners and admins can publish shared memory through the Team OS API.
+
+## Import a team note
+
+```powershell
+npm run team -- memory import --file ./team-note.md --visibility team --title "Team note"
+```
+
+## Import a client note
+
+```powershell
+npm run team -- memory import --file ./acme-note.md --visibility client --client acme --title "Acme note"
+```
+
+By default, the source path is `manual/<file-name>`. Use `--source-path` when
+you need a stable path:
+
+```powershell
+npm run team -- memory import --file ./onboarding.md --visibility client --client acme --source-path manual/acme/onboarding.md
+```
+
+Expected output:
+
+```text
+Import indexed: manual/acme/onboarding.md
+ID: <import-id>
+Source: <source-id>
+Chunks inserted: 3
+```
+
+The import creates a durable import record before indexing. If indexing fails,
+an admin can list and retry it later.
+
+## List and retry imports
+
+List recent imports:
+
+```powershell
+npm run team -- memory imports --limit 5
+```
+
+List only failed imports:
+
+```powershell
+npm run team -- memory imports --status failed
+```
+
+Retry a failed import:
+
+```powershell
+npm run team -- memory retry --id <import-id>
+```
+
+Retry normally forces re-indexing. Add `--no-force` only when you want the
+server to skip unchanged content.
+
+Next: [Published memory](/docs/team-os/published-memory)

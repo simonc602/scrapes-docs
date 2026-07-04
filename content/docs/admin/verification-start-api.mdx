@@ -1,0 +1,27 @@
+---
+title: "Start the API"
+description: "Start the Team OS API for local verification."
+---
+
+In the same terminal:
+
+```powershell
+$env:MEMORY_API_TOKEN="owner-token"
+$env:MEMORY_API_PORT="8787"
+$env:MEMORY_API_TEAM_SLUG="demo"
+$env:MEMORY_API_USER_EMAIL="owner@example.test"
+npm run memory:api
+```
+
+Leave this terminal running.
+
+Expected server log:
+
+```text
+backend: pglite
+listening on :8787
+```
+
+For hosted deployment, the health response should show `backend: postgres`.
+
+Next: [Log in as owner](/docs/admin/verification-owner-login)

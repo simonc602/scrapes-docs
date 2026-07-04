@@ -1,0 +1,35 @@
+---
+title: "Backups and restore"
+description: "Back up and restore the hosted Team OS database."
+---
+
+Back up the Postgres database, not only the API container.
+
+## Back up hosted Postgres
+
+Use the Agentic OS backup command from `command-centre` when you can run it with
+the hosted database URL:
+
+```bash
+MEMORY_DATABASE_URL='postgres://postgres:<password>@<host>:5432/agentic_memory' \
+  npm run memory:backup
+```
+
+For production, schedule database backups and copy them away from the database
+host.
+
+## Restore hosted Postgres
+
+Restore into a fresh pgvector database:
+
+```bash
+MEMORY_DATABASE_URL='postgres://postgres:<password>@<host>:5432/agentic_memory' \
+  npm run memory:restore -- backups/memory/<backup-file>.dump --yes
+```
+
+## Related backup page
+
+For more memory backup details, see
+[Backup and restore](/docs/memory/backup-restore).
+
+Next: [First verification](/docs/deploy/first-verification)

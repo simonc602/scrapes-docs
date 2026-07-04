@@ -1,0 +1,38 @@
+---
+title: "Members"
+description: "Invite, join, and list Team OS members."
+---
+
+Invite a member:
+
+```powershell
+npm run team:invite -- --team demo --email member@example.test --by owner@example.test
+```
+
+The command prints a one-time join token. Send the token through a private
+channel.
+
+Accept the invite:
+
+```powershell
+npm run team:join -- --team demo --email member@example.test --token <invite-token> --password "member-pass-123"
+```
+
+List members:
+
+```powershell
+npm run team:members -- --team demo
+```
+
+Expected member states:
+
+| Status | Meaning |
+| --- | --- |
+| `invited` | Invite exists, but the user has not joined yet. |
+| `active` | User can sign in and use granted resources. |
+| `suspended` | User should not receive access. |
+
+Invite tokens are single-use. If a token is used, expired, or sent to the wrong
+email, create a new invite.
+
+Next: [Clients](/docs/admin/clients)

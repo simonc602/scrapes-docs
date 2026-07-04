@@ -1,0 +1,24 @@
+---
+title: "Log in as owner"
+description: "Sign in to the local verification API as owner."
+---
+
+Open a second terminal:
+
+```powershell
+cd "C:\Users\gmsal\Code Projects\AgenticOS-team-os-solomon\command-centre"
+$env:AGENTIC_OS_TEAM_CONFIG_DIR="$env:TEMP\aios-owner-client"
+npm run team -- login --api-url http://127.0.0.1:8787 --email owner@example.test --password "owner-pass-123"
+npm run team -- whoami
+npm run team -- clients
+```
+
+Expected result:
+
+* `whoami` shows `owner@example.test`;
+* the role is `owner`;
+* `clients` shows only clients granted to the owner.
+
+Owners can publish shared memory because they are team admins.
+
+Next: [Import and search memory](/docs/admin/verification-memory)

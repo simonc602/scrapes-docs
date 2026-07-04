@@ -1,0 +1,43 @@
+---
+title: "Test file sync"
+description: "Verify Team OS file sync with a granted client."
+---
+
+Grant write access before this step:
+
+```powershell
+npm run team:client -- grant --team demo --client acme --user member@example.test --access write --by owner@example.test
+```
+
+Create a local client file:
+
+```powershell
+$local="$env:TEMP\team-os-local"
+New-Item -ItemType Directory -Force "$local\clients\acme\context" | Out-Null
+Set-Content "$local\clients\acme\context\notes.md" "Acme sync proof"
+```
+
+Push and inspect the manifest:
+
+```powershell
+npm run team -- sync push --client acme --src $local
+npm run team -- sync manifest --client acme
+```
+
+Pull into another folder:
+
+```powershell
+$pull="$env:TEMP\team-os-pull"
+npm run team -- sync pull --client acme --dest $pull
+Get-ChildItem -Recurse $pull
+```
+
+Expected result:
+
+* only granted client files appear;
+* pulled files live under `clients/acme`;
+* excluded files do not appear;
+* `.agentic-os/team-sync-state.json` is created;
+* Command Centre can show the client sync state.
+
+Next: [Check Command Centre](/docs/admin/verification-command-centre)

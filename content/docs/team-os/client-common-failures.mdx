@@ -1,0 +1,25 @@
+---
+title: "Client common failures"
+description: "Fix common Team OS client login problems."
+---
+
+Use this page when a local client cannot connect to Team OS.
+
+| Symptom | What to check |
+| --- | --- |
+| `--api-url must start with http:// or https://` | Use the full server URL, including `https://`. |
+| `login failed (401)` or `unauthorized` | Check email, password, invite status, and server URL. |
+| `No clients are available for this account.` | Ask an owner or admin to grant client access. |
+| Saved login expired | Run `npm run team -- login` again. |
+| Command Centre shows signed out after terminal login | Start both with the same `AGENTIC_OS_TEAM_CONFIG_DIR`. |
+| Health check fails | Ask the server operator to check `/v1/health` and API deploy logs. |
+
+## What the server decides
+
+After login, the local client can ask for clients, memory, and files. The server
+still decides what is allowed.
+
+The local client cannot grant itself a team, role, client, skill, or user
+identity by sending different IDs in a request.
+
+Next: [Memory and file sync](/docs/team-os/memory-and-sync)

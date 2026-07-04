@@ -1,0 +1,45 @@
+---
+title: "Clients"
+description: "Create clients and manage client grants."
+---
+
+Create a client:
+
+```powershell
+npm run team:client -- create --team demo --slug acme --name "Acme" --by owner@example.test
+```
+
+List clients:
+
+```powershell
+npm run team:client -- list --team demo
+```
+
+Grant read access:
+
+```powershell
+npm run team:client -- grant --team demo --client acme --user member@example.test --access read --by owner@example.test
+```
+
+Grant write access:
+
+```powershell
+npm run team:client -- grant --team demo --client acme --user member@example.test --access write --by owner@example.test
+```
+
+List client grants:
+
+```powershell
+npm run team:client -- grants --team demo
+```
+
+Revoke access:
+
+```powershell
+npm run team:client -- revoke --team demo --client acme --user member@example.test --by owner@example.test
+```
+
+Client grants affect `npm run team -- clients`, memory search, memory ingest,
+and file sync.
+
+Next: [Skill grants](/docs/admin/skill-grants)

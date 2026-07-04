@@ -1,0 +1,40 @@
+---
+title: "Skill grants"
+description: "Grant or revoke Team OS skill permissions."
+---
+
+Grant a skill permission:
+
+```powershell
+npm run team:skill -- grant --team demo --skill mkt-copywriting --user member@example.test --permission skill.use --by owner@example.test
+```
+
+List skill grants:
+
+```powershell
+npm run team:skill -- grants --team demo
+```
+
+Revoke a skill permission:
+
+```powershell
+npm run team:skill -- revoke --team demo --skill mkt-copywriting --user member@example.test --permission skill.use --by owner@example.test
+```
+
+Allowed permissions:
+
+| Permission | Meaning |
+| --- | --- |
+| `skill.use` | User can request the skill in a Team OS task or reply. |
+| `skill.read` | User can view or sync skill files. Includes use. |
+| `skill.edit` | User can save allowed Team OS edits for that skill. |
+| `skill.admin` | User can change who has use, read, edit, or admin access. |
+
+`skill.use` only lets the Team OS request pass the server permission check. It
+does not install the skill files on the user's computer.
+
+Grant `skill.read` when a user needs to download, inspect, or sync skill files.
+
+Target users must be active team members before they can receive skill grants.
+
+Next: [Owner password reset](/docs/admin/owner-password-reset)

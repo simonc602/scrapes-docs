@@ -1,0 +1,65 @@
+---
+title: "Startup and first owner"
+description: "Start the hosted API and set the first owner password."
+---
+
+Use this page after Postgres and the Team OS API are configured.
+
+## Startup and migrations
+
+The API runs memory migrations and Better Auth migrations on startup. The
+migrations can run again safely.
+
+A healthy startup should show:
+
+```text
+backend:  postgres
+listening on :8787  (GET /v1/health)
+```
+
+Use `/v1/health` for deploy health checks:
+
+```bash
+curl https://team.example.com/v1/health
+```
+
+If the response says `backend` is `pglite`, the server is not using hosted
+Postgres. Check `MEMORY_STORE_BACKEND` and `MEMORY_DATABASE_URL`.
+
+## First owner password
+
+The bootstrap variables create or resolve the first owner membership. The owner
+still needs a password before normal email and password login works.
+
+The reset command must run where the Team OS app files and environment variables
+are available. In Docker, run it inside the `memory-api` container.
+
+```bash
+npm run team:owner-reset
+```
+
+From the Docker host, first find the container name:
+
+```bash
+docker compose ps
+```
+
+Then run the same command inside that container:
+
+```bash
+docker exec -it <memory-api-container-name> npm run team:owner-reset
+```
+
+If the container does not have `MEMORY_API_PUBLIC_URL`, `TEAM_OS_PUBLIC_URL`, or
+`BETTER_AUTH_URL`, pass the public URL explicitly:
+
+```bash
+npm run team:owner-reset -- --base-url https://team.example.com
+```
+
+Open the printed reset link and set the owner password. Treat the reset link as
+a secret until it expires.
+
+After that, sign in from a local client with the normal login flow.
+
+Next: [Backups and restore](/docs/deploy/backups-and-restore)

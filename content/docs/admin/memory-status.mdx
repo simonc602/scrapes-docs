@@ -1,0 +1,42 @@
+---
+title: "Memory status"
+description: "Check Team OS memory import and review state."
+---
+
+The hosted API exposes memory status at `GET /v1/memory/status`. Command Centre
+uses this in the Team view.
+
+Use memory status to check:
+
+* failed sources;
+* failed index jobs;
+* sources grouped by status;
+* whether imports are indexed;
+* whether capture events are pending, reviewed, or failed.
+
+Failed manual imports can be retried:
+
+```powershell
+npm run team -- memory imports --status failed
+npm run team -- memory retry --id <import-id>
+```
+
+Team OS session capture is staged before it becomes shared memory. Staged
+captures are not searchable until consolidation publishes them.
+
+Run consolidation from `command-centre/` after signing in:
+
+```powershell
+npm run memory:consolidate
+```
+
+For client-scoped captures:
+
+```powershell
+npm run memory:consolidate -- --client acme
+```
+
+For the full flow, see
+[Session capture and review](/docs/memory/session-capture).
+
+Next: [Sync status](/docs/admin/sync-status)

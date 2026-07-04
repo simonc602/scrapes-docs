@@ -1,0 +1,28 @@
+---
+title: "Sync pull"
+description: "Pull granted client files from Team OS."
+---
+
+Pull one client into a local folder:
+
+```powershell
+$pull="$env:TEMP\team-os-pull"
+npm run team -- sync pull --client acme --dest $pull
+```
+
+This creates a folder like:
+
+```text
+team-os-pull/
+|-- .agentic-os/
+|   `-- team-sync-state.json
+`-- clients/
+    `-- acme/
+        `-- context/
+            `-- notes.md
+```
+
+The state file stores the remote SHA for each pulled file. Team OS uses that SHA
+to prevent accidental overwrites during push.
+
+Next: [Sync push](/docs/team-os/sync-push)

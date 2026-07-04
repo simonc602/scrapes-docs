@@ -1,0 +1,23 @@
+---
+title: "Admin surfaces"
+description: "Choose the right place to run Team OS admin work."
+---
+
+Use the simplest surface that fits the task.
+
+| Surface | Use it for |
+| --- | --- |
+| Command Centre Team tab | Manage members, invites, grants, memory status, memory review, sync state, skills, and secrets in the UI. |
+| Interactive terminal menu | Manage admin actions from a guided terminal menu. |
+| Direct command reference | Use exact commands for automation, repeatable setup, recovery, and troubleshooting. |
+| Hosted API | Health, admin data, memory status, workspace manifest, and auth. |
+
+Command Centre uses the same saved Team OS login as the terminal menu when
+`AGENTIC_OS_TEAM_CONFIG_DIR` points to the same folder.
+
+In local PGLite, stop the API before running direct admin commands. PGLite
+allows only one process to hold the local store.
+
+Hosted Postgres does not have that local lock limit.
+
+Next: [First team and owner](/docs/admin/first-team-owner)

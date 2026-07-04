@@ -1,0 +1,20 @@
+---
+title: "API and database health"
+description: "Fix Team OS API and database health problems."
+---
+
+If `/v1/health` fails:
+
+* check API deploy logs;
+* check `MEMORY_DATABASE_URL`;
+* check `PGSSLMODE`;
+* check Postgres network access;
+* check whether Postgres is private and reachable from the API container;
+* check whether migrations completed.
+
+If health returns `backend: pglite` in a hosted deploy, the API is not using the
+hosted database.
+
+Fix the database environment variables and redeploy.
+
+Next: [Workspace backup](/docs/admin/troubleshooting-workspace-backup)

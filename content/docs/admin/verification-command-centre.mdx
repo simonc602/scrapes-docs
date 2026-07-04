@@ -1,0 +1,26 @@
+---
+title: "Check Command Centre"
+description: "Verify Team OS state in Command Centre."
+---
+
+Start Command Centre with the same config directory:
+
+```powershell
+$env:AGENTIC_OS_TEAM_CONFIG_DIR="$env:TEMP\aios-member-client"
+npm run dev
+```
+
+Open the local URL shown by Next.js.
+
+Check:
+
+* the top-right Team control shows connected state after login;
+* the Team tab shows server data;
+* the clients list shows only backend-granted clients;
+* client rows show Pull and, for `write` grants, Push controls;
+* the Memories view loads for owners and admins;
+* owners and admins can open a published memory and see edit/delete actions;
+* admin controls are visible only to owners and admins;
+* sign-out clears the shared terminal and UI login state.
+
+Next: [Run automated checks](/docs/admin/verification-automated-checks)

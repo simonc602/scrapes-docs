@@ -1,0 +1,18 @@
+---
+title: "Sync revoke behavior"
+description: "Understand what happens after a client grant is revoked."
+---
+
+Client grant changes take effect on the next server request.
+
+After a grant is revoked:
+
+* `sync manifest` no longer lists that client;
+* `sync pull` cannot fetch that client;
+* `sync push` is denied for that client;
+* old local files are not automatically deleted from disk.
+
+When access changes, remove old pulled folders from the local machine if they
+should no longer be used.
+
+Next: [Restricted runner](/docs/team-os/restricted-runner)

@@ -1,0 +1,18 @@
+---
+title: "Local PGLite lock"
+description: "Fix local PGLite lock problems during tests."
+---
+
+Local PGLite is useful for tests, but one process owns the store at a time.
+
+If a direct admin command fails while `npm run memory:api` is running locally,
+stop the API, run the admin command, then start the API again.
+
+Hosted Postgres does not have this local lock issue.
+
+Related pages:
+
+* [Host Team OS](/docs/deploy/team-os-hosted-server)
+* [Connect a Team OS client](/docs/team-os/client-connection)
+* [Memory and file sync](/docs/team-os/memory-and-sync)
+* [Team OS admin operations](/docs/admin/team-os-admin)

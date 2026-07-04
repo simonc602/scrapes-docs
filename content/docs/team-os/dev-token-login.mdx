@@ -1,0 +1,25 @@
+---
+title: "Dev-only token login"
+description: "Use the Team OS dev fallback token for smoke tests."
+---
+
+Some deployments set `MEMORY_API_TOKEN` for internal smoke tests. This is a
+shared dev fallback token, not the normal login method for users.
+
+Use it only when an operator asks you to test the deployment:
+
+```bash
+npm run team -- login-dev --api-url https://team.example.com --token "<dev-token>"
+```
+
+Expected output:
+
+```text
+Dev-only shared token saved. Use email/password login for normal Team OS users.
+Signed in as owner@example.com
+Team: Acme
+```
+
+Do not share this token with normal users. Rotate it if it is exposed.
+
+Next: [Client common failures](/docs/team-os/client-common-failures)

@@ -1,0 +1,24 @@
+---
+title: "Sync status"
+description: "Check Team OS sync access and manifest state."
+---
+
+Use the manifest and grants to confirm sync access.
+
+```powershell
+npm run team -- clients
+npm run team -- sync manifest --client acme
+```
+
+If the manifest is empty, check:
+
+* the user has an active team membership;
+* the user has an active client grant;
+* the client slug is correct;
+* the API can read the workspace file data;
+* the files are not excluded by sync rules.
+
+For sync behavior, see
+[Memory and file sync](/docs/team-os/memory-and-sync).
+
+Next: [Command Centre checks](/docs/admin/command-centre-checks)

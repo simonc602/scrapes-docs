@@ -1,0 +1,57 @@
+---
+title: "Environment variables"
+description: "Set the required Team OS API and Postgres variables."
+---
+
+Set these variables before you start the hosted Team OS API.
+
+## Core API and database
+
+| Variable | Required | Example | Notes |
+| --- | --- | --- | --- |
+| `MEMORY_STORE_BACKEND` | yes | `postgres` | Forces hosted Postgres. |
+| `MEMORY_DATABASE_URL` | yes | `postgres://postgres:<password>@postgres:5432/agentic_memory` | Use the private database URL. |
+| `PGSSLMODE` | depends | `disable` | Use `disable` for private networks. Use `require` when the database needs TLS. |
+| `MEMORY_API_TOKEN` | yes | generated secret | Internal dev fallback token. Keep it secret. |
+| `MEMORY_API_PORT` | no | `8787` | API port. If unset, the server uses `PORT`, then `8787`. |
+| `MEMORY_EMBEDDER` | no | `bge-m3` | Default is `bge-m3`. |
+| `MEMORY_EMBEDDING_MODEL` | no | `bge-m3` | Optional explicit model label. |
+| `MEMORY_EMBEDDING_DIM` | no | `1024` | Optional explicit dimension. |
+| `AGENTIC_OS_DIR` | yes for Docker | `/data/agentic-os` | Workspace and runtime data root. Mount it to persistent storage. |
+
+## Auth, public URLs, and server principal
+
+| Variable | Required | Example | Notes |
+| --- | --- | --- | --- |
+| `BETTER_AUTH_SECRET` | yes | generated secret | Auth signing secret. Use a strong random value. |
+| `MEMORY_API_PUBLIC_URL` | yes | `https://team.example.com` | Public URL users enter when they sign in. |
+| `BETTER_AUTH_URL` | yes | `https://team.example.com` | Usually the same value as `MEMORY_API_PUBLIC_URL`. |
+| `TEAM_OS_PUBLIC_URL` | no | `https://team.example.com` | Fallback public URL for admin tools. |
+| `MEMORY_API_TEAM_ID` + `MEMORY_API_USER_ID` | either this pair | backend ids | Fixed server principal for the dev fallback token. |
+| `MEMORY_API_TEAM_SLUG` + `MEMORY_API_USER_EMAIL` | or this pair | `acme`, `owner@example.com` | Human-readable server principal. |
+| `MEMORY_API_BOOTSTRAP_TEAM_SLUG` + `MEMORY_API_BOOTSTRAP_OWNER_EMAIL` | first setup | `acme`, `owner@example.com` | Creates or resolves the first team and owner. |
+| `MEMORY_API_BOOTSTRAP_TEAM_NAME` | no | `Acme` | Display name for the first team. |
+| `MEMORY_API_BOOTSTRAP_OWNER_NAME` | no | `Owner Example` | Display name for the first owner. |
+
+Hosted Postgres mode requires a server principal. For the first startup, use the
+bootstrap team slug and owner email.
+
+After the first startup, you can keep the slug and email pair. You can also
+switch to the backend ID pair.
+
+## Postgres service variables
+
+Set these variables on the Postgres service:
+
+| Variable | Required | Example | Notes |
+| --- | --- | --- | --- |
+| `POSTGRES_USER` | yes | `postgres` | Database user. |
+| `POSTGRES_PASSWORD` | yes | generated secret | Strong database password. |
+| `POSTGRES_DB` | yes | `agentic_memory` | Database name used in `MEMORY_DATABASE_URL`. |
+
+<Callout type="warn">
+Do not commit real database URLs, API tokens, auth secrets, encryption keys, or
+passwords. Keep real values in your host's secret manager.
+</Callout>
+
+Next: [Secrets and workspace backup](/docs/deploy/secrets-and-workspace-backup)

@@ -1,0 +1,18 @@
+---
+title: "File sync model"
+description: "Understand how Team OS controls synced files."
+---
+
+Team OS file sync is permission-scoped. It exposes only text Agentic OS files
+under granted client workspaces.
+
+The server decides:
+
+* which clients the signed-in user can see;
+* whether each client grant is `read` or `write`;
+* which files appear in the manifest;
+* whether a push can write a file.
+
+The local client never receives full server filesystem access.
+
+Next: [Command Centre sync](/docs/team-os/command-centre-sync)

@@ -1,0 +1,32 @@
+---
+title: "Saved config directory"
+description: "Choose where Team OS saves local login state."
+---
+
+By default, the saved login file is:
+
+```text
+~/.agentic-os/team-context.json
+```
+
+Use `AGENTIC_OS_TEAM_CONFIG_DIR` when you need a separate login for testing or
+for a specific workspace.
+
+## PowerShell
+
+```powershell
+$env:AGENTIC_OS_TEAM_CONFIG_DIR="$env:TEMP\aios-team-client"
+npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>"
+```
+
+## Bash
+
+```bash
+export AGENTIC_OS_TEAM_CONFIG_DIR="/tmp/aios-team-client"
+npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>"
+```
+
+Command Centre and the terminal share the same login state when they use the
+same `AGENTIC_OS_TEAM_CONFIG_DIR`.
+
+Next: [Command Centre login](/docs/team-os/command-centre-login)

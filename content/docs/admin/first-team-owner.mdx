@@ -1,0 +1,15 @@
+---
+title: "First team and owner"
+description: "Create the first Team OS team and owner."
+---
+
+Run this once for a local test store or hosted database:
+
+```powershell
+cd command-centre
+npm run team:create -- --slug demo --name "Demo Team" --owner-email owner@example.test --owner-name "Owner" --owner-password "owner-pass-123"
+```
+
+Expected output includes the team ID, slug, and owner email.
+
+Next: [Members](/docs/admin/members)

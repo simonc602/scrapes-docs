@@ -1,0 +1,29 @@
+---
+title: "Sync push"
+description: "Push granted client file changes to Team OS."
+---
+
+A user needs a `write` client grant to push files.
+
+The source can be a workspace folder that contains `clients/acme`:
+
+```powershell
+npm run team -- sync push --client acme --src $pull
+```
+
+The source can also be the client folder itself:
+
+```powershell
+npm run team -- sync push --client acme --src "$pull\clients\acme"
+```
+
+For existing remote files, pull before pushing.
+
+If the local state does not have a base SHA, the command stops with this
+message:
+
+```text
+No base version for clients/acme/context/notes.md. Run sync pull before pushing existing files.
+```
+
+Next: [Sync conflicts](/docs/team-os/sync-conflicts)

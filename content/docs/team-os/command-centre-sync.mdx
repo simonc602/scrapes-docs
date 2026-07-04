@@ -1,0 +1,29 @@
+---
+title: "Command Centre sync"
+description: "Use Command Centre to pull and push granted client files."
+---
+
+Command Centre shows sync state in the Team tab.
+
+For clients, the row can show:
+
+| State | Meaning |
+| --- | --- |
+| `Synced` | Local files match the server version. |
+| `local changes` | Local files changed after the last sync. |
+| `server updates` | Server files changed after the last sync. |
+| `both changed` | Local and server files both changed. Review before overwriting. |
+| `not synced` | No clean sync state exists yet. |
+
+Use **Pull** to copy server files to the local workspace. Use **Push** to send
+local changes to the server.
+
+A user needs a `write` client grant to push client files.
+
+When a pull or push would overwrite changed files, Command Centre opens a review
+modal. It shows the affected files and a text diff when possible.
+
+Cancel keeps the current files. Confirming applies the overwrite in the selected
+direction.
+
+Next: [Sync manifest](/docs/team-os/sync-manifest)

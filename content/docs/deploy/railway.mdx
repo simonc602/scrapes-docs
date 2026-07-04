@@ -1,0 +1,26 @@
+---
+title: "Railway"
+description: "Deploy Team OS with Railway."
+---
+
+For Railway, use two services in one project.
+
+## Create the database service
+
+1. Add a Docker image service.
+2. Use `pgvector/pgvector:pg16`.
+3. Set `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB`.
+4. Attach a persistent volume at `/var/lib/postgresql/data`.
+
+## Create the API service
+
+1. Deploy from the Agentic OS repository.
+2. Set the root directory to `command-centre`.
+3. Set the start command to `npm run memory:api`.
+4. Set the health check path to `/v1/health`.
+5. Set the API environment variables from this guide.
+
+For Railway private networking, the database URL usually uses a private host
+and `PGSSLMODE=disable`.
+
+Next: [Startup and first owner](/docs/deploy/startup-and-first-owner)

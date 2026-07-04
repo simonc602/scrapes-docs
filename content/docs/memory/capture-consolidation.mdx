@@ -1,0 +1,36 @@
+---
+title: "Capture consolidation"
+description: "Run Team OS memory consolidation."
+---
+
+Team OS usually runs consolidation automatically after a staged capture.
+
+Use this command when you want to catch up pending captures, troubleshoot
+capture flow, or run consolidation for a client on purpose.
+
+Run it from `command-centre/` after signing in to Team OS:
+
+```powershell
+npm run memory:consolidate
+```
+
+Consolidate client-scoped captures:
+
+```powershell
+npm run memory:consolidate -- --client acme
+```
+
+Expected output:
+
+```text
+memory-consolidate: claimed 3, published 1, review 1, discarded 1
+```
+
+The command uses Claude Haiku by default. If the Claude command is installed in
+a custom location, set:
+
+```text
+MEMORY_CONSOLIDATE_CLAUDE_COMMAND=<path-or-command>
+```
+
+Next: [Review pending memory](/docs/memory/review-pending-memory)

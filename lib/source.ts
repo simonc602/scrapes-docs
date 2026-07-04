@@ -7,7 +7,7 @@ import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
 type SidebarGroup = {
   id: string;
   title: string;
-  urls: string[];
+  children: Array<string | SidebarGroup>;
 };
 
 const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
@@ -17,7 +17,7 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
       {
         id: 'install-agentic-os',
         title: 'Install Agentic OS',
-        urls: [
+        children: [
           '/docs/get-started/prerequisites',
           '/docs/get-started/local-install',
           '/docs/get-started/first-run',
@@ -32,9 +32,15 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
       {
         id: 'understand-agentic-os',
         title: 'Understand Agentic OS',
-        urls: [
+        children: [
           '/docs/agentic-os/what-is-agentic-os',
           '/docs/agentic-os/core-concepts',
+        ],
+      },
+      {
+        id: 'work-with-workspaces',
+        title: 'Work with workspaces',
+        children: [
           '/docs/agentic-os/workspace-structure',
           '/docs/agentic-os/custom-edits',
           '/docs/agentic-os/multi-client-workspaces',
@@ -42,21 +48,353 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
       },
     ],
   ],
+  [
+    'deploy',
+    [
+      {
+        id: 'host-team-os',
+        title: 'Host Team OS',
+        children: [
+          '/docs/deploy/team-os-hosted-server',
+          {
+            id: 'configuration',
+            title: 'Configuration',
+            children: [
+              '/docs/deploy/environment-variables',
+              '/docs/deploy/secrets-and-workspace-backup',
+            ],
+          },
+          {
+            id: 'deploy-options',
+            title: 'Deploy options',
+            children: [
+              '/docs/deploy/docker-compose',
+              '/docs/deploy/coolify',
+              '/docs/deploy/railway',
+              '/docs/deploy/vps',
+            ],
+          },
+          {
+            id: 'operations',
+            title: 'Operations',
+            children: [
+              '/docs/deploy/startup-and-first-owner',
+              '/docs/deploy/backups-and-restore',
+              '/docs/deploy/first-verification',
+            ],
+          },
+        ],
+      },
+    ],
+  ],
+  [
+    'team-os',
+    [
+      {
+        id: 'understand-team-os',
+        title: 'Understand Team OS',
+        children: [
+          '/docs/team-os/concepts',
+          '/docs/team-os/roles-and-permissions',
+        ],
+      },
+      {
+        id: 'connect-a-client',
+        title: 'Connect a client',
+        children: [
+          '/docs/team-os/client-connection',
+          {
+            id: 'login',
+            title: 'Login',
+            children: [
+              '/docs/team-os/terminal-login',
+              '/docs/team-os/saved-config',
+              '/docs/team-os/command-centre-login',
+            ],
+          },
+          {
+            id: 'access',
+            title: 'Access',
+            children: [
+              '/docs/team-os/invites',
+              '/docs/team-os/dev-token-login',
+            ],
+          },
+          {
+            id: 'problems',
+            title: 'Problems',
+            children: ['/docs/team-os/client-common-failures'],
+          },
+        ],
+      },
+      {
+        id: 'use-memory',
+        title: 'Use memory',
+        children: [
+          '/docs/team-os/memory-and-sync',
+          {
+            id: 'shared-memory',
+            title: 'Shared memory',
+            children: [
+              '/docs/team-os/memory-layers',
+              '/docs/team-os/import-shared-memory',
+              '/docs/team-os/published-memory',
+            ],
+          },
+          {
+            id: 'search',
+            title: 'Search',
+            children: ['/docs/team-os/hosted-memory-search'],
+          },
+        ],
+      },
+      {
+        id: 'sync-files',
+        title: 'Sync files',
+        children: [
+          {
+            id: 'basics',
+            title: 'Basics',
+            children: [
+              '/docs/team-os/file-sync-model',
+              '/docs/team-os/command-centre-sync',
+            ],
+          },
+          {
+            id: 'terminal-sync',
+            title: 'Terminal sync',
+            children: [
+              '/docs/team-os/sync-manifest',
+              '/docs/team-os/sync-pull',
+              '/docs/team-os/sync-push',
+            ],
+          },
+          {
+            id: 'safety',
+            title: 'Safety',
+            children: [
+              '/docs/team-os/sync-conflicts',
+              '/docs/team-os/sync-exclusions',
+              '/docs/team-os/sync-revoke',
+              '/docs/team-os/restricted-runner',
+            ],
+          },
+        ],
+      },
+    ],
+  ],
+  [
+    'memory',
+    [
+      {
+        id: 'understand-memory',
+        title: 'Understand memory',
+        children: ['/docs/memory/schema', '/docs/memory/hosted-api'],
+      },
+      {
+        id: 'capture-and-review',
+        title: 'Capture and review',
+        children: [
+          '/docs/memory/session-capture',
+          {
+            id: 'capture-flow',
+            title: 'Capture flow',
+            children: ['/docs/memory/capture-flow'],
+          },
+          {
+            id: 'consolidation-and-review',
+            title: 'Consolidation and review',
+            children: [
+              '/docs/memory/capture-consolidation',
+              '/docs/memory/review-pending-memory',
+            ],
+          },
+          {
+            id: 'published-memory',
+            title: 'Published memory',
+            children: ['/docs/memory/published-memories'],
+          },
+          {
+            id: 'variables-and-troubleshooting',
+            title: 'Variables and troubleshooting',
+            children: [
+              '/docs/memory/capture-variables',
+              '/docs/memory/capture-troubleshooting',
+            ],
+          },
+        ],
+      },
+      {
+        id: 'backups',
+        title: 'Backups',
+        children: ['/docs/memory/backup-restore'],
+      },
+    ],
+  ],
+  [
+    'admin',
+    [
+      {
+        id: 'admin-basics',
+        title: 'Admin basics',
+        children: [
+          '/docs/admin/team-os-admin',
+          '/docs/admin/admin-guided-path',
+          '/docs/admin/admin-surfaces',
+        ],
+      },
+      {
+        id: 'manage-access',
+        title: 'Manage access',
+        children: [
+          {
+            id: 'team-and-people',
+            title: 'Team and people',
+            children: [
+              '/docs/admin/first-team-owner',
+              '/docs/admin/members',
+            ],
+          },
+          {
+            id: 'grants',
+            title: 'Grants',
+            children: [
+              '/docs/admin/clients',
+              '/docs/admin/skill-grants',
+            ],
+          },
+          {
+            id: 'recovery',
+            title: 'Recovery',
+            children: ['/docs/admin/owner-password-reset'],
+          },
+        ],
+      },
+      {
+        id: 'monitor-team-os',
+        title: 'Monitor Team OS',
+        children: [
+          '/docs/admin/health-checks',
+          '/docs/admin/memory-status',
+          '/docs/admin/sync-status',
+          '/docs/admin/command-centre-checks',
+        ],
+      },
+      {
+        id: 'verify-setup',
+        title: 'Verify setup',
+        children: [
+          '/docs/admin/team-os-verification',
+          {
+            id: 'start-verification',
+            title: 'Start verification',
+            children: [
+              '/docs/admin/verification-test-store',
+              '/docs/admin/verification-start-api',
+              '/docs/admin/verification-owner-login',
+            ],
+          },
+          {
+            id: 'test-behavior',
+            title: 'Test behavior',
+            children: [
+              '/docs/admin/verification-memory',
+              '/docs/admin/verification-member-restrictions',
+              '/docs/admin/verification-revoke',
+              '/docs/admin/verification-file-sync',
+            ],
+          },
+          {
+            id: 'finish-checks',
+            title: 'Finish checks',
+            children: [
+              '/docs/admin/verification-command-centre',
+              '/docs/admin/verification-automated-checks',
+            ],
+          },
+        ],
+      },
+      {
+        id: 'troubleshooting',
+        title: 'Troubleshooting',
+        children: [
+          '/docs/admin/team-os-troubleshooting',
+          '/docs/admin/troubleshooting-login-grants',
+          '/docs/admin/troubleshooting-memory-search',
+          '/docs/admin/troubleshooting-sync',
+          '/docs/admin/troubleshooting-api-database',
+          '/docs/admin/troubleshooting-workspace-backup',
+          '/docs/admin/troubleshooting-pglite',
+        ],
+      },
+    ],
+  ],
+  [
+    'contribute',
+    [
+      {
+        id: 'write-docs',
+        title: 'Write docs',
+        children: [
+          '/docs/contribute/style-guide',
+          '/docs/contribute/visual-style',
+          '/docs/contribute/authoring-kit',
+        ],
+      },
+      {
+        id: 'review-docs',
+        title: 'Review docs',
+        children: [
+          '/docs/contribute/source-docs-reuse-matrix',
+          '/docs/contribute/quality-checks',
+        ],
+      },
+    ],
+  ],
 ]);
 
 function createSidebarGroup(
-  parent: Folder,
+  parentId: string,
   group: SidebarGroup,
   children: Node[],
 ): Folder {
   return {
-    $id: `${parent.$id ?? parent.$ref?.folder ?? 'folder'}:${group.id}`,
+    $id: `${parentId}:${group.id}`,
     type: 'folder',
     name: group.title,
-    defaultOpen: true,
+    defaultOpen: false,
     collapsible: true,
     children,
   };
+}
+
+function getSidebarGroupUrls(group: SidebarGroup): string[] {
+  return group.children.flatMap((child) =>
+    typeof child === 'string' ? [child] : getSidebarGroupUrls(child),
+  );
+}
+
+function createSidebarGroupNode(
+  parentId: string,
+  group: SidebarGroup,
+  foundByUrl: Map<string, Node>,
+): Folder | undefined {
+  const groupId = `${parentId}:${group.id}`;
+  const children = group.children
+    .map((child) => {
+      if (typeof child === 'string') {
+        return foundByUrl.get(child);
+      }
+
+      return createSidebarGroupNode(groupId, child, foundByUrl);
+    })
+    .filter((child): child is Node => Boolean(child));
+
+  if (children.length === 0) {
+    return undefined;
+  }
+
+  return createSidebarGroup(parentId, group, children);
 }
 
 function groupSidebarNode(node: Node): Node {
@@ -74,9 +412,10 @@ function groupSidebarNode(node: Node): Node {
 
   let remaining = children;
   const grouped: Folder[] = [];
+  const parentId = node.$id ?? node.$ref?.folder ?? 'folder';
 
   for (const group of groups) {
-    const groupUrls = new Set(group.urls);
+    const groupUrls = new Set(getSidebarGroupUrls(group));
     const foundByUrl = new Map<string, Node>();
 
     remaining = remaining.filter((child) => {
@@ -88,12 +427,10 @@ function groupSidebarNode(node: Node): Node {
       return true;
     });
 
-    const groupChildren = group.urls
-      .map((url) => foundByUrl.get(url))
-      .filter((child): child is Node => Boolean(child));
+    const groupNode = createSidebarGroupNode(parentId, group, foundByUrl);
 
-    if (groupChildren.length > 0) {
-      grouped.push(createSidebarGroup(node, group, groupChildren));
+    if (groupNode) {
+      grouped.push(groupNode);
     }
   }
 

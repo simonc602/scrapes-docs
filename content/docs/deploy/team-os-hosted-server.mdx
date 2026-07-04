@@ -1,15 +1,13 @@
 ---
-title: "Team OS hosted server setup"
-description: "This guide explains how to deploy the Team OS server."
+title: "Host Team OS"
+description: "Deploy the hosted Team OS API and Postgres."
 ---
 
-This guide explains how to deploy the Team OS server.
+Host Team OS when a team needs shared login, permissions, memory, review,
+and file sync.
 
-The server process is called `memory-api` in the Agentic OS repository. The name
-is historical. In Team OS, this service is the hosted Team OS API. It handles
-memory search, login, team and client permissions, manual memory imports, memory
-capture, memory review, workspace file sync, and the hosted endpoints used by
-Command Centre and terminal clients.
+The hosted API is called `memory-api` in the Agentic OS repository. The name is
+historical. In Team OS, it is the public API service.
 
 ## What to deploy
 
@@ -17,12 +15,11 @@ Deploy two services:
 
 | Service | Purpose | Public? |
 | --- | --- | --- |
-| Postgres with pgvector | Stores memory, auth data, teams, clients, grants, captures, imports, and audit events. | No |
+| Postgres with pgvector | Stores memory, users, teams, clients, grants, captures, imports, and audit events. | No |
 | Team OS API (`memory-api`) | Serves login, permissions, memory, sync, review, and health endpoints. | Yes |
 
-Only the API should be reachable from the public internet. Postgres should stay
-inside the private Docker network, Coolify network, Railway private network, VPS
-private network, or a firewall-protected host.
+Only the API should be reachable from the public internet. Keep Postgres inside
+a private network or behind a firewall.
 
 ## Production model
 
@@ -31,384 +28,19 @@ For production, use separate services:
 1. Postgres with the `pgvector/pgvector:pg16` image.
 2. Team OS API built from `command-centre/Dockerfile.memory-api`.
 
-This model is best when the database needs its own backups, restore plan, or
-lifecycle.
-
-## Environment variables
-
-Set these variables on the API service.
-
-### Core API and database
-
-| Variable | Required | Example | Notes |
-| --- | --- | --- | --- |
-| `MEMORY_STORE_BACKEND` | yes | `postgres` | Forces hosted Postgres. The server should not fall back to local PGLite in hosted mode. |
-| `MEMORY_DATABASE_URL` | yes | `postgres://postgres:<password>@postgres:5432/agentic_memory` | Use the private database URL. `DATABASE_URL` is a fallback when this is unset. |
-| `PGSSLMODE` | depends | `disable` | Use `disable` for private Docker, Coolify, or Railway networking. Use `require` when the database requires TLS. |
-| `MEMORY_API_TOKEN` | yes | generated secret | Internal dev fallback token. Keep it secret. Normal users should sign in with email and password. |
-| `MEMORY_API_PORT` | no | `8787` | API port. If unset, the server uses `PORT`, then `8787`. |
-| `MEMORY_EMBEDDER` | no | `bge-m3` | Default is `bge-m3`. Hosted API accepts BGE-M3 vectors with 1024 dimensions. |
-| `MEMORY_EMBEDDING_MODEL` | no | `bge-m3` | Optional explicit model label. Leave unset unless you know you need it. |
-| `MEMORY_EMBEDDING_DIM` | no | `1024` | Optional explicit dimension. Leave unset for BGE-M3. |
-| `AGENTIC_OS_DIR` | yes for Docker | `/data/agentic-os` | Workspace and runtime data root. Mount it to persistent storage. |
-
-### Auth, public URLs, and server principal
-
-| Variable | Required | Example | Notes |
-| --- | --- | --- | --- |
-| `BETTER_AUTH_SECRET` | yes | generated secret | Auth signing secret. Use a strong random value. |
-| `MEMORY_API_PUBLIC_URL` | yes | `https://team.example.com` | Public URL users enter when they sign in. |
-| `BETTER_AUTH_URL` | yes | `https://team.example.com` | Public auth base URL. Usually the same value as `MEMORY_API_PUBLIC_URL`. |
-| `TEAM_OS_PUBLIC_URL` | no | `https://team.example.com` | Fallback public URL used by some admin tools. |
-| `MEMORY_API_TEAM_ID` + `MEMORY_API_USER_ID` | either this pair | backend ids | Fixed server principal for the dev fallback token. Set both or neither. |
-| `MEMORY_API_TEAM_SLUG` + `MEMORY_API_USER_EMAIL` | or this pair | `acme`, `owner@example.com` | Human-readable server principal. The server resolves real ids at startup. |
-| `MEMORY_API_BOOTSTRAP_TEAM_SLUG` + `MEMORY_API_BOOTSTRAP_OWNER_EMAIL` | first setup | `acme`, `owner@example.com` | Creates or resolves the first team and owner. This can also provide the first server principal. |
-| `MEMORY_API_BOOTSTRAP_TEAM_NAME` | no | `Acme` | Display name for the first team. |
-| `MEMORY_API_BOOTSTRAP_OWNER_NAME` | no | `Owner Example` | Display name for the first owner. |
-
-Hosted Postgres mode requires a server principal. For the first Docker or
-Coolify startup, the bootstrap team slug and owner email are the simplest path.
-After the first startup, you can keep using the slug/email pair or switch to the
-backend id pair.
-
-### Secrets and workspace backup
-
-| Variable | Required | Example | Notes |
-| --- | --- | --- | --- |
-| `TEAM_OS_SECRETS_KEYS` | for shared secrets | `v1:<base64url-32-byte-key>` | Encrypts Team OS shared secrets and private config backups. Keep it separate from `BETTER_AUTH_SECRET`. |
-| `TEAM_OS_SECRETS_ACTIVE_KEY_ID` | for shared secrets | `v1` | Required when `TEAM_OS_SECRETS_KEYS` is set, or when more than one key is present. |
-| `TEAM_OS_GITHUB_BACKUP_REMOTE` | optional | `https://github.com/org/private-backup.git` | Private GitHub repo for files written under `AGENTIC_OS_DIR`. Use only private repositories. |
-| `TEAM_OS_GITHUB_BACKUP_TOKEN` | if remote is set | generated GitHub token | Token with read/write access to the backup repo. It is used for push and is not saved in Git config. |
-| `TEAM_OS_GITHUB_BACKUP_BRANCH` | optional | `main` | Backup branch. Default is `main`. |
-| `TEAM_OS_GITHUB_BACKUP_USER_NAME` | optional | `Team OS Backup` | Git author name for backup commits. |
-| `TEAM_OS_GITHUB_BACKUP_USER_EMAIL` | optional | `team-os-backup@example.invalid` | Git author email for backup commits. |
-| `TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS` | optional | `900` | How often the API backs up the workspace. Set `0` to disable the periodic job. |
-
-Use Team OS secrets variables if you want shared `.env` sync or private
-`.mcp.json` backup. Without them, local secrets can still work, but remote
-secret backup and secret sync are unavailable.
-
-Use GitHub workspace backup when the API writes server-side files under
-`AGENTIC_OS_DIR`, such as shared context or granted client files. This backup
-does not replace Postgres backups. It does not include `.env`, `.mcp.json`,
-runtime state, build output, local transcripts, or `backups/`.
-
-The API container must have `git` installed for workspace backup. The supplied
-`command-centre/Dockerfile.memory-api` includes it. If you build a custom image,
-install `git` there too.
-
-Older names such as `TEAM_OS_WORKSPACE_BACKUP_REMOTE`,
-`TEAM_OS_WORKSPACE_BACKUP_TOKEN`, and `TEAM_OS_GIT_BACKUP_REMOTE` still work as
-fallbacks. Prefer the `TEAM_OS_GITHUB_BACKUP_*` names for new deployments.
-
-### Postgres service variables
-
-Set these on the Postgres service:
-
-| Variable | Required | Example | Notes |
-| --- | --- | --- | --- |
-| `POSTGRES_USER` | yes | `postgres` | Database user. |
-| `POSTGRES_PASSWORD` | yes | generated secret | Strong database password. |
-| `POSTGRES_DB` | yes | `agentic_memory` | Database name used in `MEMORY_DATABASE_URL`. |
-
-<Callout type="warn">
-Do not commit real database URLs, API tokens, auth secrets, encryption keys, or
-passwords. Keep real values in your host's secret manager, Coolify variables,
-Railway variables, or another secure store.
-</Callout>
-
-## Secret handling and examples
-
-It is safe to document variable names in `.env.example`:
-
-```text
-MEMORY_STORE_BACKEND=postgres
-MEMORY_DATABASE_URL=
-PGSSLMODE=disable
-MEMORY_API_PUBLIC_URL=
-BETTER_AUTH_URL=
-MEMORY_API_BOOTSTRAP_TEAM_SLUG=
-MEMORY_API_BOOTSTRAP_OWNER_EMAIL=
-```
-
-Do not put real values for these in `.env.example`, screenshots, or committed
-docs:
-
-```text
-POSTGRES_PASSWORD
-MEMORY_DATABASE_URL
-MEMORY_API_TOKEN
-BETTER_AUTH_SECRET
-TEAM_OS_SECRETS_KEYS
-```
-
-Treat `MEMORY_API_TOKEN` as an internal dev fallback token. Normal users should
-sign in with email and password.
-
-## Quick start with one Compose stack
-
-For a small self-hosted setup, you can deploy Postgres and the API from one
-Docker Compose stack. Put this Compose file in the Agentic OS workspace,
-because the API Dockerfile copies files from the workspace root.
-
-```yaml
-services:
-  postgres:
-    image: pgvector/pgvector:pg16
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB:-agentic_memory}
-    volumes:
-      - aios_team_postgres:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-
-  memory-api:
-    build:
-      context: .
-      dockerfile: command-centre/Dockerfile.memory-api
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      AGENTIC_OS_DIR: /data/agentic-os
-      MEMORY_STORE_BACKEND: postgres
-      MEMORY_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-agentic_memory}
-      PGSSLMODE: disable
-      MEMORY_API_TOKEN: ${MEMORY_API_TOKEN}
-      MEMORY_API_PORT: 8787
-      MEMORY_EMBEDDER: bge-m3
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
-      MEMORY_API_PUBLIC_URL: ${MEMORY_API_PUBLIC_URL}
-      BETTER_AUTH_URL: ${MEMORY_API_PUBLIC_URL}
-      TEAM_OS_PUBLIC_URL: ${MEMORY_API_PUBLIC_URL}
-      MEMORY_API_BOOTSTRAP_TEAM_SLUG: ${MEMORY_API_BOOTSTRAP_TEAM_SLUG}
-      MEMORY_API_BOOTSTRAP_TEAM_NAME: ${MEMORY_API_BOOTSTRAP_TEAM_NAME}
-      MEMORY_API_BOOTSTRAP_OWNER_EMAIL: ${MEMORY_API_BOOTSTRAP_OWNER_EMAIL}
-      MEMORY_API_BOOTSTRAP_OWNER_NAME: ${MEMORY_API_BOOTSTRAP_OWNER_NAME}
-      TEAM_OS_SECRETS_KEYS: ${TEAM_OS_SECRETS_KEYS}
-      TEAM_OS_SECRETS_ACTIVE_KEY_ID: ${TEAM_OS_SECRETS_ACTIVE_KEY_ID}
-      TEAM_OS_GITHUB_BACKUP_REMOTE: ${TEAM_OS_GITHUB_BACKUP_REMOTE}
-      TEAM_OS_GITHUB_BACKUP_TOKEN: ${TEAM_OS_GITHUB_BACKUP_TOKEN}
-      TEAM_OS_GITHUB_BACKUP_BRANCH: ${TEAM_OS_GITHUB_BACKUP_BRANCH:-main}
-      TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS: ${TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS:-900}
-    volumes:
-      - aios_team_data:/data/agentic-os
-    ports:
-      - "8787:8787"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8787/v1/health >/dev/null"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 30s
-
-volumes:
-  aios_team_postgres:
-  aios_team_data:
-```
-
-Use a `.env` file or host variables with values like:
-
-```text
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=<strong-database-password>
-POSTGRES_DB=agentic_memory
-MEMORY_API_TOKEN=<strong-dev-fallback-token>
-BETTER_AUTH_SECRET=<strong-auth-secret>
-MEMORY_API_BOOTSTRAP_TEAM_SLUG=acme
-MEMORY_API_BOOTSTRAP_TEAM_NAME=Acme
-MEMORY_API_BOOTSTRAP_OWNER_EMAIL=owner@example.com
-MEMORY_API_BOOTSTRAP_OWNER_NAME=Owner Example
-MEMORY_API_PUBLIC_URL=https://team.example.com
-TEAM_OS_SECRETS_KEYS=v1:<base64url-32-byte-key>
-TEAM_OS_SECRETS_ACTIVE_KEY_ID=v1
-TEAM_OS_GITHUB_BACKUP_REMOTE=
-TEAM_OS_GITHUB_BACKUP_TOKEN=
-TEAM_OS_GITHUB_BACKUP_BRANCH=main
-TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS=900
-```
-
-Start the stack:
-
-```bash
-docker compose up -d
-```
-
-Check the API:
-
-```bash
-curl https://team.example.com/v1/health
-```
-
-Expected response:
-
-```json
-{
-  "ok": true,
-  "backend": "postgres",
-  "embedder": {
-    "model": "bge-m3",
-    "dim": 1024
-  }
-}
-```
-
-## Coolify quick start
-
-For Coolify, use the same two-service Compose model.
-
-Configure it this way:
-
-* deploy from the Agentic OS workspace root;
-* build `memory-api` with `command-centre/Dockerfile.memory-api`;
-* expose only the `memory-api` service through Coolify's reverse proxy;
-* keep Postgres private inside the Compose network;
-* do not publish port `5432`;
-* set the health check path to `/v1/health`;
-* store all secrets in Coolify environment variables.
-
-In Coolify, prefer `expose: ["8787"]` for the API service instead of a public
-`ports` mapping. Coolify's reverse proxy should route public traffic to the API.
-
-The API should connect to Postgres with the internal service name:
-
-```text
-MEMORY_DATABASE_URL=postgres://postgres:<password>@postgres:5432/agentic_memory
-PGSSLMODE=disable
-```
-
-Use the public Coolify URL as:
-
-```text
-MEMORY_API_PUBLIC_URL=https://team.example.com
-BETTER_AUTH_URL=https://team.example.com
-TEAM_OS_PUBLIC_URL=https://team.example.com
-```
-
-Set `AGENTIC_OS_DIR` to a persistent mounted path, such as
-`/data/agentic-os`. If it points inside `/app`, uploaded workspace files and
-backup state may be lost when the container is rebuilt.
-
-## Railway setup
-
-For Railway, use two services in one project.
-
-Create the database service:
-
-1. Add a Docker image service.
-2. Use `pgvector/pgvector:pg16`.
-3. Set `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB`.
-4. Attach a persistent volume at `/var/lib/postgresql/data`.
-
-Create the API service:
-
-1. Deploy from the Agentic OS repository.
-2. Set the root directory to `command-centre`.
-3. Set the start command to `npm run memory:api`.
-4. Set the health check path to `/v1/health`.
-5. Set the API environment variables from this guide.
-
-For Railway private networking, the database URL usually uses a private host
-and `PGSSLMODE=disable`.
-
-## VPS setup
-
-On a VPS, run the same two services:
-
-* Postgres with `pgvector/pgvector:pg16` and a persistent volume.
-* `memory-api` behind a TLS reverse proxy such as Caddy or nginx.
-
-Keep Postgres private. If you need local database access for maintenance, use
-SSH, WireGuard, or a firewall rule instead of opening Postgres to the internet.
-
-## Startup and migrations
-
-The API runs memory migrations and Better Auth migrations on startup. The
-migrations are idempotent, which means they can run again safely.
-
-A healthy startup should show:
-
-```text
-backend:  postgres
-listening on :8787  (GET /v1/health)
-```
-
-Use `/v1/health` for deploy health checks:
-
-```bash
-curl https://team.example.com/v1/health
-```
-
-If the response says `backend` is `pglite`, the server is not using hosted
-Postgres. Check `MEMORY_STORE_BACKEND` and `MEMORY_DATABASE_URL`.
-
-## First owner password
-
-The bootstrap variables create or resolve the first owner membership. The owner
-still needs a password before normal email/password login works.
-
-If the owner password has not been set, create a reset link from the API
-container:
-
-```bash
-docker compose exec memory-api npm run team:owner-reset
-```
-
-If the public URL cannot be detected, pass it explicitly:
-
-```bash
-docker compose exec memory-api npm run team:owner-reset -- --base-url https://team.example.com
-```
-
-Open the printed reset link and set the owner password. After that, sign in from
-a local client with the normal login flow.
-
-## Backups and restore
-
-Back up the Postgres database, not only the API container.
-
-Use the Agentic OS backup command from `command-centre` when you can run it with
-the hosted database URL:
-
-```bash
-MEMORY_DATABASE_URL='postgres://postgres:<password>@<host>:5432/agentic_memory' \
-  npm run memory:backup
-```
-
-Restore into a fresh pgvector database:
-
-```bash
-MEMORY_DATABASE_URL='postgres://postgres:<password>@<host>:5432/agentic_memory' \
-  npm run memory:restore -- backups/memory/<backup-file>.dump --yes
-```
-
-For a full production setup, schedule database backups and copy them away from
-the database host.
-
-## First verification
-
-After deployment:
-
-1. Open `/v1/health` and confirm `ok: true`.
-2. Confirm the health response says `backend: postgres`.
-3. Sign in from a local client.
-4. Run `npm run team -- whoami`.
-5. Run `npm run team -- clients`.
-6. Open Command Centre and confirm the Team tab can load memory status.
-
-## Related
-
-* [Memory schema and scope](/docs/memory/schema)
-* [Session capture and review](/docs/memory/session-capture)
-* [Hosted memory API](/docs/memory/hosted-api)
-* [Backup and restore](/docs/memory/backup-restore)
-* [Connect a Team OS client](/docs/team-os/client-connection)
-
-Next: [Connect a Team OS client](/docs/team-os/client-connection)
+This model is best when the database needs its own backup and restore plan.
+
+## Setup path
+
+1. Set [environment variables](/docs/deploy/environment-variables).
+2. Configure [secrets and workspace backup](/docs/deploy/secrets-and-workspace-backup).
+3. Choose a deploy path:
+   [Docker Compose](/docs/deploy/docker-compose),
+   [Coolify](/docs/deploy/coolify),
+   [Railway](/docs/deploy/railway), or
+   [VPS](/docs/deploy/vps).
+4. Complete [startup and first owner setup](/docs/deploy/startup-and-first-owner).
+5. Configure [backups and restore](/docs/deploy/backups-and-restore).
+6. Run [first verification](/docs/deploy/first-verification).
+
+Next: [Environment variables](/docs/deploy/environment-variables)

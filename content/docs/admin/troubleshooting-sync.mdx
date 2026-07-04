@@ -1,0 +1,32 @@
+---
+title: "Sync troubleshooting"
+description: "Fix Team OS file sync problems."
+---
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Manifest is empty | No active client grant. | Check `npm run team -- clients` and client grants. |
+| Pull returns no files | Client has no syncable text files. | Check excluded paths and file size. |
+| Push is denied | User has `read`, not `write`. | Grant `write` access for that client. |
+| Push says no base version | Existing file was not pulled first. | Run `sync pull`, merge changes, then push. |
+| Push gets a conflict | Remote file changed after pull. | Pull fresh, merge manually, then push. |
+| Command Centre asks to review files | Local and server files both changed, or one side deleted a file. | Review the diff before confirming. |
+
+Sync skips secrets, generated folders, transcripts, and files larger than 1 MB.
+
+It is not a secret distribution system.
+
+## Stale Command Centre state
+
+If Command Centre shows old Team OS data:
+
+1. Refresh the Team tab.
+2. Confirm the terminal and UI use the same `AGENTIC_OS_TEAM_CONFIG_DIR`.
+3. Run `npm run team -- whoami`.
+4. Sign out with `npm run team -- logout`.
+5. Start Command Centre again and sign in.
+
+If the backend is unavailable, hosted mode should not silently show every local
+client folder as if it came from Team OS.
+
+Next: [API and database health](/docs/admin/troubleshooting-api-database)

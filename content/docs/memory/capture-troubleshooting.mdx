@@ -1,0 +1,15 @@
+---
+title: "Capture troubleshooting"
+description: "Fix common Team OS capture and review problems."
+---
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Capture is not searchable | It is still staged, waiting for automatic consolidation, or waiting for review. | Wait for the background run, then review pending items. |
+| Consolidation publishes nothing | The model found no durable memory or sent items to review. | Open Command Centre Team > Memories. |
+| Client capture is denied | The user does not have write access to that client. | Ask an owner or admin for a `write` client grant. |
+| System capture is denied | Shared system capture needs explicit admin setup. | Use team or client capture for normal Team OS sessions. |
+
+Run `npm run memory:consolidate` only when you need to catch up manually.
+
+Next: [Hosted memory API](/docs/memory/hosted-api)

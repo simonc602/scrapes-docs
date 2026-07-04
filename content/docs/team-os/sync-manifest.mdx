@@ -1,0 +1,27 @@
+---
+title: "Sync manifest"
+description: "List files available through Team OS sync."
+---
+
+Show all granted client files:
+
+```powershell
+npm run team -- sync manifest
+```
+
+Show one client:
+
+```powershell
+npm run team -- sync manifest --client acme
+```
+
+Expected output:
+
+```text
+clients/acme/context/notes.md    245    write
+clients/acme/AGENTS.md           800    read
+```
+
+If no files are available, confirm the user has an active client grant.
+
+Next: [Sync pull](/docs/team-os/sync-pull)

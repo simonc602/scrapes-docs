@@ -1,0 +1,16 @@
+---
+title: "VPS"
+description: "Deploy Team OS on a VPS."
+---
+
+On a VPS, run the same two services:
+
+* Postgres with `pgvector/pgvector:pg16` and a persistent volume.
+* `memory-api` behind a TLS reverse proxy such as Caddy or nginx.
+
+Keep Postgres private.
+
+If you need local database access for maintenance, use SSH, WireGuard, or a
+firewall rule. Do not open Postgres to the internet.
+
+Next: [Startup and first owner](/docs/deploy/startup-and-first-owner)
