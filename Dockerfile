@@ -12,6 +12,7 @@ FROM node:24-alpine AS builder
 
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV SKIP_DIAGRAM_RENDER=1
 
 RUN corepack enable
 

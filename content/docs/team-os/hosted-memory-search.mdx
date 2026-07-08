@@ -6,6 +6,10 @@ description: "Search hosted Team OS memory."
 When the local client is signed in to Team OS, memory recall uses the hosted API
 by default.
 
+Recall is layered. It searches first. If a result is too short, it can expand
+that result into nearby source context. Transcript drill-down is local-only for
+now because raw transcripts stay in `context/transcripts/`.
+
 Run recall from `command-centre/`:
 
 ```powershell
@@ -16,6 +20,19 @@ Search a granted client:
 
 ```powershell
 npm run memory:recall -- "onboarding notes" --client acme
+```
+
+Expand a result from the same scope:
+
+```powershell
+npm run memory:recall -- --expand <chunk-id> --client acme
+```
+
+Use local transcript drill-down only when you need exact wording, a command, or
+output from the raw transcript:
+
+```powershell
+npm run memory:recall -- --transcript <chunk-id> --client acme --local
 ```
 
 ## Memory mode
@@ -30,12 +47,16 @@ npm run memory:recall -- "onboarding notes" --client acme
 
 ## Direct API call
 
-Custom clients can call the hosted API endpoint directly:
+Use `memory:recall` for normal work. Custom clients can call the hosted API
+directly when they also send a BGE-M3 query embedding.
 
 ```powershell
 $saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json
 $body = @{
   query = "onboarding notes"
+  queryEmbedding = @("<1024 BGE-M3 numbers>")
+  embeddingModel = "bge-m3"
+  embeddingDim = 1024
   topK = 5
   scope = @{
     teamId = "server-resolved"
@@ -57,6 +78,7 @@ Invoke-RestMethod `
 The server resolves the real team and user from the saved login. Body IDs can
 ask for a narrower search, but they cannot widen access.
 
+For the full recall flow, see [Layered recall](/docs/memory/layered-recall).
 For endpoint details, see [Hosted memory API](/docs/memory/hosted-api).
 
 Next: [File sync model](/docs/team-os/file-sync-model)

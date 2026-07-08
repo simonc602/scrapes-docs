@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #ffffff; overflow: hidden; }
+    #root { display: inline-block; }
+    #root svg { display: block; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    const svgNs = 'http://www.w3.org/2000/svg';
+
+    function createElement(name, attrs = {}) {
+      const element = document.createElementNS(svgNs, name);
+
+      for (const [key, value] of Object.entries(attrs)) {
+        if (value !== null && value !== undefined) {
+          element.setAttribute(key, String(value));
+        }
+      }
+
+      return element;
+    }
+
+    function absolutePoints(element) {
+      return (element.points || []).map(([x, y]) => [
+        (element.x || 0) + x,
+        (element.y || 0) + y,
+      ]);
+    }
+
+    function computeBoundingBox(elements) {
+      let minX = Number.POSITIVE_INFINITY;
+      let minY = Number.POSITIVE_INFINITY;
+      let maxX = Number.NEGATIVE_INFINITY;
+      let maxY = Number.NEGATIVE_INFINITY;
+
+      for (const element of elements) {
+        if (element.isDeleted) continue;
+
+        if ((element.type === 'arrow' || element.type === 'line') && element.points) {
+          for (const [x, y] of absolutePoints(element)) {
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+          }
+          continue;
+        }
+
+        const x = element.x || 0;
+        const y = element.y || 0;
+        const width = Math.abs(element.width || 0);
+        const height = Math.abs(element.height || 0);
+
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x + width);
+        maxY = Math.max(maxY, y + height);
+      }
+
+      if (!Number.isFinite(minX)) {
+        return { minX: 0, minY: 0, maxX: 800, maxY: 600 };
+      }
+
+      return { minX, minY, maxX, maxY };
+    }
+
+    function dashArray(element) {
+      if (element.strokeStyle === 'dashed') return '10 8';
+      if (element.strokeStyle === 'dotted') return '2 8';
+      return null;
+    }
+
+    function drawText(svg, element) {
+      const text = createElement('text', {
+        x: element.textAlign === 'center'
+          ? (element.x || 0) + Math.abs(element.width || 0) / 2
+          : element.x || 0,
+        y: (element.y || 0) + (element.fontSize || 16),
+        fill: element.strokeColor || '#1B1C1B',
+        'font-family': 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+        'font-size': element.fontSize || 16,
+        'font-weight': 500,
+        'text-anchor': element.textAlign === 'center' ? 'middle' : 'start',
+      });
+
+      const lines = String(element.text || '').split('\n');
+      const lineHeight = (element.lineHeight || 1.25) * (element.fontSize || 16);
+
+      for (const [index, line] of lines.entries()) {
+        const tspan = createElement('tspan', {
+          x: text.getAttribute('x'),
+          dy: index === 0 ? 0 : lineHeight,
+        });
+        tspan.textContent = line;
+        text.appendChild(tspan);
+      }
+
+      svg.appendChild(text);
+    }
+
+    function drawLine(svg, element, withArrow) {
+      const points = absolutePoints(element);
+      if (points.length < 2) return;
+
+      const pathData = points
+        .map(([x, y], index) => `${index === 0 ? 'M' : 'L'} ${x} ${y}`)
+        .join(' ');
+
+      svg.appendChild(createElement('path', {
+        d: pathData,
+        fill: 'none',
+        stroke: element.strokeColor || '#93452A',
+        'stroke-width': element.strokeWidth || 2,
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+        'stroke-dasharray': dashArray(element),
+      }));
+
+      if (!withArrow || element.endArrowhead !== 'arrow') return;
+
+      const end = points[points.length - 1];
+      const start = points[points.length - 2];
+      const angle = Math.atan2(end[1] - start[1], end[0] - start[0]);
+      const size = 13 + (element.strokeWidth || 2);
+      const left = [
+        end[0] - size * Math.cos(angle - Math.PI / 6),
+        end[1] - size * Math.sin(angle - Math.PI / 6),
+      ];
+      const right = [
+        end[0] - size * Math.cos(angle + Math.PI / 6),
+        end[1] - size * Math.sin(angle + Math.PI / 6),
+      ];
+
+      svg.appendChild(createElement('polygon', {
+        points: `${end[0]},${end[1]} ${left[0]},${left[1]} ${right[0]},${right[1]}`,
+        fill: element.strokeColor || '#93452A',
+      }));
+    }
+
+    function drawShape(svg, element) {
+      const common = {
+        fill: element.backgroundColor === 'transparent'
+          ? 'transparent'
+          : element.backgroundColor || 'transparent',
+        stroke: element.strokeColor || '#93452A',
+        'stroke-width': element.strokeWidth || 2,
+        'stroke-dasharray': dashArray(element),
+      };
+      const width = Math.abs(element.width || 0);
+      const height = Math.abs(element.height || 0);
+
+      if (element.type === 'rectangle') {
+        svg.appendChild(createElement('rect', {
+          x: element.x || 0,
+          y: element.y || 0,
+          width,
+          height,
+          rx: 12,
+          ...common,
+        }));
+      }
+
+      if (element.type === 'ellipse') {
+        svg.appendChild(createElement('ellipse', {
+          cx: (element.x || 0) + width / 2,
+          cy: (element.y || 0) + height / 2,
+          rx: width / 2,
+          ry: height / 2,
+          ...common,
+        }));
+      }
+
+      if (element.type === 'diamond') {
+        const x = element.x || 0;
+        const y = element.y || 0;
+        svg.appendChild(createElement('polygon', {
+          points: `${x + width / 2},${y} ${x + width},${y + height / 2} ${x + width / 2},${y + height} ${x},${y + height / 2}`,
+          ...common,
+        }));
+      }
+    }
+
+    window.renderDiagram = function(jsonData) {
+      try {
+        const data = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+        const elements = (data.elements || []).filter((element) => !element.isDeleted);
+        const box = computeBoundingBox(elements);
+        const padding = 80;
+        const viewX = box.minX - padding;
+        const viewY = box.minY - padding;
+        const width = box.maxX - box.minX + padding * 2;
+        const height = box.maxY - box.minY + padding * 2;
+
+        const svg = createElement('svg', {
+          xmlns: svgNs,
+          width,
+          height,
+          viewBox: `${viewX} ${viewY} ${width} ${height}`,
+        });
+
+        svg.appendChild(createElement('rect', {
+          x: viewX,
+          y: viewY,
+          width,
+          height,
+          fill: data.appState?.viewBackgroundColor || '#ffffff',
+        }));
+
+        for (const element of elements) {
+          if (element.type === 'line') drawLine(svg, element, false);
+          else if (element.type === 'arrow') drawLine(svg, element, true);
+          else if (element.type === 'text') drawText(svg, element);
+          else drawShape(svg, element);
+        }
+
+        const root = document.getElementById('root');
+        root.innerHTML = '';
+        root.appendChild(svg);
+
+        window.__renderComplete = true;
+        window.__renderError = null;
+        return { success: true, width, height };
+      } catch (error) {
+        window.__renderComplete = true;
+        window.__renderError = error.message;
+        return { success: false, error: error.message };
+      }
+    };
+
+    window.__moduleReady = true;
+  </script>
+</body>
+</html>

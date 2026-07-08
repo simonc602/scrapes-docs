@@ -1,6 +1,7 @@
 node_modules
 .next
 .source
+scripts/excalidraw-render/.venv/
 tsconfig.tsbuildinfo
 .DS_Store
 .tmp

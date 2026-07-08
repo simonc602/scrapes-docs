@@ -117,6 +117,22 @@ h3 {
   text-decoration: none;
 }
 
+[data-rmiz-modal][open] {
+  z-index: 100 !important;
+}
+
+[data-rmiz-modal-content] {
+  padding: 24px;
+}
+
+[data-rmiz-modal-img] {
+  max-width: calc(100dvw - 48px);
+  max-height: calc(100dvh - 48px);
+  border-radius: 6px;
+  box-shadow: 0 24px 80px rgb(0 0 0 / 45%);
+  object-fit: contain;
+}
+
 .docs-navbar-tab-title .docs-navbar-tab-icon {
   display: none;
 }

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "team-os-trust-boundary",
+    "title": "Team OS trust boundary",
+    "alt": "A local client sends requests, but the hosted server resolves the real user, team, role, grants, memory, and file access before returning anything.",
+    "source": "content/diagrams/team-os-trust-boundary/team-os-trust-boundary.excalidraw",
+    "image": "/assets/diagrams/team-os-trust-boundary.png",
+    "pages": ["content/docs/team-os/concepts.mdx"]
+  },
+  {
+    "id": "roles-and-grants",
+    "title": "Roles and grants work together",
+    "alt": "Roles decide team administration authority while client grants and skill grants decide specific access for files, memory, and skills.",
+    "source": "content/diagrams/roles-and-grants/roles-and-grants.excalidraw",
+    "image": "/assets/diagrams/roles-and-grants.png",
+    "pages": ["content/docs/team-os/roles-and-permissions.mdx"]
+  },
+  {
+    "id": "file-sync-lifecycle",
+    "title": "File sync lifecycle",
+    "alt": "A signed-in user asks for a manifest, pulls granted client files, edits locally, pushes with the last pulled version, and receives either an accepted write or a conflict.",
+    "source": "content/diagrams/file-sync-lifecycle/file-sync-lifecycle.excalidraw",
+    "image": "/assets/diagrams/file-sync-lifecycle.png",
+    "pages": ["content/docs/team-os/file-sync-model.mdx"]
+  },
+  {
+    "id": "memory-capture-review",
+    "title": "Memory capture and review flow",
+    "alt": "Session capture is staged first, then consolidation decides whether each item is published, sent to review, or discarded.",
+    "source": "content/diagrams/memory-capture-review/memory-capture-review.excalidraw",
+    "image": "/assets/diagrams/memory-capture-review.png",
+    "pages": ["content/docs/memory/capture-flow.mdx"]
+  },
+  {
+    "id": "memory-scope-layers",
+    "title": "Memory scope layers",
+    "alt": "System, team, client, and private memory scopes narrow what each search or write can use.",
+    "source": "content/diagrams/memory-scope-layers/memory-scope-layers.excalidraw",
+    "image": "/assets/diagrams/memory-scope-layers.png",
+    "pages": ["content/docs/memory/schema.mdx"]
+  },
+  {
+    "id": "layered-memory-recall",
+    "title": "Layered memory recall",
+    "alt": "A user question passes through a scope check, search combines semantic and keyword matches, expand reads nearby chunks, and local transcript drill-down reads exact conversation turns.",
+    "source": "content/diagrams/layered-memory-recall/layered-memory-recall.excalidraw",
+    "image": "/assets/diagrams/layered-memory-recall.png",
+    "pages": ["content/docs/memory/layered-recall.mdx"]
+  },
+  {
+    "id": "multi-client-workspaces",
+    "title": "Multi-client workspace layers",
+    "alt": "The root workspace holds shared methodology while each client workspace keeps its own context, memory, projects, jobs, settings, and overrides.",
+    "source": "content/diagrams/multi-client-workspaces/multi-client-workspaces.excalidraw",
+    "image": "/assets/diagrams/multi-client-workspaces.png",
+    "pages": ["content/docs/agentic-os/multi-client-workspaces.mdx"]
+  }
+]

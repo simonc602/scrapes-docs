@@ -19,8 +19,25 @@ jobs:
           node-version: 24
           cache: pnpm
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Install uv
+        run: python -m pip install uv
+
+      - name: Install diagram renderer
+        run: pnpm diagrams:setup
+
+      - name: Render diagrams
+        run: pnpm diagrams:render
+
+      - name: Check rendered diagrams are committed
+        run: git diff --exit-code -- content/diagrams public/assets/diagrams
 
       - name: Typecheck
         run: pnpm typecheck

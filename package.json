@@ -8,8 +8,11 @@
   },
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/render-diagrams.mjs",
     "build": "next build",
     "start": "next start",
+    "diagrams:setup": "uv --project scripts/excalidraw-render sync && uv --project scripts/excalidraw-render run playwright install chromium",
+    "diagrams:render": "node scripts/render-diagrams.mjs",
     "typecheck": "fumadocs-mdx && next typegen && tsc --noEmit",
     "docs:check": "pwsh ./scripts/check-docs.ps1"
   },

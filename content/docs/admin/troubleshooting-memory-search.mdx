@@ -39,6 +39,12 @@ Pending review items are not searchable. This is expected.
 Search uses server-resolved identity. The local client can send a narrow scope,
 but it cannot grant itself access by sending another ID.
 
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Search finds a hit, but expand returns no content | The `chunk_id` was expanded with a different scope, or the chunk is no longer indexed. | Repeat expand with the same scope flags used for search, then check memory status. |
+| Transcript drill-down fails in hosted mode | Raw transcripts are local-only in this phase. | Run the transcript command again with `--local` from the workspace that has `context/transcripts/`. |
+| A client result is missing | The user lacks a client grant, or the request did not include the client layer. | Check the user's client grant and search with the correct `--client` flag. |
+
 If a result is missing:
 
 * check whether the memory is `team`, `client`, or `private`;
@@ -46,5 +52,7 @@ If a result is missing:
 * check whether the source is indexed;
 * check whether the request asks for the correct visibility layer;
 * check whether the API is connected to the expected database.
+
+For the full search flow, see [Layered recall](/docs/memory/layered-recall).
 
 Next: [Sync troubleshooting](/docs/admin/troubleshooting-sync)

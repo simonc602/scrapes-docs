@@ -4,6 +4,7 @@
   "pages": [
     "index",
     "schema",
+    "layered-recall",
     "hosted-api",
     "session-capture",
     "capture-flow",
