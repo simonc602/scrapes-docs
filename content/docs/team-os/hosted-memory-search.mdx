@@ -22,6 +22,18 @@ Search a granted client:
 npm run memory:recall -- "onboarding notes" --client acme
 ```
 
+The search step uses `--embedding-mode auto` by default. In auto mode, the CLI
+checks `/v1/health`. If the server has server-side search embeddings enabled,
+the CLI sends query text only. Otherwise, it sends a client-made BGE-M3 query
+embedding.
+
+Force one path when you need to test it:
+
+```powershell
+npm run memory:recall -- "onboarding notes" --embedding-mode server
+npm run memory:recall -- "onboarding notes" --embedding-mode client
+```
+
 Expand a result from the same scope:
 
 ```powershell
@@ -48,7 +60,10 @@ npm run memory:recall -- --transcript <chunk-id> --client acme --local
 ## Direct API call
 
 Use `memory:recall` for normal work. Custom clients can call the hosted API
-directly when they also send a BGE-M3 query embedding.
+directly. They can send a BGE-M3 query embedding, or they can ask the server to
+create the query embedding when the API has `MEMORY_API_SERVER_EMBEDDINGS=1`.
+
+Client-provided embedding:
 
 ```powershell
 $saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json
@@ -74,6 +89,32 @@ Invoke-RestMethod `
   -ContentType "application/json" `
   -Body $body
 ```
+
+Server-side embedding:
+
+```powershell
+$saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json
+$body = @{
+  query = "onboarding notes"
+  embeddingMode = "server"
+  topK = 5
+  scope = @{
+    clientId = "acme"
+    include = @("team", "client")
+  }
+  storeQueryText = $false
+} | ConvertTo-Json -Depth 6
+
+Invoke-RestMethod `
+  -Uri "$($saved.apiUrl)/v1/memory/search" `
+  -Method Post `
+  -Headers @{ Authorization = "Bearer $($saved.token)" } `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+If server-side embeddings are disabled, the API returns
+`server_embedding_disabled`.
 
 The server resolves the real team and user from the saved login. Body IDs can
 ask for a narrower search, but they cannot widen access.

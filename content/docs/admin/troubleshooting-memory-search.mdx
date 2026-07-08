@@ -44,6 +44,7 @@ but it cannot grant itself access by sending another ID.
 | Search finds a hit, but expand returns no content | The `chunk_id` was expanded with a different scope, or the chunk is no longer indexed. | Repeat expand with the same scope flags used for search, then check memory status. |
 | Transcript drill-down fails in hosted mode | Raw transcripts are local-only in this phase. | Run the transcript command again with `--local` from the workspace that has `context/transcripts/`. |
 | A client result is missing | The user lacks a client grant, or the request did not include the client layer. | Check the user's client grant and search with the correct `--client` flag. |
+| `server_embedding_disabled` | The request used `embeddingMode: "server"`, but the API was not started with server-side embeddings enabled. | Send `queryEmbedding`, or restart the API with `MEMORY_API_SERVER_EMBEDDINGS=1`. |
 
 If a result is missing:
 

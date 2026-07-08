@@ -31,8 +31,10 @@ Expected response:
   "ok": true,
   "backend": "postgres",
   "embedder": {
+    "mode": "client-provided",
     "model": "bge-m3",
-    "dim": 1024
+    "dim": 1024,
+    "serverModeEnabled": false
   }
 }
 ```
@@ -76,10 +78,12 @@ cannot grant itself access by sending a different team, client, or user ID.
 
 `POST /v1/memory/search` searches allowed memory for the signed-in user.
 
-The caller sends the query text plus a BGE-M3 query embedding. The hosted API
-does not run the embedder itself. It checks the signed-in user's scope, runs
-semantic search and keyword search, combines the results, and records a search
-audit event.
+By default, the caller sends the query text plus a BGE-M3 query embedding. If
+the server has `MEMORY_API_SERVER_EMBEDDINGS=1`, the caller can send
+`embeddingMode: "server"` instead. In that mode, the server creates the query
+embedding from the query text. The server still checks the signed-in user's
+scope, runs semantic search and keyword search, combines the results, and
+records a search audit event.
 
 `POST /v1/memory/expand` takes a `chunkId` from a previous scoped search. It
 returns nearby chunks from the same source and same allowed scope. If the chunk
@@ -137,5 +141,51 @@ At startup, the API:
 
 If hosted mode is expected, the health response should show `backend:
 postgres`.
+
+If `embedder.serverModeEnabled` is `true`, direct search callers can use
+`embeddingMode: "server"`. If it is `false`, callers must send `queryEmbedding`.
+
+## Search request embeddings
+
+The default request sends a client-made BGE-M3 query embedding:
+
+```json
+{
+  "query": "onboarding notes",
+  "queryEmbedding": ["<1024 BGE-M3 numbers>"],
+  "embeddingModel": "bge-m3",
+  "embeddingDim": 1024,
+  "scope": {
+    "clientId": "acme",
+    "include": ["team", "client"]
+  },
+  "topK": 5,
+  "storeQueryText": false
+}
+```
+
+When the API server has `MEMORY_API_SERVER_EMBEDDINGS=1`, a lightweight caller
+can send text only:
+
+```json
+{
+  "query": "onboarding notes",
+  "embeddingMode": "server",
+  "scope": {
+    "clientId": "acme",
+    "include": ["team", "client"]
+  },
+  "topK": 5,
+  "storeQueryText": false
+}
+```
+
+If server-side embeddings are not enabled, this request fails with
+`server_embedding_disabled`. In that case, send `queryEmbedding` or enable
+`MEMORY_API_SERVER_EMBEDDINGS=1` on the API server.
+
+The Agentic OS CLI uses `--embedding-mode auto` by default. It checks
+`/v1/health`. If server-side embeddings are enabled, it sends
+`embeddingMode: "server"`. Otherwise, it sends a client-made query embedding.
 
 Next: [Session capture and review](/docs/memory/session-capture)

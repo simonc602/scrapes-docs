@@ -17,6 +17,8 @@ Set these variables before you start the hosted Team OS API.
 | `MEMORY_EMBEDDER` | no | `bge-m3` | Default is `bge-m3`. |
 | `MEMORY_EMBEDDING_MODEL` | no | `bge-m3` | Optional explicit model label. |
 | `MEMORY_EMBEDDING_DIM` | no | `1024` | Optional explicit dimension. |
+| `MEMORY_API_SERVER_EMBEDDINGS` | no | `1` | Lets `/v1/memory/search` accept `embeddingMode: "server"`. If unset, callers must send `queryEmbedding`. |
+| `MEMORY_MODEL_CACHE_DIR` | no | `/data/agentic-os/.command-centre/models` | Optional BGE-M3 model cache. If unset, the API uses `AGENTIC_OS_DIR/.command-centre/models`. |
 | `AGENTIC_OS_DIR` | yes for Docker | `/data/agentic-os` | Workspace and runtime data root. Mount it to persistent storage. |
 
 ## Auth, public URLs, and server principal
