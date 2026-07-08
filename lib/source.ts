@@ -4,13 +4,15 @@ import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
 
+type SidebarEntry = string | SidebarGroup;
+
 type SidebarGroup = {
   id: string;
   title: string;
-  children: Array<string | SidebarGroup>;
+  children: SidebarEntry[];
 };
 
-const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
+const sidebarGroupsByFolder = new Map<string, SidebarEntry[]>([
   [
     'get-started',
     [
@@ -120,11 +122,7 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
               '/docs/team-os/dev-token-login',
             ],
           },
-          {
-            id: 'problems',
-            title: 'Problems',
-            children: ['/docs/team-os/client-common-failures'],
-          },
+          '/docs/team-os/client-common-failures',
         ],
       },
       {
@@ -141,11 +139,7 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
               '/docs/team-os/published-memory',
             ],
           },
-          {
-            id: 'search',
-            title: 'Search',
-            children: ['/docs/team-os/hosted-memory-search'],
-          },
+          '/docs/team-os/hosted-memory-search',
         ],
       },
       {
@@ -196,11 +190,7 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
         title: 'Capture and review',
         children: [
           '/docs/memory/session-capture',
-          {
-            id: 'capture-flow',
-            title: 'Capture flow',
-            children: ['/docs/memory/capture-flow'],
-          },
+          '/docs/memory/capture-flow',
           {
             id: 'consolidation-and-review',
             title: 'Consolidation and review',
@@ -209,11 +199,7 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
               '/docs/memory/review-pending-memory',
             ],
           },
-          {
-            id: 'published-memory',
-            title: 'Published memory',
-            children: ['/docs/memory/published-memories'],
-          },
+          '/docs/memory/published-memories',
           {
             id: 'variables-and-troubleshooting',
             title: 'Variables and troubleshooting',
@@ -224,11 +210,7 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
           },
         ],
       },
-      {
-        id: 'backups',
-        title: 'Backups',
-        children: ['/docs/memory/backup-restore'],
-      },
+      '/docs/memory/backup-restore',
     ],
   ],
   [
@@ -263,11 +245,7 @@ const sidebarGroupsByFolder = new Map<string, SidebarGroup[]>([
               '/docs/admin/skill-grants',
             ],
           },
-          {
-            id: 'recovery',
-            title: 'Recovery',
-            children: ['/docs/admin/owner-password-reset'],
-          },
+          '/docs/admin/owner-password-reset',
         ],
       },
       {
@@ -368,10 +346,24 @@ function createSidebarGroup(
   };
 }
 
-function getSidebarGroupUrls(group: SidebarGroup): string[] {
-  return group.children.flatMap((child) =>
-    typeof child === 'string' ? [child] : getSidebarGroupUrls(child),
-  );
+function getSidebarEntryUrls(entry: SidebarEntry): string[] {
+  if (typeof entry === 'string') {
+    return [entry];
+  }
+
+  return entry.children.flatMap(getSidebarEntryUrls);
+}
+
+function createSidebarEntryNode(
+  parentId: string,
+  entry: SidebarEntry,
+  foundByUrl: Map<string, Node>,
+): Node | undefined {
+  if (typeof entry === 'string') {
+    return foundByUrl.get(entry);
+  }
+
+  return createSidebarGroupNode(parentId, entry, foundByUrl);
 }
 
 function createSidebarGroupNode(
@@ -381,13 +373,7 @@ function createSidebarGroupNode(
 ): Folder | undefined {
   const groupId = `${parentId}:${group.id}`;
   const children = group.children
-    .map((child) => {
-      if (typeof child === 'string') {
-        return foundByUrl.get(child);
-      }
-
-      return createSidebarGroupNode(groupId, child, foundByUrl);
-    })
+    .map((child) => createSidebarEntryNode(groupId, child, foundByUrl))
     .filter((child): child is Node => Boolean(child));
 
   if (children.length === 0) {
@@ -411,11 +397,11 @@ function groupSidebarNode(node: Node): Node {
   }
 
   let remaining = children;
-  const grouped: Folder[] = [];
+  const grouped: Node[] = [];
   const parentId = node.$id ?? node.$ref?.folder ?? 'folder';
 
   for (const group of groups) {
-    const groupUrls = new Set(getSidebarGroupUrls(group));
+    const groupUrls = new Set(getSidebarEntryUrls(group));
     const foundByUrl = new Map<string, Node>();
 
     remaining = remaining.filter((child) => {
@@ -427,7 +413,7 @@ function groupSidebarNode(node: Node): Node {
       return true;
     });
 
-    const groupNode = createSidebarGroupNode(parentId, group, foundByUrl);
+    const groupNode = createSidebarEntryNode(parentId, group, foundByUrl);
 
     if (groupNode) {
       grouped.push(groupNode);

@@ -4,7 +4,7 @@ export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
 
 export const gitConfig = {
-  user: 'salomaoparkour',
+  user: 'simonc602',
   repo: 'scrapes-docs',
-  branch: 'codex/fumadocs-self-hosted',
+  branch: 'main',
 };
