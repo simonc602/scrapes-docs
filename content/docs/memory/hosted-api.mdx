@@ -56,6 +56,49 @@ that token for later requests.
 Some deployments also configure `MEMORY_API_TOKEN`. This is a dev fallback token
 for smoke tests. It is not the normal user login path.
 
+## Private or local access
+
+A public HTTPS URL is convenient, but it is not required for local testing or a
+private operator setup. You can reach the API through `localhost`, an SSH
+tunnel, Tailscale, WireGuard, or another private network path.
+
+Set the auth URLs to the address the operator's browser and terminal will use:
+
+```bash
+BETTER_AUTH_URL=http://localhost:8787 \
+MEMORY_API_PUBLIC_URL=http://localhost:8787 \
+MEMORY_API_TOKEN=... \
+MEMORY_DATABASE_URL=... \
+npm run memory:api
+```
+
+For an SSH tunnel, keep the API bound privately on the server. From the
+operator's machine, forward the port:
+
+```bash
+ssh -N -L 8787:127.0.0.1:8787 user@server.example.com
+```
+
+Then sign in through the tunnel:
+
+```bash
+npm run team -- login --api-url http://localhost:8787 --email owner@example.com --password "<password>"
+```
+
+Owner reset links also need a base URL that the operator's browser can open:
+
+```bash
+npm run team:owner-reset -- --team demo --base-url http://localhost:8787 --ttl 4h
+```
+
+For Tailscale, WireGuard, or a private LAN, use the reachable private API URL
+instead of `localhost` in `BETTER_AUTH_URL`, `MEMORY_API_PUBLIC_URL`,
+`--api-url`, and `--base-url`.
+
+Do not put `MEMORY_DATABASE_URL` on member machines. Only the server or
+container should have the database URL. Members should connect through the Team
+OS API URL.
+
 ## Main endpoint groups
 
 | Endpoint group | Purpose |

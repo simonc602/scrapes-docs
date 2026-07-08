@@ -57,6 +57,18 @@ If the container does not have `MEMORY_API_PUBLIC_URL`, `TEAM_OS_PUBLIC_URL`, or
 npm run team:owner-reset -- --base-url https://team.example.com
 ```
 
+The base URL must be a URL the operator's browser can open. For a public
+deployment, use the HTTPS Team OS URL. For a localhost or SSH tunnel setup, use
+the tunnel URL:
+
+```bash
+npm run team:owner-reset -- --base-url http://localhost:8787 --ttl 4h
+```
+
+The reset link expires after 1 hour by default. Use `--ttl` to change it. The
+value can be seconds, minutes, or hours, such as `1800`, `30m`, or `4h`. The
+maximum is `24h`.
+
 Open the printed reset link and set the owner password. Treat the reset link as
 a secret until it expires.
 
