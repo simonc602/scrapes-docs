@@ -1,107 +1,127 @@
 ---
 title: "Roles and permissions"
-description: "Team OS uses roles and grants together."
+description: "Understand Company roles, Team roles, Full access, and member grants."
 ---
 
-Team OS uses roles and grants together.
+Team OS checks Company access, Team roles, and resource grants on the hosted
+server. The local workspace cannot give itself more access.
 
-Roles decide what a user can manage for the team. Grants decide which clients
-and skills a user can access.
+## Company roles
 
-<DocsDiagram id="roles-and-grants" />
-
-## Roles
+Company roles control work across the Team OS installation.
 
 | Role | What it means |
 | --- | --- |
-| Owner | Highest team role. Can manage team-level access and recover ownership. |
-| Admin | Can manage normal team administration tasks. |
-| Member | Can use only the clients and skills granted to them. |
+| Company Owner | Controls Company Admins and access across all Teams. Has Full access to every active Team. |
+| Company Admin | Can view the Company Team list, create a Team, and request Full access to other Teams. Does not receive Full access to every Team automatically. |
 
-Only active memberships count. Invited or suspended memberships do not give
-authority.
+Only the Company Owner can approve Company access requests, manage Company
+Admins, transfer Company ownership, or permanently delete a Team.
 
-The role order is:
+## Team roles
 
-```text
-owner > admin > member
-```
+Team roles apply to one Team.
 
-## Client grants
+| Role | What it means |
+| --- | --- |
+| Team Owner | Highest direct Team role. Has Full access to that Team. |
+| Team Admin | Manages normal Team administration. Has Full access to that Team. |
+| Team Member | Can use shared Team context and memory, plus the clients and skills granted to that member. |
 
-A client grant gives one user access to one client.
+Only active Team memberships count. An invited or suspended membership does
+not give a direct Team role. Company access is resolved separately.
+
+## Full access
+
+A user has Full access to a Team through any of these sources:
+
+| Source | Effective Team authority |
+| --- | --- |
+| Company Owner | Full access to every active Team. |
+| Direct Team Owner role | Full access to that Team. |
+| Direct Team Admin role | Full access to that Team. |
+| Company Admin with an active Company access grant | Full access to that Team. |
+
+Full access includes:
+
+* implicit `write` access to every active client in the Team;
+* administrative access to every shared Team skill;
+* Team administration and shared memory management.
+
+Full access does not need a separate client or skill grant. Command Centre may
+show this access as implicit and protected.
+
+A Company Admin without a Company grant or direct Team role does not have Full
+access to that Team.
+
+## Member client grants
+
+Client grants limit a Team Member to specific clients.
 
 | Grant | What it allows |
 | --- | --- |
-| `read` | Read granted client files and search granted client memory. |
-| `write` | Read and write granted client files, and write granted client memory where allowed. |
+| `read` | Read allowed client files and search that client's memory. |
+| `write` | Includes read, and allows permitted client file and memory writes. |
 
-Write access includes read access.
+A Team Member can belong to a Team and still see no clients. A Full access user
+sees every active client without these grants.
 
-Team admins do not automatically get every client. The server checks the active
-client grant before allowing client file or client memory access.
-
-## Skill grants
+## Member skill grants
 
 Skill permissions are ordered from narrow to broad.
 
+```text
+skill.use < skill.read < skill.edit < skill.admin
+```
+
 | Permission | What it allows |
 | --- | --- |
-| `skill.use` | Request the skill in a Team OS task or reply, such as `/mkt-copywriting`. This does not let the member open, copy, sync, or edit the skill files. |
-| `skill.read` | View or sync the skill files, such as `SKILL.md` and reference files. Includes use. |
-| `skill.edit` | Save allowed Team OS edits for that skill, such as `SKILL.local.md` overrides. This does not allow edits to the shared base `SKILL.md`. |
-| `skill.admin` | Change who has use, read, edit, or admin access to that skill. |
+| `skill.use` | Run the shared skill. The runtime can fetch a local execution copy. |
+| `skill.read` | Browse or inspect the shared skill files. Includes use. |
+| `skill.edit` | Edit-level access where supported. Includes use and read, but does not make the shared Team copy writable. |
+| `skill.admin` | Update or delete shared Team skill files. Includes the lower permissions. |
 
-Higher permissions include lower ones.
+Changing who receives skill permissions is a Team administration action. Any
+Full access user can manage those grants, including a Company Owner, a granted
+Company Admin, a Team Owner, or a Team Admin.
 
-For example, a member with `skill.edit` can also use and read that skill.
-
-`skill.use` only lets the Team OS request pass the server permission check. It
-does not install the skill files on the member's computer. The runner still
-needs the skill files in its workspace.
-
-Grant `skill.read` when a member needs to download, inspect, or sync the skill
-files.
-
-Local private files are separate from Team OS grants. A member can still create
-a private `SKILL.local.md` in a workspace they control.
+Local skill copies and private `SKILL.local.md` files are separate from the
+shared Team copy. A local edit does not update the Team skill on the server.
 
 ## Common actions
 
 | Action | Required authority |
 | --- | --- |
-| Invite a member | Owner or admin. |
-| Create a client | Owner or admin. |
-| Grant client access | Owner or admin. |
-| Revoke client access | Owner or admin. |
-| Use a client workspace | Active client grant. |
-| Push client files | Active `write` client grant. |
-| Use a skill | Active matching skill grant. |
-| Publish shared team memory | Owner or admin. |
-| Edit published team or client memory | Owner or admin. |
-| Delete published team or client memory | Owner or admin. |
+| Request Full access to a Team | Active Company Admin without Full access to that Team. |
+| Approve or deny a Team access request | Company Owner. |
+| Invite a new Team Member or Team Admin | Full access to that Team. |
+| Create a client | Full access to that Team. |
+| Grant or revoke member client access | Full access to that Team. |
+| Use a client workspace | Full access, or a matching active member grant. |
+| Push client files | Full access, or an active member `write` grant. |
+| Use a shared Team skill | Full access, or a matching active member skill grant. |
+| Manage shared Team memory | Full access to that Team. |
+| Transfer Company ownership | Company Owner. |
 
-Exact checks are enforced by the server.
+## Team access and task permission modes
 
-## Why grants matter
+These controls solve different problems:
 
-Roles are broad. Grants are specific.
+* Team OS roles and grants decide which hosted Teams and resources a user can
+  reach.
+* A task permission mode decides how the agent asks for approval before local
+  commands and file changes.
 
-A member can belong to a team but still see no clients until an owner or admin
-grants access.
-
-A user can have access to one client without seeing another client.
-
-A user can use one skill without being allowed to edit or administer it.
+Full access to a Team does not bypass a task's local permission mode. See
+[Task permission modes](/docs/command-centre/task-permission-modes).
 
 ## Trust boundary
 
-The local client is not the authority.
+The hosted server resolves the real user from a signed session or server-issued
+token. It then checks active Company access, Team access, client access, and
+skill access.
 
-It can send a request, but the hosted server checks the saved session, active
-membership, role, client grant, and skill grant before it allows the action.
+A request can ask to use a Team or client, but IDs in the request do not become
+trusted identity. The server rejects IDs that the resolved user cannot access.
 
-This protects Team OS from local requests that claim a different team, client,
-or user.
-
-Next: [Team OS](/docs/team-os)
+Next: [Connect a workspace to Team OS](/docs/team-os/client-connection)

@@ -9,8 +9,12 @@ By default, the saved login file is:
 ~/.agentic-os/team-context.json
 ```
 
-Use `AGENTIC_OS_TEAM_CONFIG_DIR` when you need a separate login for testing or
-for a specific workspace.
+Use `AGENTIC_OS_TEAM_CONFIG_DIR` when you need a separate login for testing, a
+different server or user, or a specific workspace.
+
+Within one config directory, Team OS identifies the local profile by server and
+user. Selecting another Team does not create another profile or require a
+different config directory.
 
 ## PowerShell
 
@@ -28,5 +32,9 @@ npm run team -- login --api-url https://team.example.com --email user@example.co
 
 Command Centre and the terminal share the same login state when they use the
 same `AGENTIC_OS_TEAM_CONFIG_DIR`.
+
+Do not copy or share `team-context.json`. Anyone with its valid token can act as
+that user within the user's current access until the token expires or is
+revoked. The server still checks current Team and resource access.
 
 Next: [Command Centre login](/docs/team-os/command-centre-login)

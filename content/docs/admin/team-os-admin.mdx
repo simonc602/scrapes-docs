@@ -1,31 +1,34 @@
 ---
 title: "Team OS admin operations"
-description: "Use Command Centre, the terminal menu, or direct commands for admin work."
+description: "Choose the right surface for Team OS administration."
 ---
 
-Use this section for owner and admin tasks.
+Use Command Centre for normal Company and Team administration.
 
-Owners and admins can manage Team OS from Command Centre or from the interactive
-terminal menu. Use these first when you want a guided path.
+Company Owners and Company Admins use **Team > Teams** for company-wide work.
+Users with Full access use the selected Team's **Members**, **Clients**,
+**Memories**, **Secrets**, and **Skills** sections for Team work.
 
 ## Admin path
 
 | Task | Page |
 | --- | --- |
+| Understand Company and Team authority | [Company access](/docs/admin/company-access) |
+| Create or manage Teams | [Manage Teams](/docs/admin/manage-teams) |
 | Start with the UI or terminal menu | [Admin guided path](/docs/admin/admin-guided-path) |
 | Choose the right admin surface | [Admin surfaces](/docs/admin/admin-surfaces) |
-| Create the first team and owner | [First team and owner](/docs/admin/first-team-owner) |
+| Create the first Team and owner | [First Team and owner](/docs/admin/first-team-owner) |
 | Invite and join members | [Members](/docs/admin/members) |
 | Manage client grants | [Clients](/docs/admin/clients) |
 | Manage skill grants | [Skill grants](/docs/admin/skill-grants) |
 | Reset an owner password | [Owner password reset](/docs/admin/owner-password-reset) |
 | Check health, memory, and sync | [Health checks](/docs/admin/health-checks) |
 
-Most direct admin commands run from `command-centre/`. Hosted maintenance
-commands run inside the `memory-api` container, or from `command-centre/` with
-hosted environment variables set.
+Most maintenance commands run from `command-centre/`. Hosted maintenance
+commands run inside the Team OS API container, or from `command-centre/` with
+the hosted environment variables set.
 
 When a command uses `npm run <script> -- ...`, keep the `--`. It tells npm to
 pass the rest of the command to the script.
 
-Next: [Admin guided path](/docs/admin/admin-guided-path)
+Next: [Company access](/docs/admin/company-access)

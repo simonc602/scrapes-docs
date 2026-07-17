@@ -1,9 +1,9 @@
 ---
 title: "Command Centre sync"
-description: "Use Command Centre to pull and push granted client files."
+description: "Use Command Centre to pull and push accessible client files."
 ---
 
-Command Centre shows sync state in the Team tab.
+Select a Team, then open **Team > Clients** to see sync state.
 
 For clients, the row can show:
 
@@ -18,7 +18,8 @@ For clients, the row can show:
 Use **Pull** to copy server files to the local workspace. Use **Push** to send
 local changes to the server.
 
-A user needs a `write` client grant to push client files.
+A Team Member needs a `write` client grant to push client files. Users with
+Full access have implicit `write` access to every active client in the Team.
 
 When a pull or push would overwrite changed files, Command Centre opens a review
 modal. It shows the affected files and a text diff when possible.

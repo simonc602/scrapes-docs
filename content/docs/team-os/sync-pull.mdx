@@ -1,6 +1,6 @@
 ---
 title: "Sync pull"
-description: "Pull granted client files from Team OS."
+description: "Pull accessible client files from Team OS."
 ---
 
 Pull one client into a local folder:
@@ -9,6 +9,9 @@ Pull one client into a local folder:
 $pull="$env:TEMP\team-os-pull"
 npm run team -- sync pull --client acme --dest $pull
 ```
+
+Use terminal pull for text files. Use Command Centre when you need to sync
+binary files.
 
 This creates a folder like:
 

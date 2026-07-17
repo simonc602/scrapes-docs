@@ -1,5 +1,5 @@
 ---
-title: "Connect a Team OS client"
+title: "Connect a workspace to Team OS"
 description: "Connect a local Agentic OS workspace to a hosted Team OS server."
 ---
 
@@ -8,10 +8,20 @@ server.
 
 You need:
 
-* a Team OS server URL;
+* the Team OS server URL;
+* an active server account;
 * your email and password;
-* an active team membership;
-* any client or skill grants needed for your work.
+* access to a Team before creating Team work.
+
+A Company Admin can sign in without access to a Team. The connection remains
+valid, but Team work stays unavailable until a Company grant or direct Team
+role gives access.
+
+Team Members also need the client and skill grants required for their work.
+Users with Full access do not need separate client or skill grants.
+
+The saved local profile belongs to the server and signed-in user. It can list
+and select multiple Teams without creating a separate login for each Team.
 
 If the server is not deployed yet, start with
 [Host Team OS](/docs/deploy/team-os-hosted-server).
@@ -20,9 +30,10 @@ If the server is not deployed yet, start with
 
 | Task | Page |
 | --- | --- |
+| Understand multiple Teams | [Companies and multiple Teams](/docs/team-os/multi-team) |
 | Sign in from the terminal | [Terminal login](/docs/team-os/terminal-login) |
 | Use a separate saved login | [Saved config directory](/docs/team-os/saved-config) |
-| Sign in from the UI | [Command Centre login](/docs/team-os/command-centre-login) |
+| Sign in and switch Teams in the UI | [Command Centre login](/docs/team-os/command-centre-login) |
 | Join with an invite token | [Invites](/docs/team-os/invites) |
 | Test with a dev fallback token | [Dev-only token login](/docs/team-os/dev-token-login) |
 | Fix login problems | [Client common failures](/docs/team-os/client-common-failures) |

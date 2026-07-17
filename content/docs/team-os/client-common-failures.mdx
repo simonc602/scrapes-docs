@@ -1,25 +1,33 @@
 ---
 title: "Client common failures"
-description: "Fix common Team OS client login problems."
+description: "Fix common Team OS connection and access problems."
 ---
 
-Use this page when a local client cannot connect to Team OS.
+Use this page when a local workspace cannot connect to Team OS or open the expected
+Team resources.
 
 | Symptom | What to check |
 | --- | --- |
 | `--api-url must start with http:// or https://` | Use the full server URL, including `https://`. |
-| `login failed (401)` or `unauthorized` | Check email, password, invite status, and server URL. |
-| `No clients are available for this account.` | Ask an owner or admin to grant client access. |
+| `login failed (401)` or `unauthorized` | Check the email, password, invitation state, and server URL. |
+| Connected, but no Team is available | A Company Admin can sign in without Team access. Request access or ask for a direct Team role. |
+| Expected Team is missing | Confirm the Team is active and the user still has effective access through Company ownership, an active Company grant, or a direct Team role. |
+| `No clients are available for this account.` | Confirm the selected Team has active clients. For a Team Member, check client grants. |
 | Saved login expired | Run `npm run team -- login` again. |
 | Command Centre shows signed out after terminal login | Start both with the same `AGENTIC_OS_TEAM_CONFIG_DIR`. |
-| Health check fails | Ask the server operator to check `/v1/health` and API deploy logs. |
+| New Team work is blocked while the server is unavailable | Restore the connection. Command Centre does not use stale Team or Solo context as a fallback. |
+| Existing Team reply cannot continue | Restore access or the service. Conversation-only mode also needs the saved agent session. |
+| Health check fails | Ask the server operator to check `/v1/health` and the API deploy logs. |
 
 ## What the server decides
 
-After login, the local client can ask for clients, memory, and files. The server
-still decides what is allowed.
+The local profile identifies a server and signed-in user. The server decides
+which Teams, clients, skills, memory, and files that user can access.
 
-The local client cannot grant itself a team, role, client, skill, or user
+The local workspace cannot grant itself a Team, role, client, skill, or user
 identity by sending different IDs in a request.
+
+Switching Teams affects new work. It does not move an existing task or
+conversation to a different Team.
 
 Next: [Memory and file sync](/docs/team-os/memory-and-sync)

@@ -1,0 +1,138 @@
+---
+title: "Feed"
+description: "Create Goals, follow their tasks, and open the files and plans connected to the work."
+---
+
+Feed is the main workspace in Command Centre. Use it to create a Goal, talk to
+Claude, follow results, and keep related tasks and project resources together.
+
+## How Feed is organized
+
+Feed has two main areas:
+
+- The sidebar lists workspaces, Goals, drafts, and archived Goals.
+- The Goal workspace shows the selected Goal and its chat panels, files, plans,
+  and changes.
+
+You can collapse or resize the sidebar. Command Centre saves the sidebar width
+and panel layout in this browser.
+
+## Find a Goal
+
+Under **Workspace**, select the local Agentic OS workspace or a client
+workspace. Select **All clients** to see Goals across the available client
+workspaces.
+
+The sidebar groups Goals by Agentic OS or client. It places drafts first, then
+pinned Goals, then the most recently updated Goals. If tags are available, use
+**All** or a tag above the Goal workspace to narrow the list.
+
+| Marker | What it means |
+| --- | --- |
+| Draft | The Goal has local draft content that has not been sent. |
+| In progress | Claude is working on the Goal or one of its tasks. |
+| Unread result | The Goal or one of its tasks has a result you have not opened. |
+| Needs attention | A task needs input or review before it can continue. |
+
+Selecting a Goal also marks its current results as read.
+
+## Create a Goal
+
+1. Select the workspace where the work belongs.
+2. Select **New Goal**.
+3. Describe the result you want in **What do you want to do?**
+4. Add a title, attachments, or pasted content when needed.
+5. Choose the model, thinking effort, permission mode, tag, and level.
+6. Select **Send**.
+
+The available levels are **Task**, **Planned project**, and **GSD project**. You
+can also type `--project` or `--gsd` in the message to choose a project level.
+
+<Callout type="warn">
+New Goals currently start in **Full access**, unless the saved draft already
+uses another mode. Change the permission before you select **Send** if you want
+Claude to ask first, work in Auto, or prepare a plan. See
+[Task permission modes](/docs/command-centre/task-permission-modes).
+</Callout>
+
+Command Centre saves a draft in this browser after you add a message, title,
+attachment, or pasted content. Closing the draft keeps it. Use the discard
+action to remove it.
+
+## Pin and archive Goals
+
+Move the pointer over a Goal in the sidebar to see its actions.
+
+- **Pin Goal** keeps an active Goal near the top of its group.
+- **Archive Goal** removes it from the active list without deleting it.
+- **Undo** returns a Goal immediately after you archive it.
+
+Open **Archived** at the bottom of the sidebar to search archived Goals. Select
+**Restore** to return one to the active list.
+
+An archived Goal is read-only. Restore it before you send another message,
+edit a file, change the canvas, or continue its work.
+
+## Work with panels
+
+Every Goal starts with **Main chat**. Select **+ Panel** to open more resources.
+
+| Panel | Use it to |
+| --- | --- |
+| Main chat | Work in the main conversation or open a selected subchat. |
+| Subchats | Start related tasks, open them in Main chat, or pin them beside another chat. |
+| Files | Search and browse files allowed inside the Goal workspace. |
+| File viewer | Preview an allowed file and edit supported text files. |
+| Plan | Read the Goal brief and available chat plans. |
+| Changes | Review added, changed, and deleted project files and open text differences. |
+
+You can move, resize, and close panels. Command Centre saves the layout for
+that Goal in this browser. Opening a panel that is already present focuses the
+existing panel instead of creating a duplicate.
+
+### Use subchats
+
+Open **Subchats**, then choose **Start from scratch** or start an item from the
+Goal brief. Selecting a subchat opens it in **Main chat**. Pin a subchat to keep
+it in a separate panel while you work in another conversation.
+
+Double-click a subchat name to rename it. Move the pointer over the subchat, or
+focus it with the keyboard, to show its complete and pin controls. You can also
+unpin it from the canvas. These actions affect that subchat, not the whole
+Goal.
+
+## File access and limits
+
+**Files** does not provide access to every file on the computer. Command Centre
+checks the workspace assigned to the root Goal and shows only approved paths
+inside that boundary. A subchat cannot change its metadata to reach a wider
+client workspace.
+
+When you select an allowed file, **File viewer** can preview supported text,
+images, PDF, and HTML files. Large or unsupported files may not have a preview.
+Text editing is unavailable while the Goal is archived.
+
+**Changes** compares project files inside the same workspace boundary. Open a
+changed file to inspect it in **File viewer**. Some binary or unsupported files
+do not have a text difference.
+
+<Callout type="info">
+A task permission mode controls when Claude asks before acting. It does not
+expand the Goal workspace or bypass Team OS roles, client grants, skill grants,
+or file boundaries. See
+[Roles and permissions](/docs/team-os/roles-and-permissions).
+</Callout>
+
+## Empty and error states
+
+| State | What to do |
+| --- | --- |
+| **Select a Goal** | Choose a Goal in the sidebar or create one. |
+| No archived Goals match | Change the Archived search or restore a different Goal. |
+| No subchats yet | Start a blank subchat or start an item from the Goal brief. |
+| No files match | Clear the file filter or check the selected workspace. |
+| A text file is too large to preview | Use **Download** or **Reveal in file explorer**. |
+| A binary or unsupported file cannot be previewed | Open the file from its workspace with a suitable app. |
+| A panel shows an error | Read the message and use **Retry** when that action is available. |
+
+Next: [Task permission modes](/docs/command-centre/task-permission-modes)

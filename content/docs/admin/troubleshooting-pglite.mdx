@@ -5,8 +5,9 @@ description: "Fix local PGLite lock problems during tests."
 
 Local PGLite is useful for tests, but one process owns the store at a time.
 
-If a direct admin command fails while `npm run memory:api` is running locally,
-stop the API, run the admin command, then start the API again.
+If a maintenance command fails while `npm run memory:api` is running locally,
+stop the API, run the command, then start the API again. This includes first
+owner bootstrap and Company Owner recovery.
 
 Hosted Postgres does not have this local lock issue.
 

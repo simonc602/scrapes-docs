@@ -1,10 +1,15 @@
 ---
 title: "Multi-client workspaces"
-description: "Use clients when one Agentic OS install must support separate brands, customers,"
+description: "Use clients when one Agentic OS install supports separate brands or customers."
 ---
 
 Use clients when one Agentic OS install must support separate brands, customers,
-teams, or project areas.
+or project areas.
+
+A client is not a Team. A client separates customer work inside a workspace.
+Team OS Teams separate people, permissions, and hosted resources. Read
+[Multiple Teams](/docs/team-os/multi-team) when one account belongs to more
+than one Team.
 
 ## The main rule
 
@@ -67,11 +72,13 @@ client rules.
 Edit shared skills at the root workspace when the change should apply to every
 client.
 
-Root skills sync into clients. If the same skill name exists in the root and in
-a client, the root copy wins during sync.
+Managed root skill copies refresh from the root during sync. If a client owns a
+different skill with the same name, Agentic OS preserves it and shows a warning.
+Rename that client-owned skill, or move its custom rules to `SKILL.local.md`, to
+avoid the name conflict.
 
-Do not edit an existing shared Agentic OS skill only inside a client folder.
-That client copy can be overwritten.
+Do not edit a managed shared skill only inside a client folder. That managed
+copy can be overwritten during sync.
 
 Use `SKILL.local.md` inside a client skill folder when only one client needs a
 different rule for an existing skill.

@@ -12,6 +12,10 @@ If `/v1/health` fails:
 * check whether Postgres is private and reachable from the API container;
 * check whether migrations completed.
 
+If **Team > Teams** fails while health is available, confirm the company
+permission migrations completed. Company routes also require an authenticated,
+active Company Owner or Company Admin.
+
 If health returns `backend: pglite` in a hosted deploy, the API is not using the
 hosted database.
 

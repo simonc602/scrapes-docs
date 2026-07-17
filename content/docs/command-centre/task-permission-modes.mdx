@@ -1,0 +1,102 @@
+---
+title: "Task permission modes"
+description: "Choose when Claude asks for approval, works automatically, or prepares a plan."
+---
+
+A task permission mode controls how Claude handles approval while it works in
+that task. Choose the mode when you create a Goal, or change it from the active
+chat toolbar.
+
+## Available modes
+
+| Mode | What it does | Use it when |
+| --- | --- | --- |
+| Ask | Claude asks before actions that need permission. | You want to review sensitive actions as the task runs. |
+| Auto | Claude works independently, with background checks for unsafe actions. | You want less interruption while keeping native safety checks. |
+| Full access | Claude runs without task-level asking or permission checks. | You trust the workspace and understand the task before it starts. |
+| Plan | Claude creates a plan first, then waits for your approval. | You want to review the approach before execution. |
+
+<Callout type="warn">
+New Goals currently use **Full access** by default, unless the saved draft
+already uses another mode. Open the permission picker before **Send** if you
+want a different mode.
+</Callout>
+
+## Where to choose a mode
+
+The permission picker appears in two places in Feed:
+
+- The toolbar at the bottom of **New Goal**.
+- The message toolbar for an active Goal or subchat.
+
+A completed task does not show the message toolbar. An archived Goal is
+read-only, so restore it before continuing the task.
+
+The mode belongs to the task you are working in. Changing a subchat mode does
+not grant access to a different Goal or workspace.
+
+## Auto requirements
+
+**Auto** requires:
+
+- Claude Code CLI version 2.1.83 or later.
+- A compatible model. A supported Sonnet or Opus model is the known path.
+
+Command Centre disables **Auto** when it detects an older Claude Code version
+or a known incompatible model, such as Haiku or an older Claude model. The
+picker explains what must change. A custom or unknown model can remain
+selectable because Command Centre cannot confirm it in advance. Claude can
+still reject that setup when the task starts.
+
+If **Auto** is unavailable, update Claude Code or select a supported Sonnet or
+Opus model. You can use **Ask**, **Full access**, or **Plan** while you resolve
+the requirement.
+
+## Change the mode during a task
+
+You can change the mode while a task is active:
+
+1. Open the permission picker in the message toolbar.
+2. Select **Ask**, **Auto**, **Full access**, or **Plan**.
+3. Wait for Command Centre to confirm the change.
+
+When a live Claude session is running, Command Centre sends the change to that
+session and saves it only after Claude confirms it. A successful live change
+does not need a task restart. When no live session is running, Command Centre
+saves the mode immediately and uses it for the next session.
+
+If Claude rejects the live change, the previously saved mode remains active.
+If the connection is lost or confirmation times out, the previous mode stays
+saved and Command Centre stops the live session safely. It does not
+automatically send the current message again.
+
+Selecting **Ask**, **Auto**, or **Full access** while the task is in **Plan**
+leaves Plan and starts using the selected mode.
+
+## Older tasks with Auto-edit
+
+Some tasks created by an older Agentic OS version may show
+**Auto-edit (legacy)**. This saved mode accepted file edits automatically, but
+commands could still ask for approval.
+
+**Auto-edit (legacy)** is disabled in the current picker and is not a fifth
+mode. Select one of the four current modes to replace it.
+
+## What a task mode does not change
+
+A task permission mode controls approval behavior inside Claude. It does not
+change:
+
+- Your Team OS membership or role.
+- Which client or skill grants the server gave you.
+- The workspace assigned to the root Goal.
+- The file paths that Command Centre allows or denies.
+- Rules that block protected or unsupported actions.
+
+For example, **Full access** removes Claude approval prompts for the task, but
+it does not give the task access to another Team, client, skill, or workspace.
+The Team OS server still checks the signed-in user, effective Team access,
+client access, and skill access before it allows a protected action.
+
+See [Roles and permissions](/docs/team-os/roles-and-permissions) for Team OS
+access rules, or return to [Feed](/docs/command-centre/feed).

@@ -28,8 +28,9 @@ Postgres. Check `MEMORY_STORE_BACKEND` and `MEMORY_DATABASE_URL`.
 
 ## First owner password
 
-The bootstrap variables create or resolve the first owner membership. The owner
-still needs a password before normal email and password login works.
+The bootstrap variables create or resolve the first Team Owner. The first
+setup also assigns the first Company Owner. The owner still needs a password
+before normal email and password login works.
 
 The reset command must run where the Team OS app files and environment variables
 are available. In Docker, run it inside the `memory-api` container.
@@ -72,6 +73,6 @@ maximum is `24h`.
 Open the printed reset link and set the owner password. Treat the reset link as
 a secret until it expires.
 
-After that, sign in from a local client with the normal login flow.
+After that, sign in from a local workspace with the normal login flow.
 
 Next: [Backups and restore](/docs/deploy/backups-and-restore)

@@ -1,6 +1,6 @@
 ---
 title: "Terminal login"
-description: "Sign in to Team OS from the terminal."
+description: "Sign in to Team OS and choose an initial Team from the terminal."
 ---
 
 Run terminal commands from `command-centre` in the Agentic OS repository.
@@ -13,31 +13,37 @@ cd command-centre
 npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>"
 ```
 
-If your email belongs to more than one team, pass the team slug or team ID:
+By default, the CLI saves a server-issued session token outside the repository.
+It does not save the password. If you set a custom
+`AGENTIC_OS_TEAM_CONFIG_DIR`, keep that directory outside version control.
+
+## Choose the initial Team
+
+Use the Team slug or ID when the account can access more than one Team:
 
 ```bash
 npm run team -- login --api-url https://team.example.com --email user@example.com --password "<password>" --team acme
 ```
 
-Expected output:
+The server accepts only an active Team that the signed-in user can access. A
+different Team ID cannot widen access.
 
-```text
-Signed in as user@example.com
-Team: Acme
-```
+To choose another Team from the terminal, sign in again with a different
+`--team` value. In Command Centre, use the Team control instead. Selecting a
+Team changes the default for new work. Existing work keeps its original Team.
 
-The CLI stores a user-scoped Team OS session token outside the repository. It
-does not save your password.
+A Company Admin can sign in without access to any Team. Team commands require a
+Team selection, so request access before using them.
 
-## Check your session
+## Check the selected Team
 
-Show the server-resolved user, team, and role:
+Show the server-resolved user, Team, and role label:
 
 ```bash
 npm run team -- whoami
 ```
 
-Expected output:
+Example output:
 
 ```text
 Signed in as: user@example.com
@@ -45,7 +51,7 @@ Team: Acme
 Role: member
 ```
 
-Show the clients granted to your account:
+Show the clients available in the selected Team:
 
 ```bash
 npm run team -- clients
@@ -54,34 +60,26 @@ npm run team -- clients
 Example output:
 
 ```text
-acme	read	Acme
-globex	write	Globex
+acme     read     Acme
+globex   write    Globex
 ```
 
-If you have no client grants, the command prints:
+Team Members see clients from active grants. Users with Full access see every
+active client with implicit `write` access.
+
+If a Team Member has no client grants, the command prints:
 
 ```text
 No clients are available for this account.
 ```
 
-That does not always mean your login failed. It can mean an owner or admin has
-not granted you access to a client yet.
-
 ## Sign out
-
-Sign out from the terminal:
 
 ```bash
 npm run team -- logout
 ```
 
-Expected output:
-
-```text
-Signed out.
-```
-
-If a saved session expires, run login again with the same server URL, email, and
-password.
+Signing out removes the saved local connection. If a session expires, sign in
+again with the same server URL and account.
 
 Next: [Saved config directory](/docs/team-os/saved-config)

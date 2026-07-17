@@ -31,12 +31,12 @@ Set these variables before you start the hosted Team OS API.
 | `TEAM_OS_PUBLIC_URL` | no | `https://team.example.com` | Fallback public URL for admin tools. |
 | `MEMORY_API_TEAM_ID` + `MEMORY_API_USER_ID` | either this pair | backend ids | Fixed server principal for the dev fallback token. |
 | `MEMORY_API_TEAM_SLUG` + `MEMORY_API_USER_EMAIL` | or this pair | `acme`, `owner@example.com` | Human-readable server principal. |
-| `MEMORY_API_BOOTSTRAP_TEAM_SLUG` + `MEMORY_API_BOOTSTRAP_OWNER_EMAIL` | first setup | `acme`, `owner@example.com` | Creates or resolves the first team and owner. |
-| `MEMORY_API_BOOTSTRAP_TEAM_NAME` | no | `Acme` | Display name for the first team. |
+| `MEMORY_API_BOOTSTRAP_TEAM_SLUG` + `MEMORY_API_BOOTSTRAP_OWNER_EMAIL` | first setup | `acme`, `owner@example.com` | Creates or resolves the first Team and Team Owner. The first setup also assigns the first Company Owner. |
+| `MEMORY_API_BOOTSTRAP_TEAM_NAME` | no | `Acme` | Display name for the first Team. |
 | `MEMORY_API_BOOTSTRAP_OWNER_NAME` | no | `Owner Example` | Display name for the first owner. |
 
 Hosted Postgres mode requires a server principal. For the first startup, use the
-bootstrap team slug and owner email.
+bootstrap Team slug and owner email.
 
 After the first startup, you can keep the slug and email pair. You can also
 switch to the backend ID pair.

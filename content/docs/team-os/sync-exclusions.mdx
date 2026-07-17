@@ -1,20 +1,34 @@
 ---
-title: "Sync exclusions"
-description: "See which files Team OS sync skips."
+title: "Sync limits and exclusions"
+description: "Compare terminal and Command Centre client sync limits."
 ---
 
-Sync includes text files only. It skips large files and sensitive or generated
-paths.
+The terminal and Command Centre use different client sync flows.
 
-Common exclusions:
+## Terminal push
+
+`npm run team -- sync push` includes text files up to 1 MB. It skips:
 
 * `.env`, `.env.local`, `.env.*`, and `.mcp.json`
 * `.git`, `.next`, `.memsearch`, `.command-centre`, and `node_modules`
 * `backups`, `coverage`, and `dist`
 * `clients/<slug>/context/transcripts`
-* files larger than 1 MB
+* non-text files and files larger than 1 MB
 
-Do not use Team OS file sync for secrets. Shared secrets use the Team OS secrets
-flow in Command Centre.
+These rules apply to files collected from the local source for a terminal
+push. The server still enforces Team and client access.
+
+## Command Centre client sync
+
+Command Centre can sync regular text or binary files under the selected client
+workspace, up to 25 MB per file. It does not use the terminal push exclusion
+list.
+
+Files named `.env`, `.env.local`, `.env.*`, or `.mcp.json` are marked as
+secrets. They are hidden from users with only `read` access. Users with
+`write` access can sync them, so review the file list before confirming.
+
+Use **Team > Secrets** when a value should be managed as a Team secret instead
+of a client file.
 
 Next: [Sync revoke behavior](/docs/team-os/sync-revoke)

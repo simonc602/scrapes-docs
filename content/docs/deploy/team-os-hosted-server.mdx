@@ -7,19 +7,19 @@ Host Team OS when a team needs shared login, permissions, memory, review,
 and file sync.
 
 The hosted API is called `memory-api` in the Agentic OS repository. The name is
-historical. In Team OS, it is the public API service.
+historical. In Team OS, it is the client-facing API service.
 
 ## What to deploy
 
 Deploy two services:
 
-| Service | Purpose | Public? |
+| Service | Purpose | Reachable by workspaces? |
 | --- | --- | --- |
-| Postgres with pgvector | Stores memory, users, teams, clients, grants, captures, imports, and audit events. | No |
-| Team OS API (`memory-api`) | Serves login, permissions, memory, sync, review, and health endpoints. | Yes |
+| Postgres with pgvector | Stores Company roles, Teams, access requests, members, clients, grants, memory, and audit events. | No |
+| Team OS API (`memory-api`) | Serves login, Company and Team management, permissions, memory, sync, review, and health endpoints. | Yes, through public HTTPS or an approved private path. |
 
-Only the API should be reachable from the public internet. Keep Postgres inside
-a private network or behind a firewall.
+Expose only the API through the chosen workspace access path. Never expose
+Postgres. Keep it inside a private network or behind a firewall.
 
 ## Production model
 

@@ -1,15 +1,36 @@
 ---
-title: "First team and owner"
-description: "Create the first Team OS team and owner."
+title: "First Team and owner"
+description: "Bootstrap the first Team and Company Owner."
 ---
 
-Run this once for a local test store or hosted database:
+Use this maintenance command only for the first Team OS setup. Run it where the
+Team OS database environment is available:
 
 ```powershell
 cd command-centre
-npm run team:create -- --slug demo --name "Demo Team" --owner-email owner@example.test --owner-name "Owner" --owner-password "owner-pass-123"
+npm run team:create -- --slug <TEAM_SLUG> --name "<TEAM_NAME>" --owner-email <OWNER_EMAIL> --owner-name "<OWNER_NAME>"
 ```
 
-Expected output includes the team ID, slug, and owner email.
+This command creates:
+
+* the first Team;
+* its first active Team Owner;
+* the first Company Owner, but only when no active Company Owner exists.
+
+The Team slug must use lowercase letters, numbers, and hyphens. It cannot be
+changed after creation.
+
+The command above does not put a password in shell history. Create a short-lived
+password reset link after bootstrap:
+
+```powershell
+npm run team:owner-reset -- --team <TEAM_SLUG> --email <OWNER_EMAIL>
+```
+
+Open the printed link and set the password. Treat the link as a secret until it
+expires.
+
+Creating another Team later does not replace the Company Owner. Use
+[Manage Teams](/docs/admin/manage-teams) for normal Team creation.
 
 Next: [Members](/docs/admin/members)

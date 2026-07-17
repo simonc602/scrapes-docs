@@ -3,24 +3,63 @@ title: "Check Command Centre"
 description: "Verify Team OS state in Command Centre."
 ---
 
-Start Command Centre with the same config directory:
+Start Command Centre with the Company Owner profile:
 
 ```powershell
-$env:AGENTIC_OS_TEAM_CONFIG_DIR="$env:TEMP\aios-member-client"
+$env:AGENTIC_OS_TEAM_CONFIG_DIR="$env:TEMP\aios-owner-client"
 npm run dev
 ```
 
 Open the local URL shown by Next.js.
 
-Check:
+## Check the Company Owner
 
-* the top-right Team control shows connected state after login;
-* the Team tab shows server data;
-* the clients list shows only backend-granted clients;
-* client rows show Pull and, for `write` grants, Push controls;
-* the Memories view loads for owners and admins;
-* owners and admins can open a published memory and see edit/delete actions;
-* admin controls are visible only to owners and admins;
-* sign-out clears the shared terminal and UI login state.
+1. Confirm the account and Team selector show the signed-in owner.
+2. Open **Team > Teams** and confirm **All Teams**, **Requests**, and
+   **Company Admins** are available.
+3. Create a disposable Team named **UI Check** with slug `ui-check`. Select the
+   existing owner account as its initial Team Owner.
+4. Open **Company Admins** and add `member@example.test` as a Company Admin.
+5. Confirm the owner sees every active client with implicit `write` access and
+   can open **Team > Memories** review controls.
+
+## Check the Company Admin
+
+1. Sign out, then sign in as `member@example.test` with the Member password
+   from the test store.
+2. Open **Team > Teams** and confirm **All Teams** and **My Access** are
+   available.
+3. Open **UI Check**. Confirm it is visible but cannot be managed yet.
+4. Request Full access.
+5. Sign in as the Company Owner and approve the request from **Requests**.
+6. Sign in as the Company Admin again. Confirm **UI Check** now has Full access
+   without adding a direct Team role.
+
+The automated identity checks cover a Company Admin who has no direct Team at
+all. That account can sign in, list Teams, create a Team, and request access,
+but cannot start work in an existing Team without access.
+
+## Check Team and Member access
+
+* Full access users see every active client with implicit `write` access.
+* In the original `demo` Team, the direct Team Member sees only clients and
+  skills allowed by explicit grants.
+* Client rows show **Pull** and show **Push** only with `write` access.
+* Full access users can open published memory and see edit and delete actions.
+* Admin controls follow effective Company and Team access.
+* Signing out clears the shared terminal and UI login state.
+
+## Check the Team lifecycle
+
+Use the disposable **UI Check** Team:
+
+1. Change its display name and confirm the slug stays read-only.
+2. Archive it and confirm normal Team access and authority changes are blocked.
+3. Confirm it leaves the normal Team selector.
+4. Reactivate it and confirm its memberships and grants return.
+
+Permanent deletion remains blocked until the Team has been archived for 30
+days. `npm run test:identity` covers the eligible delete path, exact-name
+confirmation, and Company Owner requirement without a 30-day manual wait.
 
 Next: [Run automated checks](/docs/admin/verification-automated-checks)

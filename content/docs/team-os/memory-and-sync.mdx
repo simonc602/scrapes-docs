@@ -1,16 +1,39 @@
 ---
 title: "Memory and file sync"
-description: "Use hosted memory and sync granted client files."
+description: "Use hosted Team memory and permission-scoped client files."
 ---
 
-Team OS lets a hosted server control shared memory and client files.
+Team OS lets the hosted server control shared memory and client files.
 
-The local client signs in, then asks the server for memory and files. The server
-checks the signed-in user, team role, client grants, and skill grants before it
-returns anything.
+The local workspace signs in and selects a Team. The server then resolves the real
+user, effective Team access, client access, and skill access before returning
+shared content.
 
-Start with [client connection](/docs/team-os/client-connection) before using
-these commands.
+Users with Full access can reach every active client in the selected Team. Team
+Members need explicit client grants and `skill.use` or a higher permission for
+each Team skill they run. Local installation skills do not depend on Team skill
+grants.
+
+Start with [client connection](/docs/team-os/client-connection).
+
+## Fixed scope for Team work
+
+Each Team task and conversation saves its server, user, Team, and optional
+client when it is created. Switching Teams later affects new work only.
+
+The server does not replace missing Team context with another Team, Solo
+context, or a stale local copy.
+
+If the exact Team context is unavailable:
+
+* new Team work is blocked;
+* an existing conversation may continue in conversation-only mode when its
+  saved agent session is available;
+* conversation-only mode cannot fetch fresh Team context, memory, skills,
+  secrets, grants, or sync data, and it skips memory capture.
+
+See [Companies and multiple Teams](/docs/team-os/multi-team) for access changes
+and outage behavior.
 
 ## Memory path
 

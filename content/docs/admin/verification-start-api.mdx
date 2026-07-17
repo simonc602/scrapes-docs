@@ -6,14 +6,18 @@ description: "Start the Team OS API for local verification."
 In the same terminal:
 
 ```powershell
-$env:MEMORY_API_TOKEN="owner-token"
+$env:MEMORY_API_TOKEN="<DEV_FALLBACK_TOKEN>"
 $env:MEMORY_API_PORT="8787"
 $env:MEMORY_API_TEAM_SLUG="demo"
 $env:MEMORY_API_USER_EMAIL="owner@example.test"
+$env:MEMORY_API_SERVER_EMBEDDINGS="1"
 npm run memory:api
 ```
 
 Leave this terminal running.
+
+The fallback token is only for this local verification. Normal users sign in
+with their own account.
 
 Expected server log:
 

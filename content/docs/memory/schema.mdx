@@ -29,7 +29,7 @@ Memory rows carry scope data:
 
 | Column | Meaning |
 | --- | --- |
-| `team_id` | The Team OS team that owns team memory. |
+| `team_id` | The Team that owns Team memory. |
 | `client_id` | The client workspace that owns client memory. |
 | `user_id` | The user that owns private memory. |
 | `visibility` | Which memory layer the row belongs to. |
@@ -39,7 +39,7 @@ Memory rows carry scope data:
 | Visibility | Required scope | Who it is for |
 | --- | --- | --- |
 | `system` | none | Baseline Agentic OS memory. |
-| `team` | `team_id` | Shared memory for one team. |
+| `team` | `team_id` | Shared memory for one Team. |
 | `client` | `client_id` | Shared memory for one client. |
 | `private` | `user_id` | Private memory for one user. |
 
@@ -54,7 +54,7 @@ The hosted API first stores the session summary in `memory_capture_events`.
 Those rows are staging data. They are not returned by memory search.
 
 Consolidation then claims eligible captures in `memory_consolidation_batches`.
-The consolidating client publishes durable items, sends uncertain items to
+The consolidating workspace publishes durable items, sends uncertain items to
 review, or discards weak items.
 
 Published items become `memory_sources` and `memory_chunks`. The
@@ -65,11 +65,12 @@ capture or consolidation behavior.
 
 ## Hosted search boundary
 
-In hosted mode, the server resolves the real team and user from the saved Team
-OS session. Request body IDs cannot widen access.
+In hosted mode, the authenticated request context resolves the Team and user.
+Request body scope IDs cannot widen access. The server replaces body `teamId`
+and `userId` values with the resolved principal.
 
-For example, if a local client sends a different `teamId`, the server still
-uses the team from the authenticated session.
+To use another Team, select it through the authorized Team context. The server
+validates access to that Team and, when needed, to the requested client.
 
 ## Embeddings
 

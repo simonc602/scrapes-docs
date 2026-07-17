@@ -4,6 +4,7 @@
   "pages": [
     "index",
     "concepts",
+    "multi-team",
     "roles-and-permissions",
     "client-connection",
     "terminal-login",

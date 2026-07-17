@@ -7,17 +7,36 @@ Sign in as the member:
 
 ```powershell
 $env:AGENTIC_OS_TEAM_CONFIG_DIR="$env:TEMP\aios-member-client"
-npm run team -- login --api-url http://127.0.0.1:8787 --email member@example.test --password "member-pass-123"
+$env:TEAM_MEMBER_PASSWORD="<MEMBER_PASSWORD>"
+npm run team -- login --api-url http://127.0.0.1:8787 --email member@example.test --password $env:TEAM_MEMBER_PASSWORD
 npm run team -- whoami
 npm run team -- clients
+npm run team -- skill list
+npm run memory:recall -- "aubergine-927" --embedding-mode server
+```
+
+Try two actions that the Member's grants do not allow:
+
+```powershell
+$memberProof="$env:TEMP\member-shared-import.txt"
+Set-Content $memberProof "This shared import should be denied."
+npm run team -- memory import --file $memberProof --visibility team --title "Denied Member Import"
+
+$deniedSync="$env:TEMP\member-read-only-sync"
+New-Item -ItemType Directory -Force "$deniedSync\clients\acme\context" | Out-Null
+Set-Content "$deniedSync\clients\acme\context\denied.md" "This write should be denied."
+npm run team -- sync push --client acme --src $deniedSync
 ```
 
 Expected result:
 
 * `whoami` shows `member@example.test`;
 * `clients` shows `acme` with `read`;
-* the member can search team memory;
-* the member cannot publish shared imports;
-* the member cannot write client memory with only `read` access.
+* the skill list contains only skills granted to this Member, including
+  `mkt-copywriting` with `skill.use` in this test store;
+* memory recall returns `aubergine-927` from Team memory;
+* the shared import is denied because the Member lacks Full access;
+* the client push is denied because the Member has only `read` access;
+* no other client or skill appears through implicit access.
 
 Next: [Test revoke behavior](/docs/admin/verification-revoke)

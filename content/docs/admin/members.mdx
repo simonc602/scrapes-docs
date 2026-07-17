@@ -1,38 +1,75 @@
 ---
 title: "Members"
-description: "Invite, join, and list Team OS members."
+description: "Add existing users or invite new users to a Team."
 ---
 
-Invite a member:
+Use a different flow for an existing account and a new user.
+
+## Add an existing user
+
+Use this path when the person already has an active Team OS account:
+
+1. Open **Team > Teams > All Teams**.
+2. Open the Team.
+3. Select **Members**.
+4. Search under **Add an existing user**.
+5. Choose Member or Admin.
+6. Select **Add member**.
+
+The user keeps the same password. No invite link is created.
+
+## Invite a new user
+
+Select the target Team, then open its main **Members** section.
+
+1. Enter the new user's email.
+2. Choose Member or Admin.
+3. Select **Invite**.
+4. Send the generated link through a private channel.
+
+The link expires after 7 days and can be used once. The new user sets their
+name and password while accepting it. Create a new invite if the link expires
+or was already used.
+
+Ownership is not an invite role. Add a Team Owner from the Team's **Settings**
+after the person has an active account.
+
+## Maintenance commands
+
+Invite a new user:
 
 ```powershell
-npm run team:invite -- --team demo --email member@example.test --by owner@example.test
+npm run team:invite -- --team <TEAM_SLUG> --email <NEW_USER_EMAIL> --role member --by <AUTHORIZED_ACTOR_EMAIL>
 ```
 
-The command prints a one-time join token. Send the token through a private
-channel.
+The command prints a one-time token. The default expiry is 7 days.
 
 Accept the invite:
 
 ```powershell
-npm run team:join -- --team demo --email member@example.test --token <invite-token> --password "member-pass-123"
+npm run team:join -- --team <TEAM_SLUG> --email <NEW_USER_EMAIL> --token <INVITE_TOKEN> --password "<NEW_ACCOUNT_PASSWORD>"
 ```
 
 List members:
 
 ```powershell
-npm run team:members -- --team demo
+npm run team:members -- --team <TEAM_SLUG>
 ```
+
+In maintenance commands, `--by` identifies the actor whose authority must be
+checked and recorded in the audit trail. It is not a way for a hosted client to
+choose its identity. The hosted server always uses the authenticated session.
 
 Expected member states:
 
 | Status | Meaning |
 | --- | --- |
 | `invited` | Invite exists, but the user has not joined yet. |
-| `active` | User can sign in and use granted resources. |
+| `active` | User can sign in and use access allowed by their role and grants. |
 | `suspended` | User should not receive access. |
 
-Invite tokens are single-use. If a token is used, expired, or sent to the wrong
-email, create a new invite.
+Company Owner, Company Admin, and direct Team roles stay separate. The Team
+member controls cannot remove or replace protected Company authority. Remove
+the Company grant or ownership authority first when that protection applies.
 
 Next: [Clients](/docs/admin/clients)

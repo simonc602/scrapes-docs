@@ -1,0 +1,135 @@
+---
+title: "Companies and multiple Teams"
+description: "Understand Company access, Team selection, and fixed work scopes."
+---
+
+A hosted Team OS server has one Company. The Company can contain multiple
+Teams, and the same user can have different access in each Team.
+
+## Company and Team are different levels
+
+| Level | What it controls |
+| --- | --- |
+| Company | Company Admins, the list of Teams, and access to those Teams. |
+| Team | Members, clients, skills, shared context, memory, secrets, and files for one Team. |
+
+Company roles do not replace Team roles. They decide who can manage access
+across the Company.
+
+* The **Company Owner** has Full access to every active Team.
+* A **Company Admin** can see the Company Team list, create a Team, and request
+  Full access to another Team.
+* A Company Admin can work in a Team only after receiving access through a
+  Company grant or a direct Team role.
+
+See [Roles and permissions](/docs/team-os/roles-and-permissions) for the full
+access model.
+
+## Use Company access
+
+Open **Team > Teams** in Command Centre. This is the Company access view.
+
+The Company Owner sees:
+
+* **All Teams**;
+* **Requests**;
+* **Company Admins**.
+
+A Company Admin sees:
+
+* **All Teams**;
+* **My Access**.
+
+The All Teams view can search Teams and filter them by status or Full access.
+Seeing a Team in this Company list does not give access to its members or
+resources.
+
+An active Company Owner or Company Admin can create a Team. The new Team must
+start with an existing user as Team Owner. When a Company Admin creates a Team,
+that Admin receives protected access to it.
+
+## Request access to a Team
+
+A Company Admin who does not have Full access to a Team can request it from
+**Team > Teams** in Command Centre. This also applies when the Admin already has
+a direct Team Member role.
+
+1. Open **Team > Teams**.
+2. Find the Team and select **Request access**.
+3. Wait for the Company Owner to approve or deny the request.
+4. After approval, select that Team from the Team control.
+
+Approval gives the Company Admin Full access to that Team. The Company Owner
+can revoke it later. A Company Admin can also remove their own granted access.
+
+Direct Team Owner or Team Admin roles are separate. Removing a Company grant
+does not remove a direct Team role.
+
+## Select a Team
+
+The Team control shows the active Teams that the signed-in user can access. If
+more than one Team is available, use **Switch team** to change the selected
+Team.
+
+The selection becomes the default for new work. It does not move existing
+tasks or conversations to another Team.
+
+An archived Team is not available in the Team selector. A Company Admin can
+still sign in when no Team is available. They can create a Team, but cannot
+start a Goal in an existing Team until they receive access to it.
+
+## One local profile per server and user
+
+The local Team OS profile is identified by the hosted server and the signed-in
+user. It is not a separate profile for each Team.
+
+This lets one sign-in list and select every Team that the server allows for
+that user. The server checks access again when the user selects a Team and on
+each protected request.
+
+## Work keeps its original scope
+
+When Command Centre creates Team work, it saves the server, user, Team, and
+client for that work. This scope cannot change later.
+
+For example, switching from Team A to Team B changes the default for the next
+task. A task already created in Team A stays in Team A. It cannot start using
+Team B context or a Solo workspace by mistake.
+
+## Access changes and service outages
+
+Access changes take effect on the next server request. If access is revoked,
+the client cannot widen its access by changing a Team, client, or user ID.
+
+Command Centre does not replace missing Team context with stale local context,
+another Team, or Solo context.
+
+* New Team work is blocked when the exact Team context is unavailable.
+* An existing Team conversation may continue in **conversation-only** mode if
+  its saved agent session is still available.
+* Conversation-only mode uses the existing conversation. It cannot fetch fresh
+  Team context, search or capture Team memory, refresh Team skills, secrets, or
+  grants, or use Team file sync.
+* Local installation skills and the last authorized Team skill copy may remain
+  available. The conversation cannot fall back to another Team or Solo context.
+* If the saved agent session is unavailable, the reply is blocked until access
+  or the service is restored.
+
+Files pulled earlier are not removed from disk automatically. See
+[Sync revoke behavior](/docs/team-os/sync-revoke).
+
+## Archive and delete a Team
+
+Archiving removes a Team from normal Team work and the Team selector. Existing
+memberships and grants are kept so the Team can be restored. Pending access
+requests are canceled.
+
+Only the Company Owner can permanently delete a Team. The Team must first stay
+archived for at least 30 days, and the deletion confirmation must match the
+Team name. Permanent deletion cannot be undone.
+
+Team OS access controls hosted resources. A task's local command and file
+approval behavior is separate. See
+[Task permission modes](/docs/command-centre/task-permission-modes).
+
+Next: [Roles and permissions](/docs/team-os/roles-and-permissions)

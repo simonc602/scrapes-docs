@@ -1,0 +1,77 @@
+---
+title: "Company access"
+description: "Understand Company roles, Team roles, Full access, requests, and grants."
+---
+
+One Team OS server represents one company. Company roles work across that
+company. Team roles and grants work inside one Team.
+
+The hosted server resolves the signed-in user and checks every action. A local
+workspace cannot gain access by sending a different user, Team, or client ID.
+
+## Company roles
+
+| Role | Access |
+| --- | --- |
+| Company Owner | The single active owner of the company. Has Full access to every Team and manages Company Admins, access requests, and permanent Team deletion. |
+| Company Admin | Can view all Teams and create a Team. Needs Full access before managing an existing Team. |
+
+Company roles do not replace direct Team roles. A person can be a Company Admin
+and also be a Team Owner, Team Admin, or Team Member in different Teams.
+
+## Team access
+
+The server resolves effective access in this order:
+
+| Access source | Result |
+| --- | --- |
+| Company Owner | Full access to every Team. |
+| Direct Team Owner or Team Admin role | Full access to that Team. |
+| Company Admin with a company grant | Full access to that Team. |
+| Direct Team Member role | Member access. Client and skill grants are still required. |
+
+Full access includes implicit write access to every active client in the Team.
+It also lets the person manage and use Team skills without separate skill
+grants. Do not add client or skill grants for Full access users.
+
+Members do not receive this implicit access. Give each Member only the client
+and skill grants needed for their work.
+
+## Tabs for each company role
+
+Open **Team > Teams** in Command Centre.
+
+Company Owners see:
+
+* **All Teams** to search, create, open, archive, and reactivate Teams;
+* **Requests** to approve or deny Company Admin access requests;
+* **Company Admins** to add admins, grant Team access, remove admins, or
+  transfer Company Ownership.
+
+Company Admins see:
+
+* **All Teams** to view Teams, create a Team, open Teams with Full access, or
+  request access;
+* **My Access** to review requests and revoke their own company grants.
+
+A Company Admin who creates a Team receives Full access to that Team. The
+initial Team Owner is still selected separately during creation.
+
+## Request Full access
+
+A Company Admin can request access from **All Teams**.
+
+1. Open the Team row.
+2. Select **Request access**.
+3. Add an optional reason.
+4. Send the request.
+
+The Company Owner reviews the request in **Requests**. Approval creates a Full
+access grant. Denial does not add a grant. The Company Admin can cancel a
+pending request from **My Access**.
+
+Direct Team Owner and Team Admin roles already include Full access. These roles
+are shown as locked in the Company Admin access controls because removing a
+company grant must not remove a direct Team role.
+
+Next: [Manage Teams](/docs/admin/manage-teams)

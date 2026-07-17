@@ -1,6 +1,6 @@
 ---
 title: "Login and grants"
-description: "Fix Team OS login, client, and grant problems."
+description: "Fix Company roles, Team access, login, and grant problems."
 ---
 
 ## Login problems
@@ -8,34 +8,68 @@ description: "Fix Team OS login, client, and grant problems."
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
 | `--api-url must start with http:// or https://` | URL is missing the scheme. | Use the full server URL, such as `https://team.example.com`. |
-| `login failed (401)` | Wrong email, password, team, or server URL. | Check credentials and ask an admin to confirm membership. |
+| `login failed (401)` | Wrong email, password, Team, or server URL. | Check the values and confirm the account is active. |
 | `You are not logged in` | No saved local Team OS context. | Run `npm run team -- login ...` again. |
 | `saved Team OS login has expired` | Session token expired. | Sign in again with email and password. |
 | Command Centre is signed out but terminal is signed in | Different config directories. | Start both with the same `AGENTIC_OS_TEAM_CONFIG_DIR`. |
 
-The saved login lives in `team-context.json` under the config directory. It
-should not be committed.
+The saved login lives in `team-context.json` under the config directory. Do not
+commit or share it.
+
+## Company roles and Full access
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| **Teams** is missing | The user is not an active Company Owner or Company Admin. | Confirm the company membership is active. |
+| Company Admin can see a Team but cannot manage it | The admin does not have Full access. | Request access from **All Teams**, or ask the Company Owner to grant it. |
+| Access request is still pending | The Company Owner has not resolved it. | Check **Team > Teams > Requests**. |
+| Company Admin grant cannot be removed | Access comes from a direct Team Owner or Team Admin role. | Change the direct Team role instead. Direct roles are protected from company grant changes. |
+| Company Owner is missing | No active Company Owner exists. | Use `npm run company:owner-recover -- --user <EMAIL_OR_USER_ID>` with an active account that can sign in. |
+| Ownership transfer fails | The target is not an active Company Admin. | Add or activate the Company Admin first, then retry from **Company Admins**. |
+
+The Company Owner has Full access to every Team. Direct Team Owners and Team
+Admins have Full access to their Team. Company Admins need a direct Team role or
+a Company Full access grant.
+
+## Team creation and lifecycle
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Team slug is rejected | It contains unsupported characters or starts or ends with a hyphen. | Use lowercase letters, numbers, and hyphens. Start and end with a letter or number. |
+| Team slug cannot be edited | Slugs are permanent after creation. | Change the display name instead. |
+| Members or roles cannot be changed | The Team is archived. | Reactivate the Team before changing authority. |
+| Permanent delete is missing | The user is not Company Owner, or the Team has been archived for less than 30 days. | Use the Company Owner account and wait until the 30-day period ends. |
+
+## Invite problems
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Invite is invalid or expired | The link is older than 7 days, already used, changed, or for another email. | Create a new invite and send the new link privately. |
+| Existing user cannot use a new-user invite | The person already has a working Team OS account. | Use **Add an existing user** from the Team's **Members** dialog. |
+| New user cannot be added as Team Owner | Ownership is not an invite role. | Invite the user as Member or Admin, wait for activation, then add them as Team Owner. |
 
 ## Missing clients or grants
 
 If `npm run team -- clients` does not show the expected client:
 
-1. Confirm the user is an active team member.
-2. Confirm the client exists.
-3. Confirm the user has an active client grant.
-4. Confirm the user signed in to the correct server and team.
-5. Ask the user to sign in again after the grant changes.
+1. Confirm the user selected the correct server and Team.
+2. Confirm the Team and client are active.
+3. For a Full access user, confirm the Company or direct Team authority is
+   active.
+4. For a Member, confirm an active client grant exists.
+5. Refresh the UI or sign in again after access changes.
 
 Run these from `command-centre/`:
 
 ```powershell
 npm run team -- whoami
 npm run team -- clients
-npm run team:members -- --team demo
-npm run team:client -- grants --team demo
+npm run team:members -- --team <TEAM_SLUG>
+npm run team:client -- grants --team <TEAM_SLUG>
 ```
 
-Grant revoke takes effect on the next backend request. Old local pulled files
-are not automatically deleted from disk.
+Do not expect an explicit client grant for a Full access user. The server
+returns implicit write access instead. A grant revoke takes effect on the next
+backend request. Old local pulled files are not automatically deleted.
 
 Next: [Memory and search](/docs/admin/troubleshooting-memory-search)

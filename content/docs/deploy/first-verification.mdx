@@ -7,13 +7,14 @@ Run these checks after deployment.
 
 1. Open `/v1/health` and confirm `ok: true`.
 2. Confirm the health response says `backend: postgres`.
-3. Sign in from a local client.
+3. Sign in as the first Company Owner and Team Owner from a local workspace.
 4. Run `npm run team -- whoami`.
 5. Run `npm run team -- clients`.
 6. Open Command Centre.
-7. Confirm the Team tab can load memory status.
+7. Confirm **Team > Dashboard** and **Team > Memories** load for the selected
+   Team.
 
 If a check fails, start with
 [Team OS troubleshooting](/docs/admin/team-os-troubleshooting).
 
-Next: [Connect a Team OS client](/docs/team-os/client-connection)
+Next: [Connect a workspace to Team OS](/docs/team-os/client-connection)

@@ -1,12 +1,11 @@
 ---
 title: "Team OS concepts"
-description: "Team OS lets a hosted server control shared Agentic OS access."
+description: "Learn how a hosted server controls shared Agentic OS access."
 ---
 
-Team OS lets a hosted server control shared Agentic OS access.
-
-The local workspace still runs on the user's machine. The hosted server decides
-which team, clients, files, skills, and memory that user can access.
+Team OS lets a hosted server control shared Agentic OS access. The local
+workspace still runs on the user's machine, but the server decides which
+Company, Teams, clients, skills, files, and memory the user can access.
 
 <DocsDiagram id="team-os-trust-boundary" />
 
@@ -14,85 +13,80 @@ which team, clients, files, skills, and memory that user can access.
 
 | Part | Meaning |
 | --- | --- |
-| Hosted server | The source of truth for team identity, roles, grants, memory, and file access. |
-| Local client | A local Agentic OS workspace signed in to the hosted server. |
-| User | A person who signs in with a server-managed identity. |
-| Team | A shared group of users, clients, memory, and permissions. |
-| Client | A scoped work area, usually for one customer, brand, or project area. |
-| Grant | A server-side permission that allows access to a client or skill. |
-| Session | The saved login state used by terminal commands and Command Centre. |
+| Hosted server | The source of truth for identity, access, shared content, and audit events. |
+| Company | The top-level group that contains all Teams on one hosted server. |
+| Team | A shared group with its own members, clients, skills, context, memory, and files. |
+| User | A server-managed identity that can have access to more than one Team. |
+| Client | A work area inside one Team, usually for one customer, brand, or project. |
+| Grant | A server-side permission for Company access, or for a Team Member's client or skill access. |
+| Local profile | Saved connection state for one hosted server and user. |
+| Work scope | The fixed server, user, Team, and optional client saved with a task or conversation. |
 
 ## Source of truth
 
-The hosted server is the source of truth in Team OS.
+The hosted server stores and checks:
 
-It stores and checks:
-
-* users;
-* teams;
-* memberships;
-* clients;
-* client grants;
-* skill grants;
-* shared memory;
-* workspace file access;
+* users and Company roles;
+* Teams and direct Team memberships;
+* Company access requests and grants;
+* clients and member client grants;
+* shared skills and member skill grants;
+* shared and private memory;
+* allowed workspace files;
 * audit events.
 
-A local client can ask for access. It cannot decide its own team, role, client,
-or user identity.
+A local workspace can request a Team or client. It cannot decide its own user,
+role, or access.
 
-## Login state
+## Effective Team access
 
-The terminal and Command Centre use the same Team OS login state when they use
-the same Team OS config directory.
+Access to a Team can come from Company ownership, an active Company grant, or
+a direct Team role. Team Owners and Team Admins have Full access to their Team.
+Team Members use explicit client and skill grants.
 
-After sign-in, users can check their server-resolved identity with:
+See [Roles and permissions](/docs/team-os/roles-and-permissions).
 
-```bash
-npm run team -- whoami
-```
+## Login and Team selection
 
-They can list only the clients granted by the server:
+The terminal and Command Centre share Team OS login state when they use the same
+Team OS config directory.
 
-```bash
-npm run team -- clients
-```
+The local profile belongs to the server and user. The user can select any
+active Team that the server says is accessible. Selecting another Team changes
+the default for new work, not the scope of existing tasks.
 
-They can remove the saved login with:
-
-```bash
-npm run team -- logout
-```
+See [Companies and multiple Teams](/docs/team-os/multi-team).
 
 ## Server-side identity
 
-Team OS does not trust identity sent by the local client.
+Team OS does not trust identity sent by the local workspace.
 
-For example, a request body can include a team ID or client ID. In hosted mode,
-the server still resolves the real user, team, role, and grants from the saved
-session or server-side principal.
+For example, a request can include a Team ID or client ID. The server first
+resolves the real user from the signed session or server-issued token. It then
+checks that user's current Company, Team, client, and skill access.
 
-This means a local client cannot gain access by sending a different `teamId`,
-`clientId`, or `userId`.
+Sending a different `teamId`, `clientId`, or `userId` cannot widen access.
 
 ## Memory scopes
 
-Team OS memory is scoped.
-
 | Scope | Who it is for |
 | --- | --- |
-| System | Shared baseline memory for the Agentic OS install. |
-| Team | Shared memory for one team. |
-| Client | Shared memory for one granted client. |
-| Private | Memory for one signed-in user. |
+| System | Shared baseline memory for the Agentic OS installation. |
+| Team | Users with effective access to one Team. |
+| Client | Full access users, or Team Members with access to one client. |
+| Private | One signed-in user. |
 
-Search and ingest routes must respect the server-resolved identity and grants.
+The server replaces Team and user identity in memory requests with the trusted
+identity from the session. Private memory always belongs to the signed-in user.
 
 ## File access
 
-Team OS exposes only granted client files through server-checked sync flows.
+Team OS exposes only allowed files for clients the user can access. Full access
+users can reach every active client in their Team. Team Members see only
+clients granted by the server.
 
-Secret files, local runtime state, transcripts, generated stores, build folders,
-and private local config must not be exposed through team sync.
+The local workspace never receives general access to the server filesystem.
+Sensitive local state, transcripts, generated stores, and build folders stay
+outside normal Team sync.
 
-Next: [Roles and permissions](/docs/team-os/roles-and-permissions)
+Next: [Companies and multiple Teams](/docs/team-os/multi-team)

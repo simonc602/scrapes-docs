@@ -1,21 +1,44 @@
 ---
 title: "Command Centre login"
-description: "Sign in to Team OS from Command Centre."
+description: "Sign in to Team OS and switch Teams in Command Centre."
 ---
 
-Command Centre can sign in with the same server URL, email, password, and
-optional team slug.
+Command Centre signs in with the Team OS server URL, email, password, and an
+optional initial Team.
 
-1. Start Command Centre from the same environment you want to use.
+1. Start Command Centre from the environment you want to use.
 2. Open the Team control in the top-right area.
-3. Choose sign in.
-4. Enter the Team OS server URL, email, password, and optional team.
-5. Confirm the Team control shows a connected state.
+3. Choose **Sign in**.
+4. Enter the server URL, email, password, and optional Team.
+5. Confirm that the Team control shows a connected state.
 
-The Team control should show the signed-in user, team, role, session expiry, and
-sign-out action.
+The Team control shows the signed-in user, selected Team, role label,
+memory state, session expiry, and sign-out action.
 
-If you logged in from the terminal first, Command Centre can reuse that login
-when `AGENTIC_OS_TEAM_CONFIG_DIR` is the same.
+A Company Admin with no Team access can still show as connected. The control
+shows that no Team is available until access is approved.
+
+## Switch Teams
+
+When more than one active Team is available:
+
+1. Open the Team control.
+2. Under **Switch team**, select another Team.
+3. Wait for the new Team to show as selected.
+
+The server validates the selection. Archived Teams and Teams without access do
+not appear in this list.
+
+The selected Team is the default for new tasks and conversations. Existing work
+keeps the server, user, Team, and client saved when that work was created.
+
+Use **Team > Teams** to request access or manage multiple Teams. See
+[Companies and multiple Teams](/docs/team-os/multi-team).
+
+## Shared login state
+
+Command Centre can reuse a terminal login when both use the same
+`AGENTIC_OS_TEAM_CONFIG_DIR`. The local profile is tied to the server and user,
+not to one Team.
 
 Next: [Invites](/docs/team-os/invites)

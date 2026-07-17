@@ -1,40 +1,73 @@
 ---
 title: "Skill grants"
-description: "Grant or revoke Team OS skill permissions."
+description: "Control which Team Members can use or manage skills."
 ---
+
+Full access users can use and manage Team skills without explicit skill grants.
+This includes the Company Owner, direct Team Owners and Team Admins, and Company
+Admins with Full access to the Team.
+
+Team Members need explicit grants.
+
+## Use Command Centre
+
+1. Select the Team.
+2. Open **Team > Skills**.
+3. Open a skill.
+4. Search for a Member.
+5. Choose the permission.
+6. Select **Add**.
+
+You can change or remove a Member's permission from the same skill dialog.
+
+## Permission levels
+
+| Permission | Meaning |
+| --- | --- |
+| `skill.use` | Run the skill. Command Centre can fetch a local execution copy. |
+| `skill.read` | Browse or inspect the shared skill files. Includes use. |
+| `skill.edit` | Edit-level access where supported. Includes read and use, but does not make the shared Team copy writable. |
+| `skill.admin` | Update or delete the shared Team copy. Includes edit, read, and use. |
+
+`skill.use` lets the runtime cache an execution copy so the skill can run. It
+does not give the Member direct browsing controls. Use `skill.read` when the
+Member must inspect the files.
+
+`skill.edit` does not make the shared Team copy writable. A Member needs
+`skill.admin` to update shared skill files on the Team OS server.
+
+Local `SKILL.local.md` overrides are separate from Team grants. Editing a local
+override does not update the shared Team copy.
+
+`skill.admin` does not give a Team Member Full access. Command Centre still
+requires Full access to manage other people's skill grants. The direct
+`team:skill` maintenance command can accept `skill.admin` for that one skill.
+
+## Maintenance commands
 
 Grant a skill permission:
 
 ```powershell
-npm run team:skill -- grant --team demo --skill mkt-copywriting --user member@example.test --permission skill.use --by owner@example.test
+npm run team:skill -- grant --team <TEAM_SLUG> --skill <SKILL_SLUG> --user <MEMBER_EMAIL> --permission skill.use --by <AUTHORIZED_ACTOR_EMAIL>
 ```
 
 List skill grants:
 
 ```powershell
-npm run team:skill -- grants --team demo
+npm run team:skill -- grants --team <TEAM_SLUG>
 ```
 
 Revoke a skill permission:
 
 ```powershell
-npm run team:skill -- revoke --team demo --skill mkt-copywriting --user member@example.test --permission skill.use --by owner@example.test
+npm run team:skill -- revoke --team <TEAM_SLUG> --skill <SKILL_SLUG> --user <MEMBER_EMAIL> --permission skill.use --by <AUTHORIZED_ACTOR_EMAIL>
 ```
 
-Allowed permissions:
+Target users must be active Team Members before they can receive skill grants.
 
-| Permission | Meaning |
-| --- | --- |
-| `skill.use` | User can request the skill in a Team OS task or reply. |
-| `skill.read` | User can view or sync skill files. Includes use. |
-| `skill.edit` | User can save allowed Team OS edits for that skill. |
-| `skill.admin` | User can change who has use, read, edit, or admin access. |
-
-`skill.use` only lets the Team OS request pass the server permission check. It
-does not install the skill files on the user's computer.
-
-Grant `skill.read` when a user needs to download, inspect, or sync skill files.
-
-Target users must be active team members before they can receive skill grants.
+For this direct maintenance command, `--by` must identify a direct Team Owner
+or Team Admin, or a user with `skill.admin` for that skill. Company-level
+authority alone is not resolved by the script. Hosted requests always use the
+server-resolved signed-in user.
 
 Next: [Owner password reset](/docs/admin/owner-password-reset)

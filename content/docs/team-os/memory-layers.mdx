@@ -7,9 +7,9 @@ Team OS uses memory scopes to decide who can use each memory item.
 
 | Layer | Who can use it | Typical content |
 | --- | --- | --- |
-| System | Local Agentic OS or trusted service paths. | Baseline Agentic OS methods. |
-| Team | Active team members. | Shared operating notes and team context. |
-| Client | Users with a grant for that client. | Client notes, briefs, and context. |
+| System | Users with effective access to that Team. | Baseline Agentic OS methods. |
+| Team | Users with effective access to that Team. | Shared operating notes and Team context. |
+| Client | Full access users, or Team Members with access to that client. | Client notes, briefs, and context. |
 | Private | One signed-in user. | User-specific memory and session context. |
 
 Manual shared imports publish only `team` or `client` memory.
@@ -18,7 +18,11 @@ Private memory is captured through normal private capture paths, not the shared
 import command.
 
 Team OS session capture is staged first. It becomes searchable only after
-consolidation publishes durable memory.
+consolidation publishes durable memory. Client capture requires `write` access.
+Managing shared Team or client memory requires Full access.
+
+The server fixes Team and user identity from the signed session. A request body
+cannot move memory to another Team or another user's private scope.
 
 See [Session capture and review](/docs/memory/session-capture).
 

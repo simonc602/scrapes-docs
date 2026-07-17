@@ -3,7 +3,7 @@ title: "Hosted memory search"
 description: "Search hosted Team OS memory."
 ---
 
-When the local client is signed in to Team OS, memory recall uses the hosted API
+When the local workspace is signed in to Team OS, memory recall uses the hosted API
 by default.
 
 Recall is layered. It searches first. If a result is too short, it can expand
@@ -16,11 +16,14 @@ Run recall from `command-centre/`:
 npm run memory:recall -- "onboarding notes"
 ```
 
-Search a granted client:
+Search a client you can access:
 
 ```powershell
 npm run memory:recall -- "onboarding notes" --client acme
 ```
+
+This adds that client's memory to the default system, Team, and private memory
+layers. It does not limit the search to client memory only.
 
 The search step uses `--embedding-mode auto` by default. In auto mode, the CLI
 checks `/v1/health`. If the server has server-side search embeddings enabled,
@@ -63,10 +66,13 @@ Use `memory:recall` for normal work. Custom clients can call the hosted API
 directly. They can send a BGE-M3 query embedding, or they can ask the server to
 create the query embedding when the API has `MEMORY_API_SERVER_EMBEDDINGS=1`.
 
+The examples below expect `TEAM_OS_API_URL` and `TEAM_OS_SESSION_TOKEN` to be
+injected securely into the current process. Do not open the saved Team OS
+profile to copy its session token.
+
 Client-provided embedding:
 
 ```powershell
-$saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json
 $body = @{
   query = "onboarding notes"
   queryEmbedding = @("<1024 BGE-M3 numbers>")
@@ -74,18 +80,16 @@ $body = @{
   embeddingDim = 1024
   topK = 5
   scope = @{
-    teamId = "server-resolved"
     clientId = "acme"
-    userId = $null
     include = @("team", "client")
   }
   storeQueryText = $false
 } | ConvertTo-Json -Depth 6
 
 Invoke-RestMethod `
-  -Uri "$($saved.apiUrl)/v1/memory/search" `
+  -Uri "$env:TEAM_OS_API_URL/v1/memory/search" `
   -Method Post `
-  -Headers @{ Authorization = "Bearer $($saved.token)" } `
+  -Headers @{ Authorization = "Bearer $env:TEAM_OS_SESSION_TOKEN" } `
   -ContentType "application/json" `
   -Body $body
 ```
@@ -93,7 +97,6 @@ Invoke-RestMethod `
 Server-side embedding:
 
 ```powershell
-$saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json
 $body = @{
   query = "onboarding notes"
   embeddingMode = "server"
@@ -106,9 +109,9 @@ $body = @{
 } | ConvertTo-Json -Depth 6
 
 Invoke-RestMethod `
-  -Uri "$($saved.apiUrl)/v1/memory/search" `
+  -Uri "$env:TEAM_OS_API_URL/v1/memory/search" `
   -Method Post `
-  -Headers @{ Authorization = "Bearer $($saved.token)" } `
+  -Headers @{ Authorization = "Bearer $env:TEAM_OS_SESSION_TOKEN" } `
   -ContentType "application/json" `
   -Body $body
 ```
@@ -116,10 +119,11 @@ Invoke-RestMethod `
 If server-side embeddings are disabled, the API returns
 `server_embedding_disabled`.
 
-The server resolves the real team and user from the saved login. Body IDs can
-ask for a narrower search, but they cannot widen access.
+The server resolves the real Team and user from the authenticated request. It
+replaces body Team and user IDs with that trusted principal. `include` and
+`clientId` can narrow the search, but request-body IDs cannot widen access.
 
 For the full recall flow, see [Layered recall](/docs/memory/layered-recall).
-For endpoint details, see [Hosted memory API](/docs/memory/hosted-api).
+For endpoint details, see [Hosted Team OS API](/docs/memory/hosted-api).
 
 Next: [File sync model](/docs/team-os/file-sync-model)

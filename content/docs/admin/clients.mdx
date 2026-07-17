@@ -1,45 +1,75 @@
 ---
 title: "Clients"
-description: "Create clients and manage client grants."
+description: "Create clients and control Member access."
 ---
+
+Client access depends on effective Team access.
+
+| User access | Client result |
+| --- | --- |
+| Company Owner | Implicit write access to every active client in every Team. |
+| Team Owner or Team Admin | Implicit write access to every active client in that Team. |
+| Company Admin with Full access | Implicit write access to every active client in that Team. |
+| Team Member | Only clients with an explicit read or write grant. |
+
+Do not create explicit client grants for Full access users. Their implicit
+access is shown as protected in Command Centre.
+
+## Use Command Centre
+
+1. Select the Team.
+2. Open **Team > Clients**.
+3. Enter a name and select **Create client** when needed.
+4. Open a client row.
+5. Add a Member and choose **Client Viewer** or **Client Editor**.
+
+Client Viewer maps to `read`. Client Editor maps to `write`. Write includes
+read.
+
+## Maintenance commands
 
 Create a client:
 
 ```powershell
-npm run team:client -- create --team demo --slug acme --name "Acme" --by owner@example.test
+npm run team:client -- create --team <TEAM_SLUG> --slug <CLIENT_SLUG> --name "<CLIENT_NAME>" --by <AUTHORIZED_ACTOR_EMAIL>
 ```
 
 List clients:
 
 ```powershell
-npm run team:client -- list --team demo
+npm run team:client -- list --team <TEAM_SLUG>
 ```
 
 Grant read access:
 
 ```powershell
-npm run team:client -- grant --team demo --client acme --user member@example.test --access read --by owner@example.test
+npm run team:client -- grant --team <TEAM_SLUG> --client <CLIENT_SLUG> --user <MEMBER_EMAIL> --access read --by <AUTHORIZED_ACTOR_EMAIL>
 ```
 
 Grant write access:
 
 ```powershell
-npm run team:client -- grant --team demo --client acme --user member@example.test --access write --by owner@example.test
+npm run team:client -- grant --team <TEAM_SLUG> --client <CLIENT_SLUG> --user <MEMBER_EMAIL> --access write --by <AUTHORIZED_ACTOR_EMAIL>
 ```
 
 List client grants:
 
 ```powershell
-npm run team:client -- grants --team demo
+npm run team:client -- grants --team <TEAM_SLUG>
 ```
 
 Revoke access:
 
 ```powershell
-npm run team:client -- revoke --team demo --client acme --user member@example.test --by owner@example.test
+npm run team:client -- revoke --team <TEAM_SLUG> --client <CLIENT_SLUG> --user <MEMBER_EMAIL> --by <AUTHORIZED_ACTOR_EMAIL>
 ```
 
 Client grants affect `npm run team -- clients`, memory search, memory ingest,
 and file sync.
+
+The direct maintenance command accepts only an active direct Team Owner or Team
+Admin for `--by`. It does not resolve Company-level Full access. Company users
+should use Command Centre or the hosted API instead. Hosted API requests use
+the authenticated user and do not trust an actor ID from the request body.
 
 Next: [Skill grants](/docs/admin/skill-grants)

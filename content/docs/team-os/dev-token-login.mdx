@@ -6,6 +6,10 @@ description: "Use the Team OS dev fallback token for smoke tests."
 Some deployments set `MEMORY_API_TOKEN` for internal smoke tests. This is a
 shared dev fallback token, not the normal login method for users.
 
+The dev token is locked to the server-side Team configured for that token. It
+cannot be used to switch across Teams. Use email and password login for normal
+multi-Team access.
+
 Use it only when an operator asks you to test the deployment:
 
 ```bash

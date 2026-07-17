@@ -1,9 +1,9 @@
 ---
-title: "Hosted memory API"
-description: "The hosted memory API is the HTTP service behind Team OS."
+title: "Hosted Team OS API"
+description: "The hosted API handles Team OS identity, access, memory, and sync."
 ---
 
-The hosted memory API is the HTTP service behind Team OS.
+The hosted API is the HTTP service behind Team OS.
 
 In the Agentic OS repository, the service is started with:
 
@@ -12,7 +12,7 @@ npm run memory:api
 ```
 
 The service is also called `memory-api`. In hosted Team OS, it does more than
-memory search. It handles login, permissions, team admin data, manual imports,
+memory search. It handles login, permissions, Company and Team admin data, manual imports,
 workspace file sync, memory capture, memory review, memory status, and health
 checks.
 
@@ -53,8 +53,9 @@ npm run team -- login --api-url https://team.example.com --email user@example.co
 The server returns a Team OS session token. The terminal and Command Centre use
 that token for later requests.
 
-Some deployments also configure `MEMORY_API_TOKEN`. This is a dev fallback token
-for smoke tests. It is not the normal user login path.
+Every deployment must set `MEMORY_API_TOKEN` because the API checks it at
+startup. This is a dev fallback credential for smoke tests. It is not the
+normal user login path.
 
 ## Private or local access
 
@@ -88,7 +89,7 @@ npm run team -- login --api-url http://localhost:8787 --email owner@example.com 
 Owner reset links also need a base URL that the operator's browser can open:
 
 ```bash
-npm run team:owner-reset -- --team demo --base-url http://localhost:8787 --ttl 4h
+npm run team:owner-reset -- --team demo --email owner@example.com --base-url http://localhost:8787 --ttl 4h
 ```
 
 For Tailscale, WireGuard, or a private LAN, use the reachable private API URL
@@ -104,7 +105,8 @@ OS API URL.
 | Endpoint group | Purpose |
 | --- | --- |
 | `/v1/auth/*` | Login, join, and logout. |
-| `/v1/team/*` | Who am I, granted clients, team admin data, members, invites, and grants. |
+| `/v1/company/*` | Company roles, Teams, access requests, Company grants, and Team lifecycle. |
+| `/v1/team/*` | Selected Team identity, accessible clients, members, invites, and grants. |
 | `/v1/memory/search`, `/v1/memory/expand`, and `/v1/memory/ingest` | Search, expand a search hit, and direct memory ingest. |
 | `/v1/memory/imports` | Manual shared imports, failed import lists, and retries. |
 | `/v1/memory/captures` | Stage automatic Team OS session captures. |
@@ -114,8 +116,12 @@ OS API URL.
 | `/v1/workspace/*` | Permission-scoped file manifest, pull, and push. |
 | `/v1/health` | Deployment health check. |
 
-All protected routes use the server-resolved Team OS identity. The local client
-cannot grant itself access by sending a different team, client, or user ID.
+All protected routes use the server-resolved Team OS identity. The local
+workspace cannot grant itself access by sending a different Team, client, or
+user ID. Team routes validate the requested Team for every request. Company
+management routes require an active Company Owner or Company Admin role.
+Company invitation acceptance is the exception: it validates the one-time
+invitation token before creating the new Company Admin session.
 
 ## Search and expand endpoints
 
@@ -146,7 +152,7 @@ Automatic Team OS session capture uses staged memory.
 It does not make the text searchable.
 
 `POST /v1/memory/consolidation/claim` claims a small batch of staged captures.
-The consolidating client reads those captures and prepares durable memory
+The consolidating workspace reads those captures and prepares durable memory
 items.
 
 `POST /v1/memory/consolidation/complete` finishes the batch. Each item is
@@ -157,10 +163,12 @@ recall.
 
 ## Memory review endpoints
 
-Owners and admins use `/v1/memory/memories` to review memory.
+Users with Full access use `/v1/memory/memories` to review memory. This includes
+the Company Owner, a Team Owner or Team Admin, and a Company Admin with Full
+access to the selected Team.
 
 `GET /v1/memory/memories` returns pending review items and published memory for
-the resolved team. `POST /v1/memory/memories` lets an owner or admin:
+the resolved Team. `POST /v1/memory/memories` lets a user with Full access:
 
 * publish a review item;
 * discard a review item;
@@ -170,7 +178,7 @@ the resolved team. `POST /v1/memory/memories` lets an owner or admin:
 Delete archives the memory source and removes its search chunks. It does not
 erase the audit event.
 
-Command Centre uses this endpoint in the Team tab's Memories view.
+Command Centre uses this endpoint in **Team > Memories**.
 
 ## Startup behavior
 

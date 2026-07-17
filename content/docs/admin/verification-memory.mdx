@@ -20,9 +20,20 @@ Expected result:
 Search through the API:
 
 ```powershell
-$saved = Get-Content "$env:AGENTIC_OS_TEAM_CONFIG_DIR\team-context.json" | ConvertFrom-Json
+$loginBody = @{
+  email = "owner@example.test"
+  password = $env:TEAM_OWNER_PASSWORD
+  team = "demo"
+} | ConvertTo-Json
+$session = Invoke-RestMethod `
+  -Uri "http://127.0.0.1:8787/v1/auth/login" `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $loginBody
+
 $body = @{
   query = "aubergine-927"
+  embeddingMode = "server"
   topK = 5
   scope = @{
     teamId = "fake-client-team"
@@ -36,13 +47,14 @@ $body = @{
 Invoke-RestMethod `
   -Uri "http://127.0.0.1:8787/v1/memory/search" `
   -Method Post `
-  -Headers @{ Authorization = "Bearer $($saved.token)" } `
+  -Headers @{ Authorization = "Bearer $($session.token)" } `
   -ContentType "application/json" `
   -Body $body
 ```
 
 Expected result: the search returns `aubergine-927`.
 
-This also proves the server does not trust the fake `teamId` sent by the client.
+This also proves the server does not trust the fake `teamId` sent by the local
+workspace. It uses the authenticated Team context instead.
 
 Next: [Test member restrictions](/docs/admin/verification-member-restrictions)

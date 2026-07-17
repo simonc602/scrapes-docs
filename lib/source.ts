@@ -51,6 +51,19 @@ const sidebarGroupsByFolder = new Map<string, SidebarEntry[]>([
     ],
   ],
   [
+    'command-centre',
+    [
+      {
+        id: 'work-in-command-centre',
+        title: 'Work in Command Centre',
+        children: [
+          '/docs/command-centre/feed',
+          '/docs/command-centre/task-permission-modes',
+        ],
+      },
+    ],
+  ],
+  [
     'deploy',
     [
       {
@@ -97,12 +110,13 @@ const sidebarGroupsByFolder = new Map<string, SidebarEntry[]>([
         title: 'Understand Team OS',
         children: [
           '/docs/team-os/concepts',
+          '/docs/team-os/multi-team',
           '/docs/team-os/roles-and-permissions',
         ],
       },
       {
-        id: 'connect-a-client',
-        title: 'Connect a client',
+        id: 'connect',
+        title: 'Connect',
         children: [
           '/docs/team-os/client-connection',
           {
@@ -126,8 +140,8 @@ const sidebarGroupsByFolder = new Map<string, SidebarEntry[]>([
         ],
       },
       {
-        id: 'use-memory',
-        title: 'Use memory',
+        id: 'memory',
+        title: 'Memory',
         children: [
           '/docs/team-os/memory-and-sync',
           {
@@ -143,8 +157,8 @@ const sidebarGroupsByFolder = new Map<string, SidebarEntry[]>([
         ],
       },
       {
-        id: 'sync-files',
-        title: 'Sync files',
+        id: 'file-sync',
+        title: 'File sync',
         children: [
           {
             id: 'basics',
@@ -170,10 +184,14 @@ const sidebarGroupsByFolder = new Map<string, SidebarEntry[]>([
               '/docs/team-os/sync-conflicts',
               '/docs/team-os/sync-exclusions',
               '/docs/team-os/sync-revoke',
-              '/docs/team-os/restricted-runner',
             ],
           },
         ],
+      },
+      {
+        id: 'test-access',
+        title: 'Test access',
+        children: ['/docs/team-os/restricted-runner'],
       },
     ],
   ],
@@ -183,7 +201,11 @@ const sidebarGroupsByFolder = new Map<string, SidebarEntry[]>([
       {
         id: 'understand-memory',
         title: 'Understand memory',
-        children: ['/docs/memory/schema', '/docs/memory/hosted-api'],
+        children: [
+          '/docs/memory/schema',
+          '/docs/memory/layered-recall',
+          '/docs/memory/hosted-api',
+        ],
       },
       {
         id: 'capture-and-review',
@@ -217,55 +239,57 @@ const sidebarGroupsByFolder = new Map<string, SidebarEntry[]>([
     'admin',
     [
       {
-        id: 'admin-basics',
-        title: 'Admin basics',
+        id: 'company-and-team-access',
+        title: 'Company and Team access',
         children: [
-          '/docs/admin/team-os-admin',
-          '/docs/admin/admin-guided-path',
-          '/docs/admin/admin-surfaces',
-        ],
-      },
-      {
-        id: 'manage-access',
-        title: 'Manage access',
-        children: [
+          '/docs/admin/company-access',
           {
-            id: 'team-and-people',
-            title: 'Team and people',
+            id: 'teams',
+            title: 'Teams',
             children: [
+              '/docs/admin/manage-teams',
               '/docs/admin/first-team-owner',
-              '/docs/admin/members',
             ],
           },
+          '/docs/admin/members',
           {
-            id: 'grants',
-            title: 'Grants',
+            id: 'client-and-skill-grants',
+            title: 'Client and skill grants',
             children: [
               '/docs/admin/clients',
               '/docs/admin/skill-grants',
             ],
           },
-          '/docs/admin/owner-password-reset',
         ],
       },
       {
-        id: 'monitor-team-os',
-        title: 'Monitor Team OS',
+        id: 'admin-operations',
+        title: 'Admin operations',
         children: [
-          '/docs/admin/health-checks',
-          '/docs/admin/memory-status',
-          '/docs/admin/sync-status',
-          '/docs/admin/command-centre-checks',
+          '/docs/admin/team-os-admin',
+          '/docs/admin/admin-guided-path',
+          '/docs/admin/admin-surfaces',
+          '/docs/admin/owner-password-reset',
+          {
+            id: 'monitoring',
+            title: 'Monitoring',
+            children: [
+              '/docs/admin/health-checks',
+              '/docs/admin/memory-status',
+              '/docs/admin/sync-status',
+              '/docs/admin/command-centre-checks',
+            ],
+          },
         ],
       },
       {
-        id: 'verify-setup',
-        title: 'Verify setup',
+        id: 'verification',
+        title: 'Verification',
         children: [
           '/docs/admin/team-os-verification',
           {
-            id: 'start-verification',
-            title: 'Start verification',
+            id: 'prepare',
+            title: 'Prepare',
             children: [
               '/docs/admin/verification-test-store',
               '/docs/admin/verification-start-api',

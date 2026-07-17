@@ -3,8 +3,8 @@ title: "Memory status"
 description: "Check Team OS memory import and review state."
 ---
 
-The hosted API exposes memory status at `GET /v1/memory/status`. Command Centre
-uses this in the Team view.
+The hosted API exposes memory status at `GET /v1/memory/status`. Select a Team,
+then use **Team > Dashboard** or **Team > Memories** in Command Centre.
 
 Use memory status to check:
 
@@ -23,6 +23,9 @@ npm run team -- memory retry --id <import-id>
 
 Team OS session capture is staged before it becomes shared memory. Staged
 captures are not searchable until consolidation publishes them.
+
+Full access users can review Team memory. A Team Member sees only memory allowed
+by their Team, client, and memory scope.
 
 Run consolidation from `command-centre/` after signing in:
 

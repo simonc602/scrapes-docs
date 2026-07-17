@@ -6,15 +6,23 @@ description: "Verify Team OS file sync with a granted client."
 Grant write access before this step:
 
 ```powershell
-npm run team:client -- grant --team demo --client acme --user member@example.test --access write --by owner@example.test
+$memberConfig = "$env:TEMP\aios-member-client"
+$env:AGENTIC_OS_TEAM_CONFIG_DIR = "$env:TEMP\aios-owner-client"
+npm run team -- client grant --client acme --user member@example.test --access write
+$env:AGENTIC_OS_TEAM_CONFIG_DIR = $memberConfig
 ```
 
-Create a local client file:
+This uses the saved Company Owner login, then returns to the Member login. The
+grant is required for this Member. A Full access user already has implicit
+write access.
+
+Create a file in the local client workspace:
 
 ```powershell
 $local="$env:TEMP\team-os-local"
 New-Item -ItemType Directory -Force "$local\clients\acme\context" | Out-Null
 Set-Content "$local\clients\acme\context\notes.md" "Acme sync proof"
+Set-Content "$local\clients\acme\.env" "PLACEHOLDER_ONLY=1"
 ```
 
 Push and inspect the manifest:
@@ -36,7 +44,7 @@ Expected result:
 
 * only granted client files appear;
 * pulled files live under `clients/acme`;
-* excluded files do not appear;
+* the terminal push excludes the placeholder `.env` file;
 * `.agentic-os/team-sync-state.json` is created;
 * Command Centre can show the client sync state.
 

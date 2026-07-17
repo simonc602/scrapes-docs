@@ -1,25 +1,53 @@
 ---
 title: "Invites"
-description: "Join Team OS with an invite token."
+description: "Invite a new Team OS user or add an existing user to a Team."
 ---
 
-Owners and admins create invites. A normal user receives an invite token for one
-email address.
+Team OS uses different flows for a new user and a user who already has an
+account on the same hosted server.
 
-The user joins with:
+## Invite a new user
 
-* the team slug;
-* the invited email;
-* the invite token;
-* a new password.
+A user with Full access to a Team can invite a new user as a Team Member or
+Team Admin.
 
-After joining, the user signs in with the normal login command:
+The invitation is tied to one email address and one Team. Its private join
+link:
+
+* expires after seven days;
+* can be used only once;
+* creates the new server account and password when accepted.
+
+Send the private join link through a secure channel. The invited user opens it
+and creates a password with at least eight characters.
+
+After joining, the user signs in normally:
 
 ```bash
 npm run team -- login --api-url https://team.example.com --email member@example.com --password "<password>" --team acme
 ```
 
-Invite tokens are single-use. If a token is already used or expired, ask an
-owner or admin for a new invite.
+An invitation does not give access until it is accepted. After successful use,
+the membership is active and another invitation is rejected. If the link
+expires or the email is wrong, create a new invitation.
+
+## Add an existing user
+
+Do not create a normal Team invitation for someone who already has an account
+on the hosted server. An existing account cannot accept that invitation.
+
+The Company Owner, or a Company Admin with Full access to the Team, can open
+**Team > Teams**, open the Team, then add the existing user from **Members**.
+
+Adding an existing user does not create another password or account.
+
+## Company and Owner invitations
+
+Company Admin invitations are managed separately by the Company Owner. A Team
+invitation cannot create a Company Admin.
+
+A normal Team invitation also cannot assign the Team Owner role. Team Owners
+are assigned through Company Team management, and every Team must keep at least
+one active Team Owner.
 
 Next: [Dev-only token login](/docs/team-os/dev-token-login)

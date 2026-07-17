@@ -13,7 +13,7 @@ Capture writes two local files:
 | `context/memory/YYYY-MM-DD.aos.md` | Machine-owned summary blocks used for backup and future re-indexing. |
 | `context/transcripts/YYYY-MM-DD/*.jsonl` | Raw transcript archive. This stays local and should not be committed. |
 
-When the local client is signed in to Team OS, the capture is also sent to the
+When the local workspace is signed in to Team OS, the capture is also sent to the
 hosted API as a staged capture event.
 
 <DocsDiagram id="memory-capture-review" />
@@ -22,9 +22,12 @@ hosted API as a staged capture event.
 
 The hosted flow has three steps:
 
-1. The local client sends a summarized block to `/v1/memory/captures`.
-2. Team OS starts consolidation in the background after capture.
-3. The client completes the batch through `/v1/memory/consolidation/complete`.
+1. The local workspace sends a summarized block to `/v1/memory/captures`.
+2. The local workspace starts a quiet consolidation run after staging the
+   capture.
+3. The hosted server stores the capture, lets the workspace claim it, and
+   accepts the final result through
+   `/v1/memory/consolidation/complete`.
 
 The consolidation script claims staged captures from
 `/v1/memory/consolidation/claim`.
@@ -37,7 +40,7 @@ The consolidation step asks an LLM to choose one result for each item:
 | Result | Meaning |
 | --- | --- |
 | `publish` | Create final team or client memory. Published memory becomes searchable. |
-| `review` | Keep the item out of recall until an owner or admin decides. |
+| `review` | Keep the item out of recall until a user with Full access decides. |
 | `discard` | Drop captures that have no durable memory value. |
 
 Only published items become `memory_sources` and `memory_chunks`.

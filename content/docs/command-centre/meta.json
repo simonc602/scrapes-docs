@@ -2,7 +2,9 @@
   "title": "Command Centre",
   "icon": "AppWindow",
   "pages": [
-    "index"
+    "index",
+    "feed",
+    "task-permission-modes"
   ],
   "root": true
 }

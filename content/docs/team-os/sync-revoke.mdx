@@ -1,18 +1,30 @@
 ---
 title: "Sync revoke behavior"
-description: "Understand what happens after a client grant is revoked."
+description: "Understand file access after a grant or Team access is revoked."
 ---
 
-Client grant changes take effect on the next server request.
+Access changes take effect on the next server request.
 
-After a grant is revoked:
+For a Team Member, revoking a client grant means:
 
 * `sync manifest` no longer lists that client;
 * `sync pull` cannot fetch that client;
-* `sync push` is denied for that client;
-* old local files are not automatically deleted from disk.
+* `sync push` is denied for that client.
 
-When access changes, remove old pulled folders from the local machine if they
-should no longer be used.
+Users with Full access do not depend on individual client grants. Their client
+access changes only when their direct Team role, Company access, account state,
+or Team state changes.
+
+Archiving a Team also blocks its normal sync requests and removes it from the
+Team selector.
+
+Old local files are not deleted automatically. Remove previously pulled files
+from the local machine when they should no longer be used.
+
+The local workspace cannot restore access by changing a Team, client, or user ID.
+The server resolves identity and checks current access on every request.
+
+Existing Team conversations have separate fail-closed behavior. See
+[Companies and multiple Teams](/docs/team-os/multi-team#access-changes-and-service-outages).
 
 Next: [Restricted runner](/docs/team-os/restricted-runner)

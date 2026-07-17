@@ -1,0 +1,92 @@
+---
+title: "Manage Teams"
+description: "Create, update, archive, reactivate, and delete Teams."
+---
+
+Company Owners and Company Admins manage Teams from **Team > Teams** in Command
+Centre.
+
+## Create a Team
+
+1. Open **All Teams**.
+2. Select **Create Team**.
+3. Enter the Team name.
+4. Review the generated slug.
+5. Select an existing active user as the initial Team Owner.
+6. Select **Create Team**.
+
+The slug is the permanent workspace identifier. You can change the Team name
+later, but you cannot change its slug.
+
+Every Team starts with an active Team Owner. A Company Admin who creates a Team
+also receives a Company Full access grant for that Team.
+
+## Manage people
+
+Open a Team and select **Members**.
+
+* Use **Add an existing user** when the person already has an active Team OS
+  account. Choose Member or Admin. The person does not need another invite or
+  password.
+* Use the selected Team's main **Members** section to invite a new user by
+  email. The invite link is valid for 7 days and can be used once.
+
+Team Owners are managed from **Settings**. Add another active owner before
+changing an owner's role. Every active Team must keep at least one active
+owner.
+
+See [Members](/docs/admin/members) for the full invite flow.
+
+## Update or archive a Team
+
+Open a Team and select **Settings**.
+
+* **Save name** changes the display name. It does not change the slug.
+* **Archive** blocks normal Team access and Team authority changes. It also
+  cancels pending company access requests for that Team.
+* **Reactivate** restores the Team so authorized users can manage and use it
+  again.
+
+Company Owners and Company Admins need Full access to update, archive, or
+reactivate an existing Team.
+
+## Delete a Team permanently
+
+Only the Company Owner can delete a Team permanently.
+
+1. Archive the Team.
+2. Wait at least 30 days.
+3. Open **Settings**.
+4. Select **Delete permanently**.
+5. Enter the exact Team name.
+6. Confirm the deletion again.
+
+Permanent deletion cannot be undone. Normal backup retention still applies.
+Team data and earlier Team audit events are removed. One minimal
+`team.deleted` Company audit event remains.
+
+## Transfer Company Ownership
+
+The current Company Owner can transfer ownership to an active Company Admin.
+
+1. Open **Team > Teams > Company Admins**.
+2. Open the target admin's action menu.
+3. Select **Transfer ownership**.
+4. Confirm the transfer.
+
+The target becomes the Company Owner. The previous owner becomes a Company
+Admin. Direct Team roles do not change.
+
+## Recover a missing Company Owner
+
+Use recovery only when no active Company Owner exists. Run it in the Team OS
+maintenance environment:
+
+```powershell
+npm run company:owner-recover -- --user <EMAIL_OR_USER_ID>
+```
+
+The target must be an active user with a working Team OS account. The command
+refuses to create a second active Company Owner.
+
+Next: [First Team and owner](/docs/admin/first-team-owner)

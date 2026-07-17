@@ -3,22 +3,27 @@ title: "Review pending memory"
 description: "Review staged Team OS memory before it enters recall."
 ---
 
-Owners and admins review pending memories in Command Centre.
+Users with Full access review pending memories in Command Centre. This includes
+the Company Owner, a Team Owner or Team Admin, and a Company Admin with Full
+access to the selected Team.
 
 1. Sign in to Team OS.
-2. Open the Team tab.
-3. Open Memories.
+2. Select the Team.
+3. Open **Team > Memories**.
 4. Review pending items.
 5. Publish or discard each item.
 
 The review UI uses `/v1/memory/memories`. It shows pending review items and
 published team or client memory.
 
-Non-admin members do not get the admin review controls.
+Team Members do not get the review controls.
 
-When an admin publishes a review item, Team OS creates final memory and links it
+When a reviewer publishes an item, Team OS creates final memory and links it
 back to the original capture.
 
-When an admin discards it, the item stays out of recall.
+When a reviewer discards it, the item stays out of recall.
+
+See [Roles and permissions](/docs/team-os/roles-and-permissions) for every
+source of Full access.
 
 Next: [Published memories](/docs/memory/published-memories)

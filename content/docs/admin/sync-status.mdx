@@ -3,7 +3,8 @@ title: "Sync status"
 description: "Check Team OS sync access and manifest state."
 ---
 
-Use the manifest and grants to confirm sync access.
+Select the correct Team, then use the manifest and effective access to confirm
+sync access.
 
 ```powershell
 npm run team -- clients
@@ -12,11 +13,18 @@ npm run team -- sync manifest --client acme
 
 If the manifest is empty, check:
 
-* the user has an active team membership;
-* the user has an active client grant;
+* the Team is active;
+* the user selected the correct Team;
+* a Full access source is still active: Company Owner, Company grant, or direct
+  Team role;
+* a Member has an active client grant;
 * the client slug is correct;
 * the API can read the workspace file data;
 * the files are not excluded by sync rules.
+
+Company Owners, direct Team Owners and Team Admins, and Company Admins with Full
+access have implicit write access to all active clients in the Team. Members
+need an explicit read or write client grant.
 
 For sync behavior, see
 [Memory and file sync](/docs/team-os/memory-and-sync).

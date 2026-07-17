@@ -3,13 +3,14 @@ title: "Sync conflicts"
 description: "Resolve Team OS file sync conflicts."
 ---
 
-Team OS sends the last pulled SHA when it pushes an existing file.
+Terminal push sends the SHA saved by the last pull. Command Centre refreshes
+the current server SHA and opens a review before it applies changes.
 
-If the server file changed since the pull, the server returns a conflict instead
-of silently overwriting the new remote version.
+Either flow returns a conflict if the server file changes after its SHA check,
+instead of silently overwriting the new remote version.
 
-Command Centre shows these conflicts in a review modal before it overwrites
-local or server files.
+Command Centre shows conflicts in its review before it overwrites local or
+server files.
 
 To resolve a conflict:
 

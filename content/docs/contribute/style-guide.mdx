@@ -94,9 +94,24 @@ Examples:
 
 When you document Team OS, be precise about trust and permissions.
 
-* Say which actor performs the action: owner, admin, member, local client, or hosted server.
-* Say which resource is affected: team, client, skill, memory, file, or invite.
+* Name the exact role: Company Owner, Company Admin, Team Owner, Team Admin, or Team Member.
+* Say when the actor is the local workspace or the hosted server.
+* Say which resource is affected: Team, client, skill, memory, file, or invite.
 * Say what the server checks before allowing the action.
-* Explain that the hosted server does not trust identity sent by a local client.
+* Explain that the hosted server does not trust identity sent by a local workspace.
 * Use placeholders for secrets, such as `YOUR_DATABASE_URL` and `YOUR_AUTH_SECRET`.
 * Never publish real server URLs, tokens, passwords, cookies, or customer data.
+
+## Distinguish permission terms
+
+Team OS access and task permission modes are different controls.
+
+* **Team OS Full access** controls resources inside one Team. It can come from
+  the Company Owner role, a Company grant for a Company Admin, or a Team Owner
+  or Team Admin role.
+* **Full access** in a Goal disables Claude's task-level permission checks. It
+  still cannot bypass Team OS grants or workspace and file boundaries.
+* Team Members without Full access need explicit client grants and Team skill
+  grants for hosted resources. Local installation skills remain available
+  separately. State the required grant whenever you describe a protected
+  action.

@@ -5,26 +5,33 @@ description: "Fix Team OS file sync problems."
 
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
-| Manifest is empty | No active client grant. | Check `npm run team -- clients` and client grants. |
+| Manifest is empty for a Member | No active client grant. | Check `npm run team -- clients` and client grants. |
+| Manifest is empty for a Full access user | Wrong Team, inactive authority, or no syncable client files. | Confirm the selected Team and effective access, then inspect exclusions. |
 | Pull returns no files | Client has no syncable text files. | Check excluded paths and file size. |
 | Push is denied | User has `read`, not `write`. | Grant `write` access for that client. |
 | Push says no base version | Existing file was not pulled first. | Run `sync pull`, merge changes, then push. |
 | Push gets a conflict | Remote file changed after pull. | Pull fresh, merge manually, then push. |
 | Command Centre asks to review files | Local and server files both changed, or one side deleted a file. | Review the diff before confirming. |
 
-Sync skips secrets, generated folders, transcripts, and files larger than 1 MB.
+The terminal `sync push` command skips secret-named files, generated folders,
+transcripts, non-text files, and files larger than 1 MB. Command Centre client
+sync is broader: it can include regular text or binary files up to 25 MB.
+Secret-named files are visible only with `write` access and are marked for
+extra care.
 
-It is not a secret distribution system.
+Use the Team OS Secrets section when a value should be managed as a Team
+secret. Review the file list before confirming a client sync.
 
 ## Stale Command Centre state
 
 If Command Centre shows old Team OS data:
 
-1. Refresh the Team tab.
+1. Refresh the current **Team** section.
 2. Confirm the terminal and UI use the same `AGENTIC_OS_TEAM_CONFIG_DIR`.
-3. Run `npm run team -- whoami`.
-4. Sign out with `npm run team -- logout`.
-5. Start Command Centre again and sign in.
+3. Confirm the correct Team is selected.
+4. Run `npm run team -- whoami`.
+5. Sign out with `npm run team -- logout`.
+6. Start Command Centre again and sign in.
 
 If the backend is unavailable, hosted mode should not silently show every local
 client folder as if it came from Team OS.

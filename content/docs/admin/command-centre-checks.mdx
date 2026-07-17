@@ -3,9 +3,20 @@ title: "Command Centre checks"
 description: "Check admin controls in Command Centre."
 ---
 
-Open the Team tab after signing in.
+Open **Team** after signing in.
 
-Owners and admins should see:
+Company Owners should see **Teams** with these tabs:
+
+* **All Teams**;
+* **Requests**;
+* **Company Admins**.
+
+Company Admins should see:
+
+* **All Teams**;
+* **My Access**.
+
+After selecting a Team, users with Full access should see:
 
 * members;
 * clients;
@@ -17,9 +28,13 @@ Owners and admins should see:
 * published memory actions;
 * sync state.
 
-Non-admin members should not see admin management controls.
+Members should not see admin-only management controls. Their visible Team
+sections include **Dashboard**, **Clients**, **Secrets**, and **Skills**. The
+data and actions inside those sections still follow their grants.
 
-The clients list should come from the Team OS backend in hosted mode. It should
-not fall back to all local client folders when Team OS is connected.
+The client list must come from the Team OS backend in hosted mode. Full access
+users receive every active client with implicit write access. Members receive
+only explicitly granted clients. The UI must not fall back to every client found
+in the local workspace folder when Team OS is connected.
 
 Next: [Team OS manual verification](/docs/admin/team-os-verification)
