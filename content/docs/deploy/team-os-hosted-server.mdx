@@ -21,12 +21,18 @@ Deploy two services:
 Expose only the API through the chosen workspace access path. Never expose
 Postgres. Keep it inside a private network or behind a firewall.
 
-## Production model
+## Hosted deployment model
 
-For production, use separate services:
+<Callout type="warn">
+This documentation currently supports the Team OS beta image. Use the exact
+tag `ghcr.io/simonc602/team-os-server:beta`. Do not use `latest` or omit the
+tag. The current beta image supports Linux `amd64` and `arm64` hosts.
+</Callout>
+
+For a hosted deployment, use separate services:
 
 1. Postgres with the `pgvector/pgvector:pg16` image.
-2. Team OS API built from `command-centre/Dockerfile.memory-api`.
+2. Team OS API from `ghcr.io/simonc602/team-os-server:beta`.
 
 This model is best when the database needs its own backup and restore plan.
 

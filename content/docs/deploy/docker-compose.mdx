@@ -5,8 +5,15 @@ description: "Run Team OS with Postgres and the API in one Compose stack."
 
 Use Docker Compose for a small self-hosted setup.
 
-Put the Compose file in the Agentic OS workspace. The API Dockerfile copies
-files from the workspace root.
+The Compose file can be stored outside the Agentic OS workspace because it uses
+the published Team OS image.
+
+<Callout type="warn">
+The published Team OS image is currently in beta. Use
+`ghcr.io/simonc602/team-os-server:beta`. Pull the image again before an update
+because the `beta` tag can move to a newer build. The current beta image
+supports Linux `amd64` and `arm64` hosts.
+</Callout>
 
 ## Compose file
 
@@ -28,9 +35,7 @@ services:
       retries: 20
 
   memory-api:
-    build:
-      context: .
-      dockerfile: command-centre/Dockerfile.memory-api
+    image: ghcr.io/simonc602/team-os-server:beta
     restart: unless-stopped
     depends_on:
       postgres:
@@ -101,9 +106,10 @@ TEAM_OS_GITHUB_BACKUP_INTERVAL_SECONDS=900
 
 ## Start and check
 
-Start the stack:
+Pull the current beta image, then start the stack:
 
 ```bash
+docker compose pull memory-api
 docker compose up -d
 ```
 

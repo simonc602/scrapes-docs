@@ -14,11 +14,13 @@ For Railway, use two services in one project.
 
 ## Create the API service
 
-1. Deploy from the Agentic OS repository.
-2. Set the root directory to `command-centre`.
-3. Set the start command to `npm run memory:api`.
-4. Set the health check path to `/v1/health`.
-5. Set the API environment variables from this guide.
+1. Add a Docker image service.
+2. Use `ghcr.io/simonc602/team-os-server:beta`.
+3. Do not override the image start command.
+4. Attach a persistent volume at `/data/agentic-os` and set
+   `AGENTIC_OS_DIR=/data/agentic-os`.
+5. Set the health check path to `/v1/health`.
+6. Set the API [environment variables](/docs/deploy/environment-variables).
 
 For Railway private networking, the database URL usually uses a private host
 and `PGSSLMODE=disable`.

@@ -6,9 +6,15 @@ description: "Deploy Team OS on a VPS."
 On a VPS, run the same two services:
 
 * Postgres with `pgvector/pgvector:pg16` and a persistent volume.
-* `memory-api` behind a TLS reverse proxy such as Caddy or nginx.
+* Team OS API from `ghcr.io/simonc602/team-os-server:beta`, behind a TLS reverse
+  proxy such as Caddy or nginx.
+
+The current beta image supports Linux `amd64` and `arm64` hosts.
 
 Keep Postgres private.
+
+Use the [Docker Compose](/docs/deploy/docker-compose) example for the complete
+service configuration.
 
 If you need local database access for maintenance, use SSH, WireGuard, or a
 firewall rule. Do not open Postgres to the internet.

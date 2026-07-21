@@ -3,14 +3,15 @@ title: "Coolify"
 description: "Deploy Team OS with Coolify."
 ---
 
-For Coolify, use the same two-service Compose model.
+For Coolify, use the same two-service model from
+[Docker Compose](/docs/deploy/docker-compose).
 
 ## Configure the services
 
 Configure Coolify this way:
 
-* deploy from the Agentic OS workspace root;
-* build `memory-api` with `command-centre/Dockerfile.memory-api`;
+* deploy `ghcr.io/simonc602/team-os-server:beta` as the `memory-api` service;
+* do not override the image start command;
 * expose only the `memory-api` service through Coolify's reverse proxy;
 * keep Postgres private inside the Compose network;
 * do not publish port `5432`;
@@ -39,8 +40,8 @@ BETTER_AUTH_URL=https://team.example.com
 TEAM_OS_PUBLIC_URL=https://team.example.com
 ```
 
-Set `AGENTIC_OS_DIR` to a persistent mounted path, such as
-`/data/agentic-os`.
+Mount a persistent volume at `/data/agentic-os`. Set `AGENTIC_OS_DIR` to the
+same path.
 
 If it points inside `/app`, uploaded workspace files and backup state may be
 lost when the container is rebuilt.
